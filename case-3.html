@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App Pessoa Jurídica - Remessa Online — Murilo Simão</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:         #FBFAF5;
+      --text:       #2C2C2A;
+      --accent:     #DD4975;
+      --card-bg:    #2C2C2A;
+      --placeholder:#434343;
+      --border:     #E3E0D8;
+      --white:      #FFFFFF;
+      --max:        1128px;
+      --font:       'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Transição nativa entre páginas: dissolve no conteúdo geral e
+       morph nas tabs de case (a pílula "cresce" a partir do círculo
+       correspondente na página anterior). Sem suporte, cai para a
+       navegação normal, sem nenhum efeito colateral. */
+    @view-transition {
+      navigation: auto;
+    }
+
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      mix-blend-mode: normal;
+      height: 100%;
+    }
+
+    ::view-transition-group(*) {
+      overflow: hidden;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.3s;
+    }
+
+    ::view-transition-old(root) { animation-name: page-fade-out; }
+    ::view-transition-new(root) { animation-name: page-fade-in; }
+
+    @keyframes page-fade-out { to   { opacity: 0; } }
+    @keyframes page-fade-in  { from { opacity: 0; } }
+
+    img { display: block; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ── NAV (idêntico às demais páginas) ────────────────────── */
+    .nav-wrapper {
+      display: flex;
+      justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      z-index: 100;
+    }
+
+    nav {
+      background: none;
+      border-radius: 80px;
+      height: 80px;
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .nav-links a {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
+      position: relative;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .nav-links a.active { font-weight: 900; }
+
+    .nav-indicator {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      height: 6px;
+      background: var(--text);
+      border-radius: 0 0 6px 6px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+    }
+
+    .nav-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 80px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── SWITCH DE IDIOMA ───────────────────────────────────── */
+    .lang-switch {
+      position: absolute;
+      right: 72px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      padding: 4px;
+      z-index: 2;
+    }
+
+    .lang-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      opacity: 0.5;
+      display: block;
+      line-height: 0;
+      transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .lang-btn svg { width: 100%; height: 100%; display: block; }
+
+    .lang-btn:hover { opacity: 0.85; }
+
+    .lang-btn.active {
+      opacity: 1;
+      border-color: var(--white);
+      transform: scale(1.08);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      transition: background 0.15s;
+      z-index: 10;
+    }
+
+    .hamburger:hover { background: rgba(255,255,255,0.15); }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+
+    .mobile-menu a {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: relative;
+      padding-bottom: 6px;
+    }
+
+    .mobile-menu a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* ── LAYOUT BASE ────────────────────────────────────────── */
+    .wrap {
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      margin: 0 auto;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      padding-top: 96px;
+      padding-bottom: 240px;
+    }
+
+    .page-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 112px;
+    }
+
+    .intro-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── CASE SWITCHER ──────────────────────────────────────── */
+    .case-switch-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .case-switch-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .case-switch-list {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .case-switch-list a {
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      text-transform: uppercase;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .case-switch-list a.active {
+      background: var(--text);
+      color: var(--white);
+      border-radius: 999px;
+      padding: 0 32px;
+      font-size: 16px;
+      letter-spacing: 0.03em;
+    }
+
+    .case-switch-list a:not(.active) {
+      width: 56px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 16px;
+      text-transform: none;
+    }
+
+    .case-switch-list a:not(.active):hover { background: var(--principle-bg, #F6EAEE); }
+
+    .double-divider {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .double-divider hr {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── TÍTULO DO CASE ─────────────────────────────────────── */
+    .case-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .case-title-block h1 {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 56px;
+      text-transform: uppercase;
+    }
+
+    .case-title-block p {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 36px;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── RESPONSIVO ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .main-content { padding-top: 64px; padding-bottom: 160px; }
+      .page-flow { gap: 80px; }
+      .case-title-block h1 { font-size: 40px; line-height: 52px; }
+      .case-title-block p { font-size: 18px; line-height: 28px; }
+    }
+
+    @media (max-width: 768px) {
+      .wrap { max-width: calc(100% - 40px); }
+      .main-content { padding-top: 48px; padding-bottom: 120px; }
+      .page-flow { gap: 64px; }
+      .case-title-block h1 { font-size: 30px; line-height: 38px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav-wrapper">
+    <nav>
+      <div class="nav-links">
+        <a href="index.html" data-i18n="nav-home">Início</a>
+        <a href="case-1.html" class="active" data-i18n="nav-work">Trabalhos</a>
+        <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+      </div>
+      <button class="hamburger" aria-label="Abrir menu" data-i18n-aria="nav-open-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-bg"></div>
+      <div class="nav-indicator"></div>
+      <div class="lang-switch" role="group" aria-label="Idioma do site / Site language">
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#009C3B"/><polygon points="12,3 21,12 12,21 3,12" fill="#FFDF00"/><circle cx="12" cy="12" r="4.5" fill="#002776"/></svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English">
+          <svg viewBox="0 0 24 24"><defs><clipPath id="usaClip"><circle cx="12" cy="12" r="12"/></clipPath></defs><g clip-path="url(#usaClip)"><rect width="24" height="24" fill="#B22234"/><rect y="1.85" width="24" height="1.85" fill="#fff"/><rect y="5.54" width="24" height="1.85" fill="#fff"/><rect y="9.23" width="24" height="1.85" fill="#fff"/><rect y="12.92" width="24" height="1.85" fill="#fff"/><rect y="16.62" width="24" height="1.85" fill="#fff"/><rect y="20.31" width="24" height="1.85" fill="#fff"/><rect width="10.5" height="12.92" fill="#3C3B6E"/></g></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- MENU MOBILE -->
+  <div class="mobile-menu" role="dialog" aria-label="Menu de navegação">
+    <a href="index.html" data-i18n="nav-home">Início</a>
+    <a href="case-1.html" class="active" data-i18n="nav-work">Trabalhos</a>
+    <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+  </div>
+
+  <div class="main-content">
+    <div class="wrap page-flow">
+
+      <!-- INTRO: seletor de case + título -->
+      <div class="intro-block">
+
+        <!-- CASE SWITCHER -->
+        <div class="case-switch-header">
+          <span class="case-switch-title" data-i18n="my-work">Meus trabalhos</span>
+          <div class="case-switch-list">
+            <a href="case-1.html" style="view-transition-name: case-tab-1;">1</a>
+            <a href="case-2.html" style="view-transition-name: case-tab-2;">2</a>
+            <a href="case-3.html" class="active" style="view-transition-name: case-tab-3;" data-i18n="tab3-label">3 - App Pessoa Jurídica</a>
+          </div>
+        </div>
+
+        <div class="double-divider">
+          <hr>
+        </div>
+
+        <!-- TÍTULO -->
+        <div class="case-title-block">
+          <h1 data-i18n="c3-title">App Pessoa Jurídica - Remessa Online</h1>
+          <p data-i18n="coming-soon">Em breve</p>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const nav          = document.querySelector('nav');
+      const navBg        = document.querySelector('.nav-bg');
+      const navIndicator = document.querySelector('.nav-indicator');
+      const hamburger    = document.querySelector('.hamburger');
+      const mobileMenu   = document.querySelector('.mobile-menu');
+      const mobileLinks  = document.querySelectorAll('.mobile-menu a');
+      const navLinks     = document.querySelectorAll('.nav-links a');
+      const NAV_LINKS_GAP = 80; // deve bater com o `gap` de .nav-links no CSS
+
+      // ── Idioma (PT/EN) ────────────────────────────────────────
+      const translations = {
+        "nav-home": { pt: "Início", en: "Home" },
+        "nav-work": { pt: "Trabalhos", en: "Work" },
+        "nav-experience": { pt: "Experiência", en: "Experience" },
+        "nav-contact": { pt: "Contato", en: "Contact" },
+        "nav-open-menu": { pt: "Abrir menu", en: "Open menu" },
+        "my-work": { pt: "Meus trabalhos", en: "My work" },
+        "tab3-label": { pt: "3 - App Pessoa Jurídica", en: "3 - Business Account App" },
+        "c3-title": { pt: "App Pessoa Jurídica - Remessa Online", en: "Business Account App - Remessa Online" },
+        "coming-soon": { pt: "Em breve", en: "Coming soon" },
+      };
+
+      function applyLanguage(lang) {
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n')];
+          if (t && t[lang] != null) el.innerHTML = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-aria')];
+          if (t && t[lang] != null) el.setAttribute('aria-label', t[lang]);
+        });
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        localStorage.setItem('site-lang', lang);
+        positionIndicator(true);
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      });
+
+      applyLanguage(localStorage.getItem('site-lang') || 'pt');
+
+      function positionIndicator(instant) {
+        const activeLink = document.querySelector('.nav-links a.active');
+        if (!activeLink) return;
+        const rect    = activeLink.getBoundingClientRect();
+        const navRect = nav.getBoundingClientRect();
+        if (instant) navIndicator.style.transition = 'none';
+        navIndicator.style.width = rect.width + 'px';
+        navIndicator.style.left  = (rect.left - navRect.left) + 'px';
+        if (instant) {
+          navIndicator.offsetHeight; // força reflow antes de reativar a transição
+          navIndicator.style.transition = '';
+        }
+      }
+
+      positionIndicator(true);
+      window.addEventListener('resize', positionIndicator);
+      if (document.fonts) document.fonts.ready.then(positionIndicator);
+
+      function openMenu() {
+        hamburger.classList.add('open');
+        mobileMenu.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => closeMenu());
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          const rect    = link.getBoundingClientRect();
+          const navRect = nav.getBoundingClientRect();
+          const pad     = NAV_LINKS_GAP / 2;
+          navBg.style.left  = (rect.left - navRect.left - pad) + 'px';
+          navBg.style.width = (rect.width + NAV_LINKS_GAP) + 'px';
+        });
+
+        link.addEventListener('mouseleave', () => {
+          navBg.style.left  = '0px';
+          navBg.style.width = '100%';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

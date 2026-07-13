@@ -1,0 +1,1925 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova plataforma web - Remessa Online — Murilo Simão</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:         #FBFAF5;
+      --text:       #2C2C2A;
+      --accent:     #DD4975;
+      --card-bg:    #2C2C2A;
+      --placeholder:#434343;
+      --border:     #E3E0D8;
+      --white:      #FFFFFF;
+      --max:        1128px;
+      --font:       'Inter', sans-serif;
+
+      --principle-bg:     #F6EAEE;
+      --principle-border: #DEC7CE;
+      --card-border:      #EEE5E8;
+      --image-border:     #EEE9E5;
+      --stat-bg:          #FAFAFA;
+      --stat-green:       #2BB34D;
+      --muted:            #9B9D9A;
+      --chart-track:      #DEC7CE;
+      --flow-blue:        #3B6FE0;
+      --flow-alert:       #E24C3C;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Transição nativa entre páginas: dissolve no conteúdo geral e
+       morph nas tabs de case (a pílula "cresce" a partir do círculo
+       correspondente na página anterior). Sem suporte, cai para a
+       navegação normal, sem nenhum efeito colateral. */
+    @view-transition {
+      navigation: auto;
+    }
+
+    /* O crossfade padrão do navegador usa mix-blend-mode:plus-lighter em
+       TODOS os grupos (root e os nomeados, como as tabs) — é isso que
+       gera aquele brilho/reflexo estranho quando duas imagens capturadas
+       se sobrepõem. Neutraliza o blend em todos eles (preservando o
+       morph de posição/tamanho, que é outra animação) e troca só o
+       crossfade do root por um dissolve simples. */
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      mix-blend-mode: normal;
+      /* Por padrão block-size é "auto", então a imagem capturada mantém
+         a proporção original (ex: círculo 1:1) enquanto o grupo anima a
+         largura até virar a pílula — isso infla a altura da imagem bem
+         acima da caixa por uma fração de segundo (o "flash" gigante).
+         Forçar 100% trava a imagem ao tamanho real do grupo a cada frame. */
+      height: 100%;
+    }
+
+    ::view-transition-group(*) {
+      overflow: hidden;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.3s;
+    }
+
+    ::view-transition-old(root) { animation-name: page-fade-out; }
+    ::view-transition-new(root) { animation-name: page-fade-in; }
+
+    @keyframes page-fade-out { to   { opacity: 0; } }
+    @keyframes page-fade-in  { from { opacity: 0; } }
+
+    img { display: block; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ── NAV (idêntico à Home) ─────────────────────────────── */
+    .nav-wrapper {
+      display: flex;
+      justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      z-index: 100;
+    }
+
+    nav {
+      background: none;
+      border-radius: 80px;
+      height: 80px;
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .nav-links a {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
+      position: relative;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .nav-links a.active { font-weight: 900; }
+
+    .nav-indicator {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      height: 6px;
+      background: var(--text);
+      border-radius: 0 0 6px 6px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+    }
+
+    .nav-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 80px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── SWITCH DE IDIOMA ───────────────────────────────────── */
+    .lang-switch {
+      position: absolute;
+      right: 72px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      padding: 4px;
+      z-index: 2;
+    }
+
+    .lang-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      opacity: 0.5;
+      display: block;
+      line-height: 0;
+      transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .lang-btn svg { width: 100%; height: 100%; display: block; }
+
+    .lang-btn:hover { opacity: 0.85; }
+
+    .lang-btn.active {
+      opacity: 1;
+      border-color: var(--white);
+      transform: scale(1.08);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      transition: background 0.15s;
+      z-index: 10;
+    }
+
+    .hamburger:hover { background: rgba(255,255,255,0.15); }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+
+    .mobile-menu a {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: relative;
+      padding-bottom: 6px;
+    }
+
+    .mobile-menu a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* ── LAYOUT BASE ────────────────────────────────────────── */
+    .wrap {
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      margin: 0 auto;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      padding-top: 96px;
+      padding-bottom: 160px;
+    }
+
+    /* Todo bloco de topo (intro + cada .section) é filho direto de
+       .page-flow, que garante 112px entre todos eles de forma única
+       e confiável (em vez de depender de seletores de irmãos). */
+    .page-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 112px;
+    }
+
+    .intro-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── CASE SWITCHER ──────────────────────────────────────── */
+    .case-switch-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .case-switch-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .case-switch-list {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .case-switch-list a {
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      text-transform: uppercase;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .case-switch-list a.active {
+      background: var(--text);
+      color: var(--white);
+      border-radius: 999px;
+      padding: 0 32px;
+      font-size: 16px;
+      letter-spacing: 0.03em;
+    }
+
+    .case-switch-list a:not(.active) {
+      width: 56px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 16px;
+      text-transform: none;
+    }
+
+    .case-switch-list a:not(.active):hover { background: var(--principle-bg); }
+
+    .double-divider {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .double-divider hr {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── TÍTULO DO CASE ─────────────────────────────────────── */
+    .case-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .case-title-block h1 {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 56px;
+      text-transform: uppercase;
+    }
+
+    .case-title-block p {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 36px;
+    }
+
+    /* ── IMAGEM PLACEHOLDER GENÉRICA ────────────────────────── */
+    .ph {
+      background: var(--placeholder);
+      border-radius: 40px;
+      overflow: hidden;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      box-shadow: inset 0 0 0 2px var(--bg);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .ph:hover {
+      box-shadow: 0 20px 40px rgba(44, 44, 42, 0.2), inset 0 0 0 2px var(--bg);
+      transform: translateY(-4px);
+    }
+
+    .ph img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .ph:hover img {
+      transform: scale(1.06);
+    }
+
+    /* overflow:hidden (necessário pra cortar o vídeo no border-radius)
+       corta também a própria box-shadow do elemento — por isso a sombra
+       de elevação vai num wrapper externo, que não tem overflow. */
+    .hero-video-frame {
+      border-radius: 40px;
+      box-shadow: 0 10px 20px rgba(44, 42, 42, 0.10);
+    }
+
+    .hero-image {
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-image video {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .hero-image:hover video {
+      transform: scale(1.06);
+    }
+
+    /* ── SEÇÕES ─────────────────────────────────────────────── */
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .subsection-title {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .body-text {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 28px;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+
+    /* ── TAGS ───────────────────────────────────────────────── */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-pill {
+      background: var(--white);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* ── IMAGENS COM BORDA (O desafio) ──────────────────────── */
+    .bordered-images {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .img-trigger {
+      width: 264px;
+      height: 134px;
+      flex: 0 0 264px;
+      border: 2px solid var(--image-border);
+      border-radius: 8px;
+      padding: 0;
+      background: none;
+      cursor: zoom-in;
+      overflow: hidden;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      box-shadow: inset 0 0 0 2px var(--bg);
+      display: block;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .img-trigger:hover {
+      box-shadow: 0 16px 32px rgba(44, 44, 42, 0.16), inset 0 0 0 2px var(--bg);
+      transform: translateY(-3px);
+    }
+
+    .img-trigger img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .img-trigger:hover img {
+      transform: scale(1.06);
+    }
+
+    /* ── LIGHTBOX ───────────────────────────────────────────── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(44, 44, 42, 0.9);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .lightbox.open { display: flex; opacity: 1; }
+
+    .lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 32px;
+      right: 32px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.12);
+      border: none;
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,0.24); }
+
+    /* ── PROBLEMAS E OPORTUNIDADES ──────────────────────────── */
+    .problems-box {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+    }
+
+    .problems-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px 92px;
+    }
+
+    .problem-card {
+      display: flex;
+      gap: 24px;
+    }
+
+    .problem-number {
+      flex: 0 0 56px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--flow-alert);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .problem-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .problem-card h4 {
+      font-size: 20px;
+      font-weight: 800;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .problem-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .problem-card li {
+      font-size: 18px;
+      line-height: 28px;
+      color: var(--text);
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .problem-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* ── PRINCÍPIOS (cards com ícone) ────────────────────────── */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 24px;
+    }
+
+    .principle-card {
+      background: var(--principle-bg);
+      border-bottom: 6px solid var(--principle-border);
+      border-radius: 24px;
+      padding: 32px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .principle-icon {
+      background: var(--accent);
+      width: 64px;
+      height: 56px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+    }
+
+    .principle-card h4 {
+      font-size: 20px;
+      font-weight: 500;
+    }
+
+    .principle-card p {
+      font-size: 18px;
+      line-height: 28px;
+    }
+
+    /* ── GALERIA DE IMAGENS (Área não logada / logada) ──────── */
+    .gallery-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .gallery-row {
+      display: flex;
+      gap: 24px;
+    }
+
+    .gallery-image-frame {
+      border-radius: 40px;
+      box-shadow: 0 10px 20px rgba(44, 42, 42, 0.10);
+      border: none;
+      background: none;
+      padding: 0;
+      width: 100%;
+      display: block;
+      font: inherit;
+      text-align: left;
+      cursor: zoom-in;
+    }
+
+    .gallery-row .gallery-image-frame {
+      flex: 1;
+      min-width: 0;
+      width: auto;
+    }
+
+    .gallery-image-frame .ph { width: 100%; height: auto; }
+    .gallery-image-frame .ph img { height: auto; object-fit: contain; }
+    .gallery-big { width: 100%; height: auto; }
+
+    /* ── CHECKLIST (melhorias / insights) ────────────────────── */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .checklist-card {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .checklist-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
+      background: var(--stat-green);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .checklist-icon.accent { background: var(--accent); }
+
+    .checklist-card p {
+      font-size: 18px;
+      line-height: 28px;
+    }
+
+    /* ── STAT CARDS ─────────────────────────────────────────── */
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      width: 264px;
+      flex: 0 0 264px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stat-badge {
+      background: var(--stat-bg);
+      border-radius: 8px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+    }
+
+    .stat-badge .num {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--stat-green);
+      white-space: nowrap;
+    }
+
+    .stat-badge .label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .stat-card p {
+      font-size: 18px;
+      line-height: 28px;
+    }
+
+    /* ── FEATURE ROWS ALTERNADAS (Área logada) ───────────────── */
+    .feature-row {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    /* overflow:hidden do .ph (necessário pro corte do border-radius)
+       corta a própria box-shadow — por isso a sombra vai num wrapper
+       externo, igual ao vídeo do topo. */
+    .al-image-frame {
+      width: 708px;
+      height: 348px;
+      flex-shrink: 0;
+      border-radius: 40px;
+      box-shadow: 0 10px 20px rgba(44, 42, 42, 0.10);
+    }
+
+    .al-image-frame .ph { width: 100%; height: 100%; }
+
+    .feature-text {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .feature-text h4 { font-size: 24px; font-weight: 800; }
+    .feature-text p { font-size: 18px; line-height: 28px; }
+    .feature-text .impact { color: var(--accent); font-weight: 600; }
+
+    .feature-row.text-only {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    /* ── PESQUISA (fluxograma com traçado e setas) ──────────────── */
+    .survey-flow {
+      position: relative;
+      padding-top: 56px;
+    }
+
+    .survey-grid {
+      display: grid;
+      grid-template-columns: 2fr 0.5fr 2fr 0.5fr 2fr 0.5fr 2fr;
+      align-items: start;
+      position: relative;
+      z-index: 1;
+    }
+
+    .survey-arrow-icon {
+      align-self: center;
+      justify-self: center;
+      color: var(--flow-blue);
+    }
+
+    .survey-card {
+      position: relative;
+      background: var(--white);
+      border-bottom: 6px solid var(--principle-border);
+      border-radius: 24px;
+      padding: 40px 24px 24px;
+    }
+
+    .survey-card.branch {
+      grid-column: 3;
+      margin-top: 96px;
+      background: var(--principle-bg);
+    }
+
+    .survey-card p { font-size: 18px; line-height: 27px; text-align: left; }
+
+    .survey-badge {
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: var(--accent);
+      border: 4px solid var(--bg);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .survey-card.branch .survey-badge { background: var(--flow-alert); }
+
+    .survey-connector {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+      z-index: 0;
+    }
+
+    .respondents {
+      font-size: 18px;
+      line-height: 28px;
+      font-weight: 800;
+    }
+
+    /* ── GRÁFICOS DE RESULTADOS ───────────────────────────────── */
+    .chart-block { display: flex; flex-direction: column; gap: 24px; }
+
+    .chart-card {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+    }
+
+    .hbar-list { display: flex; flex-direction: column; gap: 18px; }
+
+    .hbar-row { display: flex; flex-direction: column; gap: 8px; }
+
+    .hbar-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 16px;
+    }
+
+    .hbar-name {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .hbar-tag {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .hbar-right {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .hbar-pct  { font-size: 22px; font-weight: 800; color: var(--accent); }
+    .hbar-count { font-size: 13px; color: var(--muted); }
+
+    .hbar-track {
+      height: 14px;
+      background: var(--chart-track);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .hbar-fill {
+      height: 100%;
+      width: 0%;
+      background: var(--accent);
+      border-radius: 8px;
+      transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* ── RESPONSIVO ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .main-content { padding-top: 64px; padding-bottom: 96px; }
+      .page-flow { gap: 80px; }
+      .case-title-block h1 { font-size: 40px; line-height: 52px; }
+      .case-title-block p { font-size: 18px; line-height: 28px; }
+      .problems-grid { grid-template-columns: 1fr; gap: 32px; }
+      .principles-grid { grid-template-columns: repeat(2, 1fr); }
+      .feature-row { flex-direction: column !important; }
+      .al-image-frame { width: 100%; height: 320px; }
+      .feature-text { width: 100%; flex: none; }
+      .feature-row.text-only { grid-template-columns: 1fr; }
+      .gallery-row { flex-direction: column; }
+      .gallery-row .gallery-image-frame { width: 100%; }
+      .chart-card { padding: 28px; }
+      .survey-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+      .survey-card.branch { grid-column: auto; margin-top: 0; }
+      .survey-arrow-icon { display: none; }
+      .survey-connector { display: none; }
+    }
+
+    @media (max-width: 768px) {
+      .wrap { max-width: calc(100% - 40px); }
+      .main-content { padding-top: 48px; padding-bottom: 64px; }
+      .page-flow { gap: 64px; }
+      .case-title-block h1 { font-size: 30px; line-height: 38px; }
+      .hero-video-frame, .hero-image { border-radius: 24px; }
+      .section-title { font-size: 26px; }
+      .subsection-title { font-size: 20px; }
+      .body-text, .problem-card li, .stat-card p, .feature-text p, .checklist-card p, .principle-card p, .survey-card p { font-size: 17px; }
+      .bordered-images { flex-direction: column; }
+      .img-trigger { width: 100%; height: auto; aspect-ratio: 264 / 134; flex: none; }
+      .principles-grid { grid-template-columns: 1fr; }
+      .checklist-grid { grid-template-columns: 1fr; }
+      .stat-card { width: 100%; flex-basis: 100%; }
+      .chart-card { padding: 20px; border-radius: 16px; }
+      .hbar-name { font-size: 15px; }
+      .hbar-pct { font-size: 18px; }
+      .survey-grid { display: flex; flex-direction: column; gap: 40px; }
+      .survey-card.branch { grid-column: auto; margin-top: 0; }
+      .survey-arrow-icon { display: none; }
+      .survey-connector { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav-wrapper">
+    <nav>
+      <div class="nav-links">
+        <a href="index.html" data-i18n="nav-home">Início</a>
+        <a href="case-1.html" class="active" data-i18n="nav-work">Trabalhos</a>
+        <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+      </div>
+      <button class="hamburger" aria-label="Abrir menu" data-i18n-aria="nav-open-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-bg"></div>
+      <div class="nav-indicator"></div>
+      <div class="lang-switch" role="group" aria-label="Idioma do site / Site language">
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#009C3B"/><polygon points="12,3 21,12 12,21 3,12" fill="#FFDF00"/><circle cx="12" cy="12" r="4.5" fill="#002776"/></svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English">
+          <svg viewBox="0 0 24 24"><defs><clipPath id="usaClip"><circle cx="12" cy="12" r="12"/></clipPath></defs><g clip-path="url(#usaClip)"><rect width="24" height="24" fill="#B22234"/><rect y="1.85" width="24" height="1.85" fill="#fff"/><rect y="5.54" width="24" height="1.85" fill="#fff"/><rect y="9.23" width="24" height="1.85" fill="#fff"/><rect y="12.92" width="24" height="1.85" fill="#fff"/><rect y="16.62" width="24" height="1.85" fill="#fff"/><rect y="20.31" width="24" height="1.85" fill="#fff"/><rect width="10.5" height="12.92" fill="#3C3B6E"/></g></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- MENU MOBILE -->
+  <div class="mobile-menu" role="dialog" aria-label="Menu de navegação">
+    <a href="index.html" data-i18n="nav-home">Início</a>
+    <a href="case-1.html" class="active" data-i18n="nav-work">Trabalhos</a>
+    <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+  </div>
+
+  <div class="main-content">
+    <div class="wrap page-flow">
+
+      <!-- INTRO: seletor de case + título + imagem hero -->
+      <div class="intro-block">
+
+        <!-- CASE SWITCHER -->
+        <div class="case-switch-header">
+          <span class="case-switch-title" data-i18n="my-work">Meus trabalhos</span>
+          <div class="case-switch-list">
+            <a href="case-1.html" class="active" style="view-transition-name: case-tab-1;" data-i18n="tab1-label">1 - Nova plataforma web</a>
+            <a href="case-2.html" style="view-transition-name: case-tab-2;">2</a>
+            <a href="case-3.html" style="view-transition-name: case-tab-3;">3</a>
+          </div>
+        </div>
+
+        <div class="double-divider">
+          <hr>
+        </div>
+
+        <!-- TÍTULO -->
+        <div class="case-title-block">
+          <h1 data-i18n="c1-title">Nova plataforma web - Remessa Online</h1>
+          <p data-i18n="c1-intro">Redesign completo da plataforma, contemplando a reformulação da experiência do usuário, da arquitetura da informação, desde o onboarding até os fluxos operacionais e a implementação de novas funcionalidades alinhadas às estratégias de negócio.</p>
+        </div>
+
+        <div class="hero-video-frame" style="margin-top:56px;">
+          <div class="ph hero-image">
+            <video src="images/Video%20principal%203.mp4" autoplay muted playsinline></video>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MEU PAPEL -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="role-title">Meu papel</h2>
+        <p class="body-text" data-i18n="role-body">Fui o designer responsável por todo o projeto, conduzi o Discovery, a definição da arquitetura da informação, UX / UI, as pesquisas, a aplicação do Design System, o alinhamento com as áreas de Produto e Engenharia, bem como o acompanhamento após o rollout.</p>
+        <div class="tag-row">
+          <span class="tag-pill">Discovery</span>
+          <span class="tag-pill">Heuristics</span>
+          <span class="tag-pill">UX Research</span>
+          <span class="tag-pill">UI Design</span>
+          <span class="tag-pill">Rollout</span>
+          <span class="tag-pill">Product Strategy</span>
+        </div>
+      </section>
+
+      <!-- O DESAFIO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="challenge-title">O desafio</h2>
+        <p class="body-text" data-i18n="challenge-body">A plataforma web da Remessa Online havia sido construída ao longo de quase sete anos. O crescimento acelerado trouxe novas funcionalidades, mas também uma série de inconsistências de usabilidade, arquitetura da informação e escalabilidade que dificultavam tanto a evolução do produto quanto a realização das principais tarefas pelos clientes.<br><br>O <strong>objetivo</strong> foi o de modernizar a experiência da plataforma, eliminando limitações estruturais e criando uma base escalável para sustentar a evolução do produto e do negócio.</p>
+        <div class="bordered-images">
+          <button type="button" class="img-trigger" data-full="images/RO1.png" aria-label="Ampliar imagem da plataforma antiga 1" data-i18n-aria="ro-aria-1">
+            <img src="images/RO1.png" alt="Plataforma antiga - Remessa Online 1" data-i18n-alt="ro-alt-1">
+          </button>
+          <button type="button" class="img-trigger" data-full="images/RO2.png" aria-label="Ampliar imagem da plataforma antiga 2" data-i18n-aria="ro-aria-2">
+            <img src="images/RO2.png" alt="Plataforma antiga - Remessa Online 2" data-i18n-alt="ro-alt-2">
+          </button>
+          <button type="button" class="img-trigger" data-full="images/RO3.png" aria-label="Ampliar imagem da plataforma antiga 3" data-i18n-aria="ro-aria-3">
+            <img src="images/RO3.png" alt="Plataforma antiga - Remessa Online 3" data-i18n-alt="ro-alt-3">
+          </button>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- O QUE EU DESCOBRI -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="discover-title">O que eu descobri</h2>
+        <p class="body-text" data-i18n="discover-body">Durante o Discovery, consolidei pesquisas, feedbacks de clientes e análises da experiência existente para identificar os principais fatores que comprometiam a evolução do produto.</p>
+        <div style="margin-top:16px;">
+          <h3 class="subsection-title" style="margin-bottom:24px;" data-i18n="problems-title">Problemas e oportunidades</h3>
+          <div class="problems-box">
+            <div class="problems-grid">
+              <div class="problem-card">
+                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <div class="problem-content">
+                  <h4 data-i18n="prob1-h4">Onboarding com alta fricção</h4>
+                  <ul>
+                    <li data-i18n="prob1-li1">Cadastro longo e pouco orientado.</li>
+                    <li data-i18n="prob1-li2">Sem visibilidade de progresso.</li>
+                    <li data-i18n="prob1-li3">Envio de documentos com restrições técnicas.</li>
+                    <li data-i18n="prob1-li4">Baixa percepção de segurança.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="problem-card">
+                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <div class="problem-content">
+                  <h4 data-i18n="prob2-h4">Arquitetura da informação confusa</h4>
+                  <ul>
+                    <li data-i18n="prob2-li1">Navegação pouco escalável.</li>
+                    <li data-i18n="prob2-li2">Terminologias distantes do modelo mental dos clientes.</li>
+                    <li data-i18n="prob2-li3">Organização inconsistente entre funcionalidades.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="problem-card">
+                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <div class="problem-content">
+                  <h4 data-i18n="prob3-h4">Experiência pouco personalizada</h4>
+                  <ul>
+                    <li data-i18n="prob3-li1">Home genérica para diferentes perfis.</li>
+                    <li data-i18n="prob3-li2">Pouco suporte durante a jornada.</li>
+                    <li data-i18n="prob3-li3">Acompanhamento de transações dependente de e-mails.</li>
+                    <li data-i18n="prob3-li4">Feedbacks pouco claros.</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="problem-card">
+                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+                <div class="problem-content">
+                  <h4 data-i18n="prob4-h4">Baixa consistência e escalabilidade</h4>
+                  <ul>
+                    <li data-i18n="prob4-li1">Ausência de Design System.</li>
+                    <li data-i18n="prob4-li2">Componentes e padrões visuais inconsistentes.</li>
+                    <li data-i18n="prob4-li3">Alto custo para evoluir o produto.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- CONSTRUÇÃO DA NOVA EXPERIÊNCIA -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="build-title">Construção da nova experiência</h2>
+        <p class="body-text" data-i18n="build-body">Redesenhei toda a plataforma utilizando um Design System desenvolvido pelo time de design. A nova experiência foi concebida para resolver os problemas de inconsistência, arquitetura da informação e usabilidade identificados no diagnóstico, estabelecendo uma base escalável para a evolução do produto.<br><br>Realizei um benchmarking com concorrentes diretos e indiretos, analisando fluxos, arquitetura da informação e padrões de interação, além de mapear boas práticas de UX e UI adotadas por fintechs e bancos digitais. O objetivo foi identificar oportunidades para elevar a usabilidade, a confiança e a competitividade da plataforma.</p>
+      </section>
+
+      <!-- PRINCÍPIOS -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="principles-title">Princípios que guiaram o redesign</h2>
+        <div class="principles-grid" style="margin-top:16px;">
+          <div class="principle-card">
+            <div class="principle-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20"/></svg>
+            </div>
+            <h4 data-i18n="princ1-h4">Escalabilidade</h4>
+            <p data-i18n="princ1-p">Construir uma plataforma preparada para crescer.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
+            </div>
+            <h4 data-i18n="princ2-h4">Encontrabilidade</h4>
+            <p data-i18n="princ2-p">Facilitar a descoberta das funcionalidades.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+            </div>
+            <h4 data-i18n="princ3-h4">Personalização</h4>
+            <p data-i18n="princ3-p">Mostrar o que é mais relevante para o caso de uso do cliente.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l6 7-6 7M13 5l6 7-6 7"/></svg>
+            </div>
+            <h4 data-i18n="princ4-h4">Orientação</h4>
+            <p data-i18n="princ4-p">Reduzir dúvidas em jornadas financeiras complexas.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>
+            </div>
+            <h4 data-i18n="princ5-h4">Visibilidade</h4>
+            <p data-i18n="princ5-p">Diminuir ansiedade durante as operações.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>
+            </div>
+            <h4 data-i18n="princ6-h4">Consistência e clareza</h4>
+            <p data-i18n="princ6-p">Padrão consistente nos componentes, diminuindo o esforço cognitivo.</p>
+          </div>
+          <div class="principle-card">
+            <div class="principle-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>
+            </div>
+            <h4 data-i18n="princ7-h4">Controle e Liberdade</h4>
+            <p data-i18n="princ7-p">Caminhos claros para desfazer ações, cancelar processos ou voltar no fluxo.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ÁREA NÃO LOGADA -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="logged-out-title">Área não logada</h2>
+        <p class="body-text" data-i18n="onboarding-desc">O onboarding foi redesenhado para reduzir a incerteza durante o cadastro e aumentar as chances de conversão no topo do funil. Em vez de apenas solicitar informações, passei a orientar o cliente em cada etapa da jornada, tornando o processo mais previsível e reduzindo erros.</p>
+
+        <div class="gallery-stack" style="margin-top:16px;">
+          <div class="gallery-row">
+            <button type="button" class="gallery-image-frame" data-full="images/ANL%201.png" aria-label="Ampliar imagem Área não logada 1"><div class="ph"><img src="images/ANL%201.png" alt="Área não logada 1"></div></button>
+            <button type="button" class="gallery-image-frame" data-full="images/ANL%202.png" aria-label="Ampliar imagem Área não logada 2"><div class="ph"><img src="images/ANL%202.png" alt="Área não logada 2"></div></button>
+          </div>
+          <button type="button" class="gallery-image-frame" data-full="images/ANL%203.png" aria-label="Ampliar imagem Área não logada 3">
+            <div class="ph gallery-big">
+              <img src="images/ANL%203.png" alt="Área não logada 3">
+            </div>
+          </button>
+        </div>
+
+        <div style="margin-top:56px;">
+          <h3 class="subsection-title" style="margin-bottom:32px;" data-i18n="main-improvements">Principais melhorias</h3>
+          <div class="checklist-grid">
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+              <p data-i18n="chk1-1">Stepper para dar visibilidade ao progresso do cadastro.</p>
+            </div>
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+              <p data-i18n="chk1-2">UX Writing mais claro e conversacional, orientando as ações ao longo da jornada.</p>
+            </div>
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+              <p data-i18n="chk1-3">Orientações contextuais para envio do documento de identificação.</p>
+            </div>
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+              <p data-i18n="chk1-4">Máscara para captura no mobile, reduzindo erros durante a fotografia do documento.</p>
+            </div>
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></div>
+              <p data-i18n="chk1-5">Fluxo de qualificação, permitindo personalizar a experiência desde o primeiro acesso.</p>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:56px;">
+          <h3 class="subsection-title" style="margin-bottom:32px;" data-i18n="results-title-1">Resultados</h3>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <div class="stat-badge"><span class="num">23%</span><span class="label" data-i18n="stat1-label">menos abandono</span></div>
+              <p data-i18n="stat1-p">Menos abandono do fluxo de cadastro.</p>
+            </div>
+            <div class="stat-card">
+              <div class="stat-badge"><span class="num">&gt; 90%</span><span class="label" data-i18n="stat2-label">Aprovação</span></div>
+              <p data-i18n="stat2-p">Aprovação automática dos documentos de identificação.</p>
+            </div>
+          </div>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- ÁREA LOGADA -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="logged-in-title">Área logada</h2>
+        <p class="body-text" data-i18n="onboarding-desc">O onboarding foi redesenhado para reduzir a incerteza durante o cadastro e aumentar as chances de conversão no topo do funil. Em vez de apenas solicitar informações, passei a orientar o cliente em cada etapa da jornada, tornando o processo mais previsível e reduzindo erros.</p>
+
+        <div style="margin-top:32px; display:flex; flex-direction:column; gap:56px;">
+
+        <div class="feature-row">
+          <div class="al-image-frame"><div class="ph"><img src="images/AL%201.png" alt="Menu lateral e header simplificado" data-i18n-alt="fr1-h4"></div></div>
+          <div class="feature-text">
+            <h4 data-i18n="fr1-h4">Menu lateral e header simplificado</h4>
+            <p data-i18n="fr1-p">A navegação foi reorganizada com a adoção de um menu lateral, posicionando a estrutura principal da plataforma como o primeiro elemento na leitura da interface.</p>
+            <p class="impact" data-i18n="fr1-impact">→ Melhor hierarquia da informação, encontrabilidade e escalabilidade da navegação.</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="al-image-frame"><div class="ph"><img src="images/AL%202.png" alt="Tela inicial modular" data-i18n-alt="fr2-h4"></div></div>
+          <div class="feature-text">
+            <h4 data-i18n="fr2-h4">Tela inicial modular</h4>
+            <p data-i18n="fr2-p">A home foi redesenhada utilizando uma estrutura modular baseada em seções hierarquizadas conforme a relevância para o cliente. O que permitiu testar diferentes organizações, aumentando a flexibilidade da plataforma.</p>
+            <p class="impact" data-i18n="fr2-impact">→ Melhor priorização das informações, flexibilidade para testes e personalização.</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="al-image-frame"><div class="ph"><img src="images/AL%203.png" alt="Novo extrato de transações" data-i18n-alt="fr3-h4"></div></div>
+          <div class="feature-text">
+            <h4 data-i18n="fr3-h4">Novo extrato de transações</h4>
+            <p data-i18n="fr3-p">O histórico de operações deixou de utilizar cards horizontais e passou a ser apresentado em formato de tabela, permitindo comparação rápida entre valores, moedas, datas e status.</p>
+            <p class="impact" data-i18n="fr3-impact">→ Maior escaneabilidade, eficiência e foco nas tarefas prioritárias.</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="al-image-frame"><div class="ph"><img src="images/AL%204.png" alt="Gestão de beneficiários" data-i18n-alt="fr4-h4"></div></div>
+          <div class="feature-text">
+            <h4 data-i18n="fr4-h4">Gestão de beneficiários</h4>
+            <p data-i18n="fr4-p">Exibidos em formato de tabela, facilitando a localização, leitura e comparação de informações bancárias.</p>
+            <p class="impact" data-i18n="fr4-impact">→ Melhor compreensão, reconhecimento e consulta de informações.</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="al-image-frame"><div class="ph"><img src="images/AL%205.png" alt="Vídeos explicativos" data-i18n-alt="fr5-h4"></div></div>
+          <div class="feature-text">
+            <h4 data-i18n="fr5-h4">Vídeos explicativos</h4>
+            <p data-i18n="fr5-p">Para reduzir dúvidas dos clientes, criamos vídeos explicativos para os principais casos de uso da plataforma, como envio para terceiros, mesma titularidade, recebimento internacional e Conta Global.</p>
+            <p class="impact" data-i18n="fr5-impact">→ Maior autonomia, redução de dúvidas e menor dependência do suporte.</p>
+          </div>
+        </div>
+
+        <div class="feature-row">
+          <div class="al-image-frame"><div class="ph"><img src="images/AL%206.png" alt="Customização da experiência" data-i18n-alt="fr6-h4"></div></div>
+          <div class="feature-text">
+            <h4 data-i18n="fr6-h4">Customização da experiência</h4>
+            <p data-i18n="fr6-p">A qualificação realizada durante o onboarding passou a orientar a composição da tela inicial, permitindo destacar funcionalidades e conteúdos de acordo com o objetivo de cada cliente.</p>
+            <p class="impact" data-i18n="fr6-impact">→ Maior relevância, descoberta de funcionalidades e eficiência na jornada.</p>
+          </div>
+        </div>
+
+        <div class="feature-row text-only">
+          <div class="feature-text">
+            <h4 data-i18n="fr7-h4">Central de notificações</h4>
+            <p data-i18n="fr7-p">Foi criada uma central de notificações integrada ao header, reunindo todas as atualizações relevantes sobre o andamento das transações. A funcionalidade reduziu a dependência do e-mail como único canal de comunicação.</p>
+            <p class="impact" data-i18n="fr7-impact">→ Maior visibilidade das operações e continuidade da experiência.</p>
+          </div>
+          <div class="feature-text">
+            <h4 data-i18n="fr8-h4">Grid unificado</h4>
+            <p data-i18n="fr8-p">Todo o produto passou a utilizar um único grid e uma mesma estrutura visual, garantindo consistência entre as jornadas.</p>
+            <p class="impact" data-i18n="fr8-impact">→ Consistência visual, menor carga cognitiva e maior escalabilidade.</p>
+          </div>
+        </div>
+
+        <hr class="section-divider" style="margin-top:0;">
+      </div>
+      </section>
+
+      <!-- ROLLOUT -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="rollout-title">Rollout do site</h2>
+        <p class="body-text" data-i18n="rollout-body">Para minimizar riscos durante uma mudança estrutural da plataforma, optamos por um rollout gradual, disponibilizando inicialmente a nova experiência para apenas 5% da base de clientes e ampliando esse percentual de forma progressiva à medida que acompanhávamos métricas de estabilidade, comportamento e adoção. Como mudanças significativas de interface e arquitetura da informação podem gerar resistência mesmo quando representam uma melhoria, mantivemos, durante os primeiros meses, a opção de alternar entre a nova e a antiga experiência. Essa estratégia reduziu o impacto da transição, preservou a sensação de controle do usuário e mitigou o risco de abandono.</p>
+        <div class="stats-grid" style="margin-top:16px;">
+          <div class="stat-card">
+            <div class="stat-badge"><span class="num">5%</span><span class="label" data-i18n="stat3-label">Base de clientes</span></div>
+            <p data-i18n="stat3-p">Tamanho da base no lançamento do site novo.</p>
+          </div>
+          <div class="stat-card">
+            <div class="stat-badge"><span class="num">&lt; 10%</span><span class="label" data-i18n="stat4-label">não aceitação</span></div>
+            <p data-i18n="stat4-p">Taxa de retorno à versão antiga do site.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PESQUISA TERMÔMETRO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="survey-title">Pesquisa termômetro e acompanhamento</h2>
+        <p class="body-text" data-i18n="survey-body">Após a abertura da nova web para 30% dos clientes, devido ao volume de acessos à nova plataforma, foi disparada na dashboard (via Hotjar) uma pesquisa de termômetro, para acompanharmos as impressões dos clientes sobre a nova experiência da plataforma web.</p>
+        <p class="respondents" data-i18n="respondents">Número de respondentes: 2.040</p>
+
+        <div class="survey-flow">
+          <svg class="survey-connector"></svg>
+          <div class="survey-grid">
+            <div class="survey-card">
+              <div class="survey-badge"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><path d="M2.5 20c0-3.3 3-5.5 6.5-5.5s6.5 2.2 6.5 5.5"/><circle cx="17" cy="9" r="2.3"/><path d="M15.2 14.8c2.4.4 3.8 2.2 3.8 5.2"/></svg></div>
+              <p data-i18n="survey1">Como o cliente avalia a experiência nova.</p>
+            </div>
+            <div class="survey-arrow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l6 7-6 7"/></svg></div>
+            <div class="survey-card" id="survey-node-2">
+              <div class="survey-badge"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="6"/><path d="M20.5 20.5L15 15"/></svg></div>
+              <p data-i18n="survey2">O quão fácil foi realizar o que foi fazer no site.</p>
+            </div>
+            <div class="survey-arrow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l6 7-6 7"/></svg></div>
+            <div class="survey-card" id="survey-node-3">
+              <div class="survey-badge"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/><path d="M4.5 5l1 1 2-2"/></svg></div>
+              <p data-i18n="survey3">Se encontrou tudo o que procurava.</p>
+            </div>
+            <div class="survey-arrow-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l6 7-6 7"/></svg></div>
+            <div class="survey-card">
+              <div class="survey-badge"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 00-3 11.2c.8.6 1 1.4 1 2.3v.5h4v-.5c0-.9.2-1.7 1-2.3A6 6 0 0012 3z"/></svg></div>
+              <p data-i18n="survey4">Sugestões de melhorias</p>
+            </div>
+            <div class="survey-card branch" id="survey-node-5">
+              <div class="survey-badge"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.3 9.2a2.7 2.7 0 015.2 1c0 1.8-2.2 1.8-2.4 3.6"/><path d="M12 17h.01"/></svg></div>
+              <p data-i18n="survey5">O que frustrou ou confundiu o cliente.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTADOS E IMPACTO (gráficos) -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="results-impact-title">Resultados e impacto da nova experiência</h2>
+        <p class="body-text" data-i18n="results-impact-body">O redesign foi bem recebido pelos clientes desde as primeiras fases do rollout. A estratégia de disponibilizar a nova experiência gradualmente, aliada à possibilidade de retornar temporariamente à versão anterior, permitiu reduzir o risco da transição e acompanhar a adoção com segurança.</p>
+
+        <!-- Gráfico 1 -->
+        <div class="chart-block" style="margin-top:32px;">
+          <h3 class="subsection-title" data-i18n="chart1-title">Em uma escala de 1 a 5, como você avalia sua experiência com o site até agora?</h3>
+          <div class="chart-card">
+            <div class="hbar-list">
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">1 <span class="hbar-tag" data-i18n="tag-1">muito ruim</span></span>
+                  <span class="hbar-right"><span class="hbar-pct">6%</span><span class="hbar-count">147 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="6"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">2</span>
+                  <span class="hbar-right"><span class="hbar-pct">4%</span><span class="hbar-count">91 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="4"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">3</span>
+                  <span class="hbar-right"><span class="hbar-pct">11%</span><span class="hbar-count">268 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="11"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">4</span>
+                  <span class="hbar-right"><span class="hbar-pct">22%</span><span class="hbar-count">537 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="22"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">5 <span class="hbar-tag" data-i18n="tag-2">excelente</span></span>
+                  <span class="hbar-right"><span class="hbar-pct">58%</span><span class="hbar-count">1.411 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="58"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card" style="width:342px; flex:none;">
+            <div class="stat-badge"><span class="num">4,2</span><span class="label" data-i18n="avg-label">Média final</span></div>
+          </div>
+        </div>
+
+        <!-- Gráfico 2 -->
+        <div class="chart-block" style="margin-top:56px;">
+          <h3 class="subsection-title" data-i18n="chart2-title">Em uma escala de 1 a 5, o quão fácil foi realizar o que você veio fazer no site?</h3>
+          <div class="chart-card">
+            <div class="hbar-list">
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">1 <span class="hbar-tag" data-i18n="tag-3">muito difícil</span></span>
+                  <span class="hbar-right"><span class="hbar-pct">7%</span><span class="hbar-count">121 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="7"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">2</span>
+                  <span class="hbar-right"><span class="hbar-pct">4%</span><span class="hbar-count">73 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="4"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">3</span>
+                  <span class="hbar-right"><span class="hbar-pct">12%</span><span class="hbar-count">211 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="12"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">4</span>
+                  <span class="hbar-right"><span class="hbar-pct">20%</span><span class="hbar-count">356 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="20"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name">5 <span class="hbar-tag" data-i18n="tag-4">muito fácil</span></span>
+                  <span class="hbar-right"><span class="hbar-pct">57%</span><span class="hbar-count">1.006 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="57"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card" style="width:342px; flex:none;">
+            <div class="stat-badge"><span class="num">4,1</span><span class="label" data-i18n="avg-label">Média final</span></div>
+          </div>
+        </div>
+
+        <!-- Gráfico 3 -->
+        <div class="chart-block" style="margin-top:56px;">
+          <h3 class="subsection-title" data-i18n="chart3-title">Você encontrou tudo o que procurava?</h3>
+          <div class="chart-card">
+            <div class="hbar-list">
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name" data-i18n="yes-answer">Sim</span>
+                  <span class="hbar-right"><span class="hbar-pct">82%</span><span class="hbar-count">515 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="82"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name" data-i18n="no-answer">Não</span>
+                  <span class="hbar-right"><span class="hbar-pct">10%</span><span class="hbar-count">64 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="10"></div></div>
+              </div>
+              <div class="hbar-row">
+                <div class="hbar-top">
+                  <span class="hbar-name" data-i18n="partial-answer">Parcialmente</span>
+                  <span class="hbar-right"><span class="hbar-pct">8%</span><span class="hbar-count">51 <span data-i18n="word-responses">respostas</span></span></span>
+                </div>
+                <div class="hbar-track"><div class="hbar-fill" data-width="8"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="stat-card" style="width:342px; flex:none;">
+            <div class="stat-badge"><span class="num">82%</span><span class="label" data-i18n="found-label">Encontram</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRINCIPAIS INSIGHTS -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="insights-title">Principais insights:</h2>
+        <div class="checklist-grid">
+          <div class="checklist-card">
+            <div class="checklist-icon accent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
+            <p data-i18n="insight1">Percepção de modernidade: O novo site foi percebido como mais moderno, profissional e alinhado à credibilidade da marca.</p>
+          </div>
+          <div class="checklist-card">
+            <div class="checklist-icon accent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
+            <p data-i18n="insight2">Maior facilidade: Os fluxos de envio passaram a ser considerados mais simples, rápidos e intuitivos.</p>
+          </div>
+          <div class="checklist-card">
+            <div class="checklist-icon accent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
+            <p data-i18n="insight3">Mais transparência: As informações de taxas e valores da transação estão mais fáceis de compreender.</p>
+          </div>
+          <div class="checklist-card">
+            <div class="checklist-icon accent"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
+            <p data-i18n="insight4">Confiança preservada: O redesign modernizou a experiência sem comprometer a percepção de segurança.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- APRENDIZADOS -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="learnings-title">Aprendizados</h2>
+        <p class="body-text" data-i18n="learnings-body">Mais do que redesenhar uma interface, este projeto mostrou que melhorar a experiência do cliente exige repensar a estrutura do produto, validar decisões continuamente e conduzir mudanças de forma gradual para equilibrar valor para o usuário e segurança para o negócio.</p>
+      </section>
+
+    </div>
+  </div>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" role="dialog" aria-modal="true" aria-label="Imagem ampliada" data-i18n-aria="lightbox-aria">
+    <button type="button" class="lightbox-close" aria-label="Fechar" data-i18n-aria="lightbox-close">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <img src="" alt="">
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const nav          = document.querySelector('nav');
+      const navBg        = document.querySelector('.nav-bg');
+      const navIndicator = document.querySelector('.nav-indicator');
+      const hamburger    = document.querySelector('.hamburger');
+      const mobileMenu   = document.querySelector('.mobile-menu');
+      const mobileLinks  = document.querySelectorAll('.mobile-menu a');
+      const navLinks     = document.querySelectorAll('.nav-links a');
+      const NAV_LINKS_GAP = 80; // deve bater com o `gap` de .nav-links no CSS
+
+      // ── Idioma (PT/EN) ────────────────────────────────────────
+      const translations = {
+        "nav-home": { pt: "Início", en: "Home" },
+        "nav-work": { pt: "Trabalhos", en: "Work" },
+        "nav-experience": { pt: "Experiência", en: "Experience" },
+        "nav-contact": { pt: "Contato", en: "Contact" },
+        "nav-open-menu": { pt: "Abrir menu", en: "Open menu" },
+        "my-work": { pt: "Meus trabalhos", en: "My work" },
+        "tab1-label": { pt: "1 - Nova plataforma web", en: "1 - New web platform" },
+        "c1-title": { pt: "Nova plataforma web - Remessa Online", en: "New web platform - Remessa Online" },
+        "c1-intro": { pt: "Redesign completo da plataforma, contemplando a reformulação da experiência do usuário, da arquitetura da informação, desde o onboarding até os fluxos operacionais e a implementação de novas funcionalidades alinhadas às estratégias de negócio.", en: "Complete platform redesign, covering the overhaul of the user experience and information architecture, from onboarding to operational flows, plus the rollout of new features aligned with business strategy." },
+        "role-title": { pt: "Meu papel", en: "My role" },
+        "role-body": { pt: "Fui o designer responsável por todo o projeto, conduzi o Discovery, a definição da arquitetura da informação, UX / UI, as pesquisas, a aplicação do Design System, o alinhamento com as áreas de Produto e Engenharia, bem como o acompanhamento após o rollout.", en: "I was the designer responsible for the entire project — leading Discovery, defining the information architecture, UX / UI, research, applying the Design System, aligning with the Product and Engineering teams, as well as follow-up after rollout." },
+        "challenge-title": { pt: "O desafio", en: "The challenge" },
+        "challenge-body": { pt: "A plataforma web da Remessa Online havia sido construída ao longo de quase sete anos. O crescimento acelerado trouxe novas funcionalidades, mas também uma série de inconsistências de usabilidade, arquitetura da informação e escalabilidade que dificultavam tanto a evolução do produto quanto a realização das principais tarefas pelos clientes.<br><br>O <strong>objetivo</strong> foi o de modernizar a experiência da plataforma, eliminando limitações estruturais e criando uma base escalável para sustentar a evolução do produto e do negócio.", en: "Remessa Online's web platform had been built over almost seven years. Rapid growth brought new features, but also a series of usability, information architecture, and scalability inconsistencies that made it harder to evolve the product and for customers to complete key tasks.<br><br>The <strong>goal</strong> was to modernize the platform experience, removing structural limitations and creating a scalable foundation to support the growth of the product and the business." },
+        "ro-aria-1": { pt: "Ampliar imagem da plataforma antiga 1", en: "Enlarge old platform image 1" },
+        "ro-alt-1": { pt: "Plataforma antiga - Remessa Online 1", en: "Old platform - Remessa Online 1" },
+        "ro-aria-2": { pt: "Ampliar imagem da plataforma antiga 2", en: "Enlarge old platform image 2" },
+        "ro-alt-2": { pt: "Plataforma antiga - Remessa Online 2", en: "Old platform - Remessa Online 2" },
+        "ro-aria-3": { pt: "Ampliar imagem da plataforma antiga 3", en: "Enlarge old platform image 3" },
+        "ro-alt-3": { pt: "Plataforma antiga - Remessa Online 3", en: "Old platform - Remessa Online 3" },
+        "discover-title": { pt: "O que eu descobri", en: "What I discovered" },
+        "discover-body": { pt: "Durante o Discovery, consolidei pesquisas, feedbacks de clientes e análises da experiência existente para identificar os principais fatores que comprometiam a evolução do produto.", en: "During Discovery, I consolidated research, customer feedback, and analyses of the existing experience to identify the key factors holding back the product's evolution." },
+        "problems-title": { pt: "Problemas e oportunidades", en: "Problems and opportunities" },
+        "prob1-h4": { pt: "Onboarding com alta fricção", en: "High-friction onboarding" },
+        "prob1-li1": { pt: "Cadastro longo e pouco orientado.", en: "Long, poorly guided sign-up." },
+        "prob1-li2": { pt: "Sem visibilidade de progresso.", en: "No progress visibility." },
+        "prob1-li3": { pt: "Envio de documentos com restrições técnicas.", en: "Document upload with technical restrictions." },
+        "prob1-li4": { pt: "Baixa percepção de segurança.", en: "Low perceived security." },
+        "prob2-h4": { pt: "Arquitetura da informação confusa", en: "Confusing information architecture" },
+        "prob2-li1": { pt: "Navegação pouco escalável.", en: "Poorly scalable navigation." },
+        "prob2-li2": { pt: "Terminologias distantes do modelo mental dos clientes.", en: "Terminology far from customers' mental model." },
+        "prob2-li3": { pt: "Organização inconsistente entre funcionalidades.", en: "Inconsistent organization across features." },
+        "prob3-h4": { pt: "Experiência pouco personalizada", en: "Poorly personalized experience" },
+        "prob3-li1": { pt: "Home genérica para diferentes perfis.", en: "Generic home for different profiles." },
+        "prob3-li2": { pt: "Pouco suporte durante a jornada.", en: "Little support throughout the journey." },
+        "prob3-li3": { pt: "Acompanhamento de transações dependente de e-mails.", en: "Transaction tracking dependent on emails." },
+        "prob3-li4": { pt: "Feedbacks pouco claros.", en: "Unclear feedback." },
+        "prob4-h4": { pt: "Baixa consistência e escalabilidade", en: "Low consistency and scalability" },
+        "prob4-li1": { pt: "Ausência de Design System.", en: "No Design System." },
+        "prob4-li2": { pt: "Componentes e padrões visuais inconsistentes.", en: "Inconsistent components and visual patterns." },
+        "prob4-li3": { pt: "Alto custo para evoluir o produto.", en: "High cost to evolve the product." },
+        "principles-title": { pt: "Princípios que guiaram o redesign", en: "Principles that guided the redesign" },
+        "princ1-h4": { pt: "Escalabilidade", en: "Scalability" },
+        "princ1-p": { pt: "Construir uma plataforma preparada para crescer.", en: "Build a platform ready to grow." },
+        "princ2-h4": { pt: "Encontrabilidade", en: "Findability" },
+        "princ2-p": { pt: "Facilitar a descoberta das funcionalidades.", en: "Make it easier to discover features." },
+        "princ3-h4": { pt: "Personalização", en: "Personalization" },
+        "princ3-p": { pt: "Mostrar o que é mais relevante para o caso de uso do cliente.", en: "Show what's most relevant to the customer's use case." },
+        "princ4-h4": { pt: "Orientação", en: "Guidance" },
+        "princ4-p": { pt: "Reduzir dúvidas em jornadas financeiras complexas.", en: "Reduce doubts in complex financial journeys." },
+        "princ5-h4": { pt: "Visibilidade", en: "Visibility" },
+        "princ5-p": { pt: "Diminuir ansiedade durante as operações.", en: "Reduce anxiety during operations." },
+        "princ6-h4": { pt: "Consistência e clareza", en: "Consistency and clarity" },
+        "princ6-p": { pt: "Padrão consistente nos componentes, diminuindo o esforço cognitivo.", en: "Consistent component patterns, reducing cognitive effort." },
+        "princ7-h4": { pt: "Controle e Liberdade", en: "Control and Freedom" },
+        "princ7-p": { pt: "Caminhos claros para desfazer ações, cancelar processos ou voltar no fluxo.", en: "Clear paths to undo actions, cancel processes, or go back in the flow." },
+        "build-title": { pt: "Construção da nova experiência", en: "Building the new experience" },
+        "build-body": { pt: "Redesenhei toda a plataforma utilizando um Design System desenvolvido pelo time de design. A nova experiência foi concebida para resolver os problemas de inconsistência, arquitetura da informação e usabilidade identificados no diagnóstico, estabelecendo uma base escalável para a evolução do produto.<br><br>Realizei um benchmarking com concorrentes diretos e indiretos, analisando fluxos, arquitetura da informação e padrões de interação, além de mapear boas práticas de UX e UI adotadas por fintechs e bancos digitais. O objetivo foi identificar oportunidades para elevar a usabilidade, a confiança e a competitividade da plataforma.", en: "I redesigned the entire platform using a Design System developed by the design team. The new experience was built to solve the inconsistency, information architecture, and usability problems identified in the diagnosis, establishing a scalable foundation for the product's evolution.<br><br>I ran a benchmark against direct and indirect competitors, analyzing flows, information architecture, and interaction patterns, as well as mapping UX and UI best practices adopted by fintechs and digital banks. The goal was to identify opportunities to raise usability, trust, and the platform's competitiveness." },
+        "logged-out-title": { pt: "Área não logada", en: "Logged-out area" },
+        "onboarding-desc": { pt: "O onboarding foi redesenhado para reduzir a incerteza durante o cadastro e aumentar as chances de conversão no topo do funil. Em vez de apenas solicitar informações, passei a orientar o cliente em cada etapa da jornada, tornando o processo mais previsível e reduzindo erros.", en: "Onboarding was redesigned to reduce uncertainty during sign-up and increase conversion at the top of the funnel. Instead of just requesting information, I started guiding the customer through each step of the journey, making the process more predictable and reducing errors." },
+        "main-improvements": { pt: "Principais melhorias", en: "Main improvements" },
+        "chk1-1": { pt: "Stepper para dar visibilidade ao progresso do cadastro.", en: "Stepper to show sign-up progress." },
+        "chk1-2": { pt: "UX Writing mais claro e conversacional, orientando as ações ao longo da jornada.", en: "Clearer, more conversational UX writing, guiding actions throughout the journey." },
+        "chk1-3": { pt: "Orientações contextuais para envio do documento de identificação.", en: "Contextual guidance for uploading the ID document." },
+        "chk1-4": { pt: "Máscara para captura no mobile, reduzindo erros durante a fotografia do documento.", en: "Capture mask on mobile, reducing errors while photographing the document." },
+        "chk1-5": { pt: "Fluxo de qualificação, permitindo personalizar a experiência desde o primeiro acesso.", en: "Qualification flow, allowing the experience to be personalized from the first access." },
+        "results-title-1": { pt: "Resultados", en: "Results" },
+        "stat1-label": { pt: "menos abandono", en: "less drop-off" },
+        "stat1-p": { pt: "Menos abandono do fluxo de cadastro.", en: "Less drop-off in the sign-up flow." },
+        "stat2-label": { pt: "Aprovação", en: "Approval" },
+        "stat2-p": { pt: "Aprovação automática dos documentos de identificação.", en: "Automatic approval of ID documents." },
+        "logged-in-title": { pt: "Área logada", en: "Logged-in area" },
+        "fr1-h4": { pt: "Menu lateral e header simplificado", en: "Simplified sidebar and header" },
+        "fr1-p": { pt: "A navegação foi reorganizada com a adoção de um menu lateral, posicionando a estrutura principal da plataforma como o primeiro elemento na leitura da interface.", en: "Navigation was reorganized with a sidebar menu, positioning the platform's main structure as the first element read in the interface." },
+        "fr1-impact": { pt: "→ Melhor hierarquia da informação, encontrabilidade e escalabilidade da navegação.", en: "→ Better information hierarchy, findability, and navigation scalability." },
+        "fr2-h4": { pt: "Tela inicial modular", en: "Modular home screen" },
+        "fr2-p": { pt: "A home foi redesenhada utilizando uma estrutura modular baseada em seções hierarquizadas conforme a relevância para o cliente. O que permitiu testar diferentes organizações, aumentando a flexibilidade da plataforma.", en: "The home screen was redesigned using a modular structure based on sections prioritized by relevance to the customer, enabling testing of different arrangements and increasing the platform's flexibility." },
+        "fr2-impact": { pt: "→ Melhor priorização das informações, flexibilidade para testes e personalização.", en: "→ Better information prioritization, testing flexibility, and personalization." },
+        "fr3-h4": { pt: "Novo extrato de transações", en: "New transaction statement" },
+        "fr3-p": { pt: "O histórico de operações deixou de utilizar cards horizontais e passou a ser apresentado em formato de tabela, permitindo comparação rápida entre valores, moedas, datas e status.", en: "The operations history moved away from horizontal cards to a table format, enabling quick comparison across amounts, currencies, dates, and status." },
+        "fr3-impact": { pt: "→ Maior escaneabilidade, eficiência e foco nas tarefas prioritárias.", en: "→ Greater scannability, efficiency, and focus on priority tasks." },
+        "fr4-h4": { pt: "Gestão de beneficiários", en: "Beneficiary management" },
+        "fr4-p": { pt: "Exibidos em formato de tabela, facilitando a localização, leitura e comparação de informações bancárias.", en: "Displayed in table format, making it easier to locate, read, and compare banking information." },
+        "fr4-impact": { pt: "→ Melhor compreensão, reconhecimento e consulta de informações.", en: "→ Better understanding, recognition, and lookup of information." },
+        "fr5-h4": { pt: "Vídeos explicativos", en: "Explainer videos" },
+        "fr5-p": { pt: "Para reduzir dúvidas dos clientes, criamos vídeos explicativos para os principais casos de uso da plataforma, como envio para terceiros, mesma titularidade, recebimento internacional e Conta Global.", en: "To reduce customer doubts, we created explainer videos for the platform's main use cases, such as sending to third parties, same-ownership transfers, international receiving, and Global Account." },
+        "fr5-impact": { pt: "→ Maior autonomia, redução de dúvidas e menor dependência do suporte.", en: "→ Greater autonomy, fewer doubts, and less dependence on support." },
+        "fr6-h4": { pt: "Customização da experiência", en: "Experience customization" },
+        "fr6-p": { pt: "A qualificação realizada durante o onboarding passou a orientar a composição da tela inicial, permitindo destacar funcionalidades e conteúdos de acordo com o objetivo de cada cliente.", en: "Qualification during onboarding now guides the composition of the home screen, allowing features and content to be highlighted according to each customer's goal." },
+        "fr6-impact": { pt: "→ Maior relevância, descoberta de funcionalidades e eficiência na jornada.", en: "→ Greater relevance, feature discovery, and journey efficiency." },
+        "fr7-h4": { pt: "Central de notificações", en: "Notification center" },
+        "fr7-p": { pt: "Foi criada uma central de notificações integrada ao header, reunindo todas as atualizações relevantes sobre o andamento das transações. A funcionalidade reduziu a dependência do e-mail como único canal de comunicação.", en: "A notification center integrated into the header was created, gathering all relevant updates on transaction progress. The feature reduced reliance on email as the only communication channel." },
+        "fr7-impact": { pt: "→ Maior visibilidade das operações e continuidade da experiência.", en: "→ Greater visibility of operations and continuity of the experience." },
+        "fr8-h4": { pt: "Grid unificado", en: "Unified grid" },
+        "fr8-p": { pt: "Todo o produto passou a utilizar um único grid e uma mesma estrutura visual, garantindo consistência entre as jornadas.", en: "The entire product now uses a single grid and the same visual structure, ensuring consistency across journeys." },
+        "fr8-impact": { pt: "→ Consistência visual, menor carga cognitiva e maior escalabilidade.", en: "→ Visual consistency, less cognitive load, and greater scalability." },
+        "rollout-title": { pt: "Rollout do site", en: "Site rollout" },
+        "rollout-body": { pt: "Para minimizar riscos durante uma mudança estrutural da plataforma, optamos por um rollout gradual, disponibilizando inicialmente a nova experiência para apenas 5% da base de clientes e ampliando esse percentual de forma progressiva à medida que acompanhávamos métricas de estabilidade, comportamento e adoção. Como mudanças significativas de interface e arquitetura da informação podem gerar resistência mesmo quando representam uma melhoria, mantivemos, durante os primeiros meses, a opção de alternar entre a nova e a antiga experiência. Essa estratégia reduziu o impacto da transição, preservou a sensação de controle do usuário e mitigou o risco de abandono.", en: "To minimize risk during a structural platform change, we opted for a gradual rollout, initially making the new experience available to just 5% of the customer base and progressively expanding that share as we tracked stability, behavior, and adoption metrics. Since significant interface and information architecture changes can create resistance even when they represent an improvement, we kept the option to switch between the new and old experience during the first few months. This strategy reduced the impact of the transition, preserved users' sense of control, and mitigated the risk of drop-off." },
+        "stat3-label": { pt: "Base de clientes", en: "Customer base" },
+        "stat3-p": { pt: "Tamanho da base no lançamento do site novo.", en: "Base size at the launch of the new site." },
+        "stat4-label": { pt: "não aceitação", en: "opt-out" },
+        "stat4-p": { pt: "Taxa de retorno à versão antiga do site.", en: "Rate of return to the old version of the site." },
+        "survey-title": { pt: "Pesquisa termômetro e acompanhamento", en: "Pulse survey and follow-up" },
+        "survey-body": { pt: "Após a abertura da nova web para 30% dos clientes, devido ao volume de acessos à nova plataforma, foi disparada na dashboard (via Hotjar) uma pesquisa de termômetro, para acompanharmos as impressões dos clientes sobre a nova experiência da plataforma web.", en: "After the new web platform opened up to 30% of customers, due to the volume of traffic to the new platform, a pulse survey was triggered on the dashboard (via Hotjar) to track customer impressions of the new web platform experience." },
+        "respondents": { pt: "Número de respondentes: 2.040", en: "Number of respondents: 2,040" },
+        "survey1": { pt: "Como o cliente avalia a experiência nova.", en: "How the customer rates the new experience." },
+        "survey2": { pt: "O quão fácil foi realizar o que foi fazer no site.", en: "How easy it was to do what they came to do on the site." },
+        "survey3": { pt: "Se encontrou tudo o que procurava.", en: "Whether they found everything they were looking for." },
+        "survey4": { pt: "Sugestões de melhorias", en: "Suggestions for improvement" },
+        "survey5": { pt: "O que frustrou ou confundiu o cliente.", en: "What frustrated or confused the customer." },
+        "results-impact-title": { pt: "Resultados e impacto da nova experiência", en: "Results and impact of the new experience" },
+        "results-impact-body": { pt: "O redesign foi bem recebido pelos clientes desde as primeiras fases do rollout. A estratégia de disponibilizar a nova experiência gradualmente, aliada à possibilidade de retornar temporariamente à versão anterior, permitiu reduzir o risco da transição e acompanhar a adoção com segurança.", en: "The redesign was well received by customers from the early phases of the rollout. The strategy of gradually rolling out the new experience, combined with the option to temporarily return to the previous version, reduced transition risk and allowed us to track adoption safely." },
+        "chart1-title": { pt: "Em uma escala de 1 a 5, como você avalia sua experiência com o site até agora?", en: "On a scale of 1 to 5, how do you rate your experience with the site so far?" },
+        "chart2-title": { pt: "Em uma escala de 1 a 5, o quão fácil foi realizar o que você veio fazer no site?", en: "On a scale of 1 to 5, how easy was it to do what you came to do on the site?" },
+        "chart3-title": { pt: "Você encontrou tudo o que procurava?", en: "Did you find everything you were looking for?" },
+        "word-responses": { pt: "respostas", en: "responses" },
+        "tag-1": { pt: "muito ruim", en: "very poor" },
+        "tag-2": { pt: "excelente", en: "excellent" },
+        "tag-3": { pt: "muito difícil", en: "very hard" },
+        "tag-4": { pt: "muito fácil", en: "very easy" },
+        "yes-answer": { pt: "Sim", en: "Yes" },
+        "no-answer": { pt: "Não", en: "No" },
+        "partial-answer": { pt: "Parcialmente", en: "Partially" },
+        "avg-label": { pt: "Média final", en: "Final average" },
+        "found-label": { pt: "Encontram", en: "Found it" },
+        "insights-title": { pt: "Principais insights:", en: "Key insights:" },
+        "insight1": { pt: "Percepção de modernidade: O novo site foi percebido como mais moderno, profissional e alinhado à credibilidade da marca.", en: "Perceived modernity: The new site was seen as more modern, professional, and aligned with the brand's credibility." },
+        "insight2": { pt: "Maior facilidade: Os fluxos de envio passaram a ser considerados mais simples, rápidos e intuitivos.", en: "Greater ease: Sending flows came to be seen as simpler, faster, and more intuitive." },
+        "insight3": { pt: "Mais transparência: As informações de taxas e valores da transação estão mais fáceis de compreender.", en: "More transparency: Fee and transaction amount information is easier to understand." },
+        "insight4": { pt: "Confiança preservada: O redesign modernizou a experiência sem comprometer a percepção de segurança.", en: "Trust preserved: The redesign modernized the experience without compromising the perception of security." },
+        "learnings-title": { pt: "Aprendizados", en: "Learnings" },
+        "learnings-body": { pt: "Mais do que redesenhar uma interface, este projeto mostrou que melhorar a experiência do cliente exige repensar a estrutura do produto, validar decisões continuamente e conduzir mudanças de forma gradual para equilibrar valor para o usuário e segurança para o negócio.", en: "More than redesigning an interface, this project showed that improving the customer experience requires rethinking the product's structure, continuously validating decisions, and rolling out changes gradually to balance value for the user with safety for the business." },
+        "lightbox-aria": { pt: "Imagem ampliada", en: "Enlarged image" },
+        "lightbox-close": { pt: "Fechar", en: "Close" },
+      };
+
+      function applyLanguage(lang) {
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n')];
+          if (t && t[lang] != null) el.innerHTML = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-alt')];
+          if (t && t[lang] != null) el.alt = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-aria')];
+          if (t && t[lang] != null) el.setAttribute('aria-label', t[lang]);
+        });
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        localStorage.setItem('site-lang', lang);
+        positionIndicator(true);
+        drawSurveyConnector();
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      });
+
+      applyLanguage(localStorage.getItem('site-lang') || 'pt');
+
+      // ── Vídeos: reproduzir em câmera lenta e, ao terminar,
+      // esperar 2s antes de reiniciar o loop ───────────────────
+      function setupLoopingVideo(video, rate) {
+        if (!video) return;
+        video.defaultPlaybackRate = rate;
+        video.playbackRate = rate;
+        video.addEventListener('ended', () => {
+          setTimeout(() => {
+            video.currentTime = 0;
+            video.play();
+          }, 2000);
+        });
+      }
+
+      setupLoopingVideo(document.querySelector('.hero-image video'), 0.8);
+
+      // ── Lightbox: abre imagem em tamanho real ────────────────
+      const lightbox      = document.querySelector('.lightbox');
+      const lightboxImg   = lightbox.querySelector('img');
+      const lightboxClose = lightbox.querySelector('.lightbox-close');
+
+      function openLightbox(src, alt) {
+        lightboxImg.src = src;
+        lightboxImg.alt = alt || '';
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        document.body.style.overflow = '';
+        lightboxImg.src = '';
+      }
+
+      document.querySelectorAll('.img-trigger, .gallery-image-frame[data-full]').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const img = trigger.querySelector('img');
+          openLightbox(trigger.dataset.full, img ? img.alt : '');
+        });
+      });
+
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+
+      // ── Gráficos: barras carregam ao entrar na tela ──────────
+      const chartObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const fills = entry.target.querySelectorAll('.hbar-fill');
+          fills.forEach((fill, i) => {
+            setTimeout(() => { fill.style.width = fill.dataset.width + '%'; }, i * 90);
+          });
+          chartObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('.chart-card').forEach(card => chartObserver.observe(card));
+
+      // ── Pesquisa: traçado do fluxograma ligando os cards ────
+      function drawSurveyConnector() {
+        const flow  = document.querySelector('.survey-flow');
+        const svg   = document.querySelector('.survey-connector');
+        const node2 = document.getElementById('survey-node-2');
+        const node3 = document.getElementById('survey-node-3');
+        const node5 = document.getElementById('survey-node-5');
+        if (!flow || !svg || !node2 || !node3 || !node5) return;
+        if (getComputedStyle(svg).display === 'none') return;
+
+        const flowRect = flow.getBoundingClientRect();
+        const toLocal = (x, y) => ({ x: x - flowRect.left, y: y - flowRect.top });
+
+        const r2 = node2.getBoundingClientRect();
+        const r3 = node3.getBoundingClientRect();
+        const r5 = node5.getBoundingClientRect();
+        const badge5 = node5.querySelector('.survey-badge').getBoundingClientRect();
+
+        const p2bottom = toLocal(r2.left + r2.width / 2, r2.bottom);
+        const p5top    = toLocal(badge5.left + badge5.width / 2, badge5.top);
+        const p5right  = toLocal(r5.right, r5.top + r5.height / 2);
+        const p3x      = toLocal(r3.left + r3.width / 2, 0).x;
+        const p3bottom = toLocal(r3.left + r3.width / 2, r3.bottom).y;
+
+        const dash = getComputedStyle(document.documentElement).getPropertyValue('--principle-border').trim();
+        const blue = getComputedStyle(document.documentElement).getPropertyValue('--flow-blue').trim();
+        const arrowTipY = p3bottom + 10;
+        const arrowBaseY = p3bottom + 24;
+
+        svg.setAttribute('viewBox', `0 0 ${flowRect.width} ${flowRect.height}`);
+        svg.innerHTML =
+          `<path d="M ${p2bottom.x} ${p2bottom.y} L ${p5top.x} ${p5top.y}" fill="none" stroke="${dash}" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" />` +
+          `<path d="M ${p5right.x} ${p5right.y} L ${p3x} ${p5right.y} L ${p3x} ${arrowBaseY}" fill="none" stroke="${dash}" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round" />` +
+          `<path d="M ${p3x - 9} ${arrowBaseY} L ${p3x} ${arrowTipY} L ${p3x + 9} ${arrowBaseY}" fill="none" stroke="${blue}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />`;
+      }
+
+      drawSurveyConnector();
+      window.addEventListener('resize', drawSurveyConnector);
+      if (document.fonts) document.fonts.ready.then(drawSurveyConnector);
+
+      function positionIndicator(instant) {
+        const activeLink = document.querySelector('.nav-links a.active');
+        if (!activeLink) return;
+        const rect    = activeLink.getBoundingClientRect();
+        const navRect = nav.getBoundingClientRect();
+        if (instant) navIndicator.style.transition = 'none';
+        navIndicator.style.width = rect.width + 'px';
+        navIndicator.style.left  = (rect.left - navRect.left) + 'px';
+        if (instant) {
+          navIndicator.offsetHeight; // força reflow antes de reativar a transição
+          navIndicator.style.transition = '';
+        }
+      }
+
+      // Primeiro posicionamento é instantâneo (sem transition) para não
+      // "deslizar" a partir de left:0/width:0 — isso ficava visível durante
+      // a transição de página entre os cases.
+      positionIndicator(true);
+      window.addEventListener('resize', positionIndicator);
+      if (document.fonts) document.fonts.ready.then(positionIndicator);
+
+      function openMenu() {
+        hamburger.classList.add('open');
+        mobileMenu.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => closeMenu());
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          const rect    = link.getBoundingClientRect();
+          const navRect = nav.getBoundingClientRect();
+          const pad     = NAV_LINKS_GAP / 2;
+          navBg.style.left  = (rect.left - navRect.left - pad) + 'px';
+          navBg.style.width = (rect.width + NAV_LINKS_GAP) + 'px';
+        });
+
+        link.addEventListener('mouseleave', () => {
+          navBg.style.left  = '0px';
+          navBg.style.width = '100%';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

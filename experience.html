@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Experience — Murilo Simão</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:         #FBFAF5;
+      --text:       #2C2C2A;
+      --accent:     #DD4975;
+      --card-bg:    #2C2C2A;
+      --border:     #E3E0D8;
+      --white:      #FFFFFF;
+      --muted:      #928888;
+      --max:        1128px;
+      --font:       'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Transição nativa entre páginas (mesmo padrão do resto do site). */
+    @view-transition {
+      navigation: auto;
+    }
+
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      mix-blend-mode: normal;
+      height: 100%;
+    }
+
+    ::view-transition-group(*) {
+      overflow: hidden;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.3s;
+    }
+
+    ::view-transition-old(root) { animation-name: page-fade-out; }
+    ::view-transition-new(root) { animation-name: page-fade-in; }
+
+    @keyframes page-fade-out { to   { opacity: 0; } }
+    @keyframes page-fade-in  { from { opacity: 0; } }
+
+    img { display: block; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ── NAV (idêntico às demais páginas) ────────────────────── */
+    .nav-wrapper {
+      display: flex;
+      justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      z-index: 100;
+    }
+
+    nav {
+      background: none;
+      border-radius: 80px;
+      height: 80px;
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .nav-links a {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
+      position: relative;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .nav-links a.active { font-weight: 900; }
+
+    .nav-indicator {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      height: 6px;
+      background: var(--text);
+      border-radius: 0 0 6px 6px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+    }
+
+    .nav-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 80px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── SWITCH DE IDIOMA ───────────────────────────────────── */
+    .lang-switch {
+      position: absolute;
+      right: 72px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      padding: 4px;
+      z-index: 2;
+    }
+
+    .lang-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      opacity: 0.5;
+      display: block;
+      line-height: 0;
+      transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .lang-btn svg { width: 100%; height: 100%; display: block; }
+
+    .lang-btn:hover { opacity: 0.85; }
+
+    .lang-btn.active {
+      opacity: 1;
+      border-color: var(--white);
+      transform: scale(1.08);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      transition: background 0.15s;
+      z-index: 10;
+    }
+
+    .hamburger:hover { background: rgba(255,255,255,0.15); }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+
+    .mobile-menu a {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: relative;
+      padding-bottom: 6px;
+    }
+
+    .mobile-menu a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* ── LAYOUT ─────────────────────────────────────────────── */
+    .exp {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 72px;
+      width: 100%;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      padding-top: 144px;
+      padding-bottom: 160px;
+    }
+
+    /* ── TÍTULO ─────────────────────────────────────────────── */
+    .exp-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .exp-title {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 56px;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .exp-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── PERFIL + BIO ───────────────────────────────────────── */
+    .exp-intro {
+      display: flex;
+      gap: 40px;
+      align-items: flex-start;
+    }
+
+    .exp-photo {
+      width: 552px;
+      height: 548px;
+      max-width: 100%;
+      flex-shrink: 0;
+      border-radius: 96px;
+      overflow: hidden;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      box-shadow: inset 0 0 0 2px var(--bg);
+    }
+
+    .exp-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    .exp-bio {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 32px;
+      color: var(--text);
+    }
+
+    .exp-bio strong {
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .exp-bio p + p { margin-top: 24px; }
+
+    /* ── LISTA DE EXPERIÊNCIAS ──────────────────────────────── */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      width: 100%;
+    }
+
+    .exp-entry {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .exp-entry-header {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .exp-entry-header h3 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .exp-entry-header .meta {
+      font-size: 16px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .exp-entry ul {
+      list-style: disc;
+      padding-left: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .exp-entry li {
+      font-size: 20px;
+      line-height: 32px;
+      color: var(--text);
+    }
+
+    /* ── LINKS ──────────────────────────────────────────────── */
+    .exp-links {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .exp-links-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      text-transform: uppercase;
+      line-height: 32px;
+    }
+
+    .exp-icons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .icon-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      transition: opacity 0.15s;
+    }
+
+    .icon-btn:hover { opacity: 0.8; }
+
+    /* ── RESPONSIVO ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .main-content { padding-top: 96px; padding-bottom: 96px; }
+      .exp { gap: 56px; }
+      .exp-title { font-size: 40px; line-height: 48px; }
+      .exp-intro { flex-direction: column; gap: 40px; }
+      .exp-photo { width: 420px; height: 540px; }
+      .exp-bio { font-size: 24px; line-height: 34px; }
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        padding: 0 16px;
+        height: 64px;
+        justify-content: space-between;
+        max-width: calc(100% - 32px);
+      }
+
+      .lang-switch { right: 16px; }
+
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+
+      .mobile-menu { display: flex; }
+
+      .main-content { padding-top: 64px; padding-bottom: 80px; }
+
+      .exp { gap: 48px; padding: 0 20px; }
+
+      .exp-title { font-size: 30px; line-height: 38px; }
+
+      .exp-photo {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        border-radius: 48px;
+      }
+
+      .exp-bio { font-size: 19px; line-height: 28px; }
+
+      .exp-entry-header h3 { font-size: 20px; }
+
+      .exp-entry li { font-size: 17px; line-height: 27px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav-wrapper">
+    <nav>
+      <div class="nav-links">
+        <a href="index.html" data-i18n="nav-home">Início</a>
+        <a href="case-1.html" data-i18n="nav-work">Trabalhos</a>
+        <a href="experience.html" class="active" data-i18n="nav-experience">Experiência</a>
+      </div>
+      <button class="hamburger" aria-label="Abrir menu" data-i18n-aria="nav-open-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-bg"></div>
+      <div class="nav-indicator"></div>
+      <div class="lang-switch" role="group" aria-label="Idioma do site / Site language">
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#009C3B"/><polygon points="12,3 21,12 12,21 3,12" fill="#FFDF00"/><circle cx="12" cy="12" r="4.5" fill="#002776"/></svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English">
+          <svg viewBox="0 0 24 24"><defs><clipPath id="usaClip"><circle cx="12" cy="12" r="12"/></clipPath></defs><g clip-path="url(#usaClip)"><rect width="24" height="24" fill="#B22234"/><rect y="1.85" width="24" height="1.85" fill="#fff"/><rect y="5.54" width="24" height="1.85" fill="#fff"/><rect y="9.23" width="24" height="1.85" fill="#fff"/><rect y="12.92" width="24" height="1.85" fill="#fff"/><rect y="16.62" width="24" height="1.85" fill="#fff"/><rect y="20.31" width="24" height="1.85" fill="#fff"/><rect width="10.5" height="12.92" fill="#3C3B6E"/></g></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- MENU MOBILE -->
+  <div class="mobile-menu" role="dialog" aria-label="Menu de navegação">
+    <a href="index.html" data-i18n="nav-home">Início</a>
+    <a href="case-1.html" data-i18n="nav-work">Trabalhos</a>
+    <a href="experience.html" class="active" data-i18n="nav-experience">Experiência</a>
+  </div>
+
+  <div class="main-content">
+    <div class="exp">
+
+      <!-- TÍTULO -->
+      <div class="exp-title-block">
+        <h1 class="exp-title" data-i18n="exp-title">Experiência</h1>
+        <hr class="exp-divider">
+      </div>
+
+      <!-- PERFIL + BIO -->
+      <div class="exp-intro">
+        <div class="exp-photo">
+          <img src="images/imagem%20perfil%204.png" alt="Murilo Simão">
+        </div>
+        <div class="exp-bio">
+          <p data-i18n="exp-bio1">No meu tempo livre, você provavelmente vai me encontrar em um café, no cinema ou explorando novos lugares. Minha história com o design começou há quase duas décadas, quando me formei em Design Gráfico.</p>
+          <p data-i18n="exp-bio2">Nos últimos 10 anos, <strong>concentrei minha carreira em Product Design</strong>, conduzindo projetos de ponta a ponta para criar produtos digitais que geram valor para usuários e negócios. Estas são algumas das minhas experiências neste período.</p>
+        </div>
+      </div>
+
+      <hr class="exp-divider">
+
+      <!-- LISTA DE EXPERIÊNCIAS -->
+      <div class="exp-list">
+
+        <div class="exp-entry">
+          <div class="exp-entry-header">
+            <h3 data-i18n="job1-title">Remessa Online — Senior Product Designer</h3>
+            <span class="meta">2020 – 2026 | São Paulo, SP</span>
+          </div>
+          <ul>
+            <li data-i18n="job1-li1">Condução de iniciativas estratégicas de Product Design de ponta a ponta, do discovery à validação de soluções, alinhando necessidades dos usuários aos objetivos de negócio.</li>
+            <li data-i18n="job1-li2">Planejamento e execução de pesquisas qualitativas e quantitativas (entrevistas, testes de usabilidade, surveys e análises comportamentais), transformando dados em insights para priorização do roadmap.</li>
+            <li data-i18n="job1-li3">Liderança de processos de discovery contínuo em parceria com Product Managers, Tech Leads e stakeholders, definindo hipóteses e direcionando decisões orientadas por evidências.</li>
+            <li data-i18n="job1-li4">Evolução da experiência do produto e do Design System, promovendo consistência, escalabilidade e qualidade da interface.</li>
+            <li data-i18n="job1-li5">Definição e acompanhamento de métricas de produto para avaliar impacto das soluções e apoiar decisões estratégicas.</li>
+            <li data-i18n="job1-li6">Mentoria de designers juniores e plenos, contribuindo para o desenvolvimento técnico, evolução da disciplina e fortalecimento da cultura de Design.</li>
+          </ul>
+        </div>
+
+        <hr class="exp-divider">
+
+        <div class="exp-entry">
+          <div class="exp-entry-header">
+            <h3 data-i18n="job2-title">NTT DATA Europe &amp; Latam — Senior Product Designer</h3>
+            <span class="meta">2019 – 2020 | São Paulo, SP</span>
+          </div>
+          <ul>
+            <li data-i18n="job2-li1">Condução do processo de Product Design end to end em projetos de transformação digital para o Itaú, desenvolvendo plataformas internas utilizadas por milhares de colaboradores.</li>
+            <li data-i18n="job2-li2">Realização de pesquisas com usuários, mapeamento de jornadas, definição de fluxos e prototipação para validar soluções antes do desenvolvimento.</li>
+            <li data-i18n="job2-li3">Colaboração multidisciplinar com times de negócio, tecnologia e desenvolvimento, garantindo alinhamento entre necessidades dos usuários e objetivos do produto.</li>
+            <li data-i18n="job2-li4">Criação de interfaces focadas em eficiência operacional, simplificação de processos e melhoria da experiência dos usuários internos.</li>
+          </ul>
+        </div>
+
+        <hr class="exp-divider">
+
+        <div class="exp-entry">
+          <div class="exp-entry-header">
+            <h3 data-i18n="job3-title">Altec Sistemas e Tecnologia — Product Designer</h3>
+            <span class="meta">2018 – 2019 | São Paulo, SP</span>
+          </div>
+          <ul>
+            <li data-i18n="job3-li1">Condução do processo de UX/UI Design para sistemas corporativos, desde o levantamento de requisitos até a entrega de interfaces para desenvolvimento.</li>
+            <li data-i18n="job3-li2">Mapeamento de fluxos, arquitetura da informação, wireframes, protótipos e interfaces de alta fidelidade.</li>
+            <li data-i18n="job3-li3">Validação de soluções por meio de testes de usabilidade e iterações contínuas com usuários e stakeholders.</li>
+          </ul>
+        </div>
+
+        <hr class="exp-divider">
+
+        <div class="exp-links">
+          <span class="exp-links-label" data-i18n="find-me">Where you can find me</span>
+          <div class="exp-icons">
+            <a href="https://www.linkedin.com/in/murilo-simão-designer/" target="_blank" rel="noopener" class="icon-btn" aria-label="LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+            <a href="https://wa.me/55" target="_blank" rel="noopener" class="icon-btn" aria-label="WhatsApp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+              </svg>
+            </a>
+            <a href="https://instagram.com/" target="_blank" rel="noopener" class="icon-btn" aria-label="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const nav          = document.querySelector('nav');
+      const navBg        = document.querySelector('.nav-bg');
+      const navIndicator = document.querySelector('.nav-indicator');
+      const hamburger    = document.querySelector('.hamburger');
+      const mobileMenu   = document.querySelector('.mobile-menu');
+      const mobileLinks  = document.querySelectorAll('.mobile-menu a');
+      const navLinks     = document.querySelectorAll('.nav-links a');
+      const NAV_LINKS_GAP = 80; // deve bater com o `gap` de .nav-links no CSS
+
+      // ── Idioma (PT/EN) ────────────────────────────────────────
+      const translations = {
+        "nav-home": { pt: "Início", en: "Home" },
+        "nav-work": { pt: "Trabalhos", en: "Work" },
+        "nav-experience": { pt: "Experiência", en: "Experience" },
+        "nav-contact": { pt: "Contato", en: "Contact" },
+        "nav-open-menu": { pt: "Abrir menu", en: "Open menu" },
+        "exp-title": { pt: "Experiência", en: "Experience" },
+        "exp-bio1": { pt: "No meu tempo livre, você provavelmente vai me encontrar em um café, no cinema ou explorando novos lugares. Minha história com o design começou há quase duas décadas, quando me formei em Design Gráfico.",
+                      en: "In my free time, you'll probably find me at a coffee shop, at the movies, or exploring new places. My story with design began almost two decades ago, when I graduated in Graphic Design." },
+        "exp-bio2": { pt: "Nos últimos 10 anos, <strong>concentrei minha carreira em Product Design</strong>, conduzindo projetos de ponta a ponta para criar produtos digitais que geram valor para usuários e negócios. Estas são algumas das minhas experiências neste período.",
+                      en: "Over the past 10 years, <strong>I've focused my career on Product Design</strong>, leading end-to-end projects to create digital products that generate value for users and businesses. These are some of my experiences from this period." },
+
+        "job1-title": { pt: "Remessa Online — Senior Product Designer", en: "Remessa Online — Senior Product Designer" },
+        "job1-li1": { pt: "Condução de iniciativas estratégicas de Product Design de ponta a ponta, do discovery à validação de soluções, alinhando necessidades dos usuários aos objetivos de negócio.",
+                      en: "Led end-to-end Product Design strategic initiatives, from discovery to solution validation, aligning user needs with business goals." },
+        "job1-li2": { pt: "Planejamento e execução de pesquisas qualitativas e quantitativas (entrevistas, testes de usabilidade, surveys e análises comportamentais), transformando dados em insights para priorização do roadmap.",
+                      en: "Planned and executed qualitative and quantitative research (interviews, usability tests, surveys, and behavioral analyses), turning data into insights for roadmap prioritization." },
+        "job1-li3": { pt: "Liderança de processos de discovery contínuo em parceria com Product Managers, Tech Leads e stakeholders, definindo hipóteses e direcionando decisões orientadas por evidências.",
+                      en: "Led continuous discovery processes in partnership with Product Managers, Tech Leads, and stakeholders, defining hypotheses and driving evidence-based decisions." },
+        "job1-li4": { pt: "Evolução da experiência do produto e do Design System, promovendo consistência, escalabilidade e qualidade da interface.",
+                      en: "Evolved the product experience and Design System, promoting consistency, scalability, and interface quality." },
+        "job1-li5": { pt: "Definição e acompanhamento de métricas de produto para avaliar impacto das soluções e apoiar decisões estratégicas.",
+                      en: "Defined and tracked product metrics to assess solution impact and support strategic decisions." },
+        "job1-li6": { pt: "Mentoria de designers juniores e plenos, contribuindo para o desenvolvimento técnico, evolução da disciplina e fortalecimento da cultura de Design.",
+                      en: "Mentored junior and mid-level designers, contributing to technical growth, discipline evolution, and a stronger Design culture." },
+
+        "job2-title": { pt: "NTT DATA Europe & Latam — Senior Product Designer", en: "NTT DATA Europe & Latam — Senior Product Designer" },
+        "job2-li1": { pt: "Condução do processo de Product Design end to end em projetos de transformação digital para o Itaú, desenvolvendo plataformas internas utilizadas por milhares de colaboradores.",
+                      en: "Led the end-to-end Product Design process on digital transformation projects for Itaú, developing internal platforms used by thousands of employees." },
+        "job2-li2": { pt: "Realização de pesquisas com usuários, mapeamento de jornadas, definição de fluxos e prototipação para validar soluções antes do desenvolvimento.",
+                      en: "Conducted user research, journey mapping, flow definition, and prototyping to validate solutions before development." },
+        "job2-li3": { pt: "Colaboração multidisciplinar com times de negócio, tecnologia e desenvolvimento, garantindo alinhamento entre necessidades dos usuários e objetivos do produto.",
+                      en: "Collaborated cross-functionally with business, technology, and development teams, ensuring alignment between user needs and product goals." },
+        "job2-li4": { pt: "Criação de interfaces focadas em eficiência operacional, simplificação de processos e melhoria da experiência dos usuários internos.",
+                      en: "Created interfaces focused on operational efficiency, process simplification, and improved experience for internal users." },
+
+        "job3-title": { pt: "Altec Sistemas e Tecnologia — Product Designer", en: "Altec Sistemas e Tecnologia — Product Designer" },
+        "job3-li1": { pt: "Condução do processo de UX/UI Design para sistemas corporativos, desde o levantamento de requisitos até a entrega de interfaces para desenvolvimento.",
+                      en: "Led the UX/UI Design process for corporate systems, from requirements gathering to interface handoff for development." },
+        "job3-li2": { pt: "Mapeamento de fluxos, arquitetura da informação, wireframes, protótipos e interfaces de alta fidelidade.",
+                      en: "Mapped flows, information architecture, wireframes, prototypes, and high-fidelity interfaces." },
+        "job3-li3": { pt: "Validação de soluções por meio de testes de usabilidade e iterações contínuas com usuários e stakeholders.",
+                      en: "Validated solutions through usability testing and continuous iteration with users and stakeholders." },
+
+        "find-me": { pt: "Onde você pode me encontrar", en: "Where you can find me" },
+      };
+
+      function applyLanguage(lang) {
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n')];
+          if (t && t[lang] != null) el.innerHTML = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-aria')];
+          if (t && t[lang] != null) el.setAttribute('aria-label', t[lang]);
+        });
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        localStorage.setItem('site-lang', lang);
+        positionIndicator(true);
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      });
+
+      applyLanguage(localStorage.getItem('site-lang') || 'pt');
+
+      function positionIndicator(instant) {
+        const activeLink = document.querySelector('.nav-links a.active');
+        if (!activeLink) return;
+        const rect    = activeLink.getBoundingClientRect();
+        const navRect = nav.getBoundingClientRect();
+        if (instant) navIndicator.style.transition = 'none';
+        navIndicator.style.width = rect.width + 'px';
+        navIndicator.style.left  = (rect.left - navRect.left) + 'px';
+        if (instant) {
+          navIndicator.offsetHeight; // força reflow antes de reativar a transição
+          navIndicator.style.transition = '';
+        }
+      }
+
+      positionIndicator(true);
+      window.addEventListener('resize', positionIndicator);
+      if (document.fonts) document.fonts.ready.then(positionIndicator);
+
+      function openMenu() {
+        hamburger.classList.add('open');
+        mobileMenu.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => closeMenu());
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          const rect    = link.getBoundingClientRect();
+          const navRect = nav.getBoundingClientRect();
+          const pad     = NAV_LINKS_GAP / 2;
+          navBg.style.left  = (rect.left - navRect.left - pad) + 'px';
+          navBg.style.width = (rect.width + NAV_LINKS_GAP) + 'px';
+        });
+
+        link.addEventListener('mouseleave', () => {
+          navBg.style.left  = '0px';
+          navBg.style.width = '100%';
+        });
+      });
+    });
+  </script>
+</body>
+</html>

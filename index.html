@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Murilo Simão — Product Designer</title>
+
+  <!-- Inter (fonte exata do Figma) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ── Tokens extraídos do Figma ──────────────────────────── */
+    :root {
+      --bg:         #FBFAF5;
+      --text:       #2C2C2A;
+      --accent:     #DD4975;
+      --about-bg:   #DD4975;
+      --card-bg:    #2C2C2A;
+      --placeholder:#434343;
+      --border:     #E3E0D8;
+      --white:      #FFFFFF;
+      --max:        1128px;
+      --font:       'Inter', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    img { display: block; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ── NAV ────────────────────────────────────────────────── */
+    .nav-wrapper {
+      display: flex;
+      justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      z-index: 100;
+    }
+
+    nav {
+      background: none;
+      border-radius: 80px;
+      height: 80px;
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .nav-links a {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
+      position: relative;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .nav-links a.active {
+      font-weight: 900;
+    }
+
+    .nav-indicator {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      height: 6px;
+      background: var(--text);
+      border-radius: 0 0 6px 6px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+    }
+
+    .nav-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 80px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── SWITCH DE IDIOMA ───────────────────────────────────── */
+    .lang-switch {
+      position: absolute;
+      right: 72px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      padding: 4px;
+      z-index: 2;
+    }
+
+    .lang-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      opacity: 0.5;
+      display: block;
+      line-height: 0;
+      transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .lang-btn svg { width: 100%; height: 100%; display: block; }
+
+    .lang-btn:hover { opacity: 0.85; }
+
+    .lang-btn.active {
+      opacity: 1;
+      border-color: var(--white);
+      transform: scale(1.08);
+    }
+
+    /* Hambúrguer */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      transition: background 0.15s;
+      z-index: 10;
+    }
+
+    .hamburger:hover { background: rgba(255,255,255,0.15); }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+
+    /* X quando aberto */
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* Drawer mobile */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .mobile-menu.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .mobile-menu a {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: relative;
+      padding-bottom: 6px;
+    }
+
+    .mobile-menu a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* ── MAIN CONTENT ───────────────────────────────────────── */
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 112px;
+      padding-top: 144px;
+      padding-bottom: 160px;
+    }
+
+    /* ── HERO ───────────────────────────────────────────────── */
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 72px;
+      width: 100%;
+    }
+
+    .hero-title {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .hero-name-block {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-name {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 56px;
+      color: var(--text);
+      text-transform: uppercase;
+    }
+
+    .hero-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    .hero-bio {
+      font-size: 32px;
+      font-weight: 400;
+      line-height: 40px;
+      color: var(--text);
+    }
+
+    .hero-bio strong {
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .hero-photo {
+      width: 552px;
+      height: 612px;
+      max-width: 100%;
+      border-radius: 96px;
+      overflow: hidden;
+      /* Sem isso o Chrome corta o border-radius sem anti-aliasing em
+         elementos com transition/transform (camada de composição própria),
+         deixando o canto serrilhado. */
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      /* Contorno interno na cor do fundo disfarça o serrilhado residual. */
+      box-shadow: inset 0 0 0 2px var(--bg);
+    }
+
+    .hero-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: bottom;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .hero-links-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      text-transform: uppercase;
+      line-height: 32px;
+    }
+
+    .hero-icons {
+      display: flex;
+      gap: 16px;
+    }
+
+    .icon-btn {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--white);
+      transition: opacity 0.15s;
+    }
+
+    .icon-btn:hover { opacity: 0.8; }
+
+    /* ── ABOUT ──────────────────────────────────────────────── */
+    .about {
+      background: var(--about-bg);
+      width: 100%;
+      padding: 128px 240px;
+    }
+
+    .about-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 48px;
+    }
+
+    .about-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--bg);
+    }
+
+    .about-divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.32);
+    }
+
+    .about-body {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--white);
+      line-height: 28px;
+    }
+
+    .about-body p + p { margin-top: 24px; }
+
+    /* ── CASES ──────────────────────────────────────────────── */
+    .cases {
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .cases-header {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .cases-header-label {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+
+    .cases-header-line {
+      flex: 1;
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    .cases-list {
+      display: flex;
+      flex-direction: column;
+      gap: 96px;
+    }
+
+    /* ── CARD ───────────────────────────────────────────────── */
+    .case-card {
+      display: flex;
+      align-items: stretch;
+      gap: 24px;
+      background: var(--card-bg);
+      border-radius: 40px;
+      padding: 24px;
+      width: 100%;
+      height: 580px;
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .case-card:hover {
+      box-shadow: 0 20px 40px rgba(44, 44, 42, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .case-text {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 32px;
+    }
+
+    .case-title {
+      font-size: 32px;
+      font-weight: 600;
+      line-height: 40px;
+      color: var(--white);
+    }
+
+    .coming-soon-tag {
+      display: inline-flex;
+      align-items: center;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      padding: 6px 14px;
+      border-radius: 999px;
+      width: fit-content;
+    }
+
+    .case-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      background: var(--accent);
+      color: var(--white);
+      font-size: 16px;
+      font-weight: 500;
+      font-family: var(--font);
+      border: none;
+      border-radius: 40px;
+      height: 48px;
+      padding: 0 32px;
+      cursor: pointer;
+      width: fit-content;
+      transition: opacity 0.15s;
+    }
+
+    .case-btn:hover { opacity: 0.85; }
+
+    .case-image-wrap {
+      flex: 0 0 744px;
+      background: var(--placeholder);
+      border-radius: 24px;
+      overflow: hidden;
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      box-shadow: inset 0 0 0 2px var(--card-bg);
+    }
+
+    .case-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: bottom;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .case-card:hover .case-image {
+      transform: scale(1.06);
+    }
+
+    /* ── RESPONSIVE ─────────────────────────────────────────── */
+
+    /* Tablet */
+    @media (max-width: 1024px) {
+      .main-content {
+        padding-top: 96px;
+        gap: 80px;
+      }
+
+      .hero { gap: 48px; }
+
+      .hero-name { font-size: 40px; line-height: 52px; }
+
+      .hero-bio { font-size: 32px; line-height: 44px; }
+
+      .hero-photo { width: 420px; height: 540px; }
+
+      .about { padding: 96px 64px; }
+
+      .case-card { height: auto; }
+
+      .case-text { flex: 0 0 320px; padding: 16px; }
+
+      .case-title { font-size: 32px; line-height: 38px; }
+
+      .case-image-wrap { flex: 1; height: 460px; }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      /* Nav */
+      nav {
+        padding: 0 16px;
+        height: 64px;
+        justify-content: space-between;
+        max-width: calc(100% - 32px);
+      }
+
+      .lang-switch { right: 16px; }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .mobile-menu {
+        display: flex;
+      }
+
+      /* Main spacing */
+      .main-content {
+        gap: 64px;
+        padding-top: 64px;
+        padding-bottom: 80px;
+      }
+
+      /* Hero */
+      .hero {
+        gap: 40px;
+        padding: 0 20px;
+      }
+
+      .hero-name { font-size: 36px; line-height: 42px; }
+
+      .hero-bio { font-size: 22px; line-height: 32px; }
+
+      .hero-photo {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        border-radius: 48px;
+      }
+
+      .hero-links-label { font-size: 13px; }
+
+      .icon-btn { width: 48px; height: 48px; }
+
+      /* About */
+      .about { padding: 64px 20px; }
+
+      .about-body { font-size: 16px; }
+
+      /* Cases */
+      .cases {
+        gap: 64px;
+        padding: 0 20px;
+      }
+
+      .cases-list { gap: 48px; }
+
+      .case-card {
+        flex-direction: column !important;
+        padding: 20px;
+        border-radius: 24px;
+        gap: 20px;
+      }
+
+      .case-text {
+        flex: unset;
+        width: 100%;
+        padding: 4px;
+        gap: 24px;
+      }
+
+      .case-title {
+        font-size: 26px;
+        line-height: 32px;
+      }
+
+      .case-image-wrap {
+        flex: 1;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 10;
+        border-radius: 16px;
+      }
+    }
+
+    /* Small mobile */
+    @media (max-width: 480px) {
+      .hero-name { font-size: 30px; line-height: 36px; }
+      .hero-bio { font-size: 19px; line-height: 28px; }
+      .hero-photo { border-radius: 32px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav-wrapper">
+    <nav>
+      <div class="nav-links">
+        <a href="#" class="active" data-i18n="nav-home">Início</a>
+        <a href="case-1.html" data-i18n="nav-work">Trabalhos</a>
+        <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+      </div>
+      <button class="hamburger" aria-label="Abrir menu" data-i18n-aria="nav-open-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-bg"></div>
+      <div class="nav-indicator"></div>
+      <div class="lang-switch" role="group" aria-label="Idioma do site / Site language">
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#009C3B"/><polygon points="12,3 21,12 12,21 3,12" fill="#FFDF00"/><circle cx="12" cy="12" r="4.5" fill="#002776"/></svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English">
+          <svg viewBox="0 0 24 24"><defs><clipPath id="usaClip"><circle cx="12" cy="12" r="12"/></clipPath></defs><g clip-path="url(#usaClip)"><rect width="24" height="24" fill="#B22234"/><rect y="1.85" width="24" height="1.85" fill="#fff"/><rect y="5.54" width="24" height="1.85" fill="#fff"/><rect y="9.23" width="24" height="1.85" fill="#fff"/><rect y="12.92" width="24" height="1.85" fill="#fff"/><rect y="16.62" width="24" height="1.85" fill="#fff"/><rect y="20.31" width="24" height="1.85" fill="#fff"/><rect width="10.5" height="12.92" fill="#3C3B6E"/></g></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- MENU MOBILE -->
+  <div class="mobile-menu" role="dialog" aria-label="Menu de navegação">
+    <a href="#" class="active" data-i18n="nav-home">Início</a>
+    <a href="#cases" data-i18n="nav-work">Trabalhos</a>
+    <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+  </div>
+
+  <div class="main-content">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-title">
+        <div class="hero-name-block">
+          <h1 class="hero-name">Murilo Simão</h1>
+          <hr class="hero-divider">
+        </div>
+        <p class="hero-bio" data-i18n="hero-bio">Olá! Atuo como <strong>Product Designer</strong> e tenho sólida experiência em projetar e evoluir soluções digitais centradas no usuário.</p>
+      </div>
+
+      <div class="hero-photo">
+        <img src="images/imagem%20perfil%20home.JPEG" alt="Murilo Simão">
+      </div>
+
+      <div class="hero-links">
+        <hr class="hero-divider">
+        <div>
+          <p class="hero-links-label" style="margin-bottom:16px;" data-i18n="hero-find-me">Onde você pode me encontrar</p>
+          <div class="hero-icons">
+            <a href="https://www.linkedin.com/in/murilo-simão-designer/" target="_blank" rel="noopener" class="icon-btn" aria-label="LinkedIn">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+            <a href="https://wa.me/55" target="_blank" rel="noopener" class="icon-btn" aria-label="WhatsApp">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/>
+              </svg>
+            </a>
+            <a href="https://instagram.com/" target="_blank" rel="noopener" class="icon-btn" aria-label="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+              </svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT ME -->
+    <section class="about">
+      <div class="about-inner">
+        <h2 class="about-title" data-i18n="about-title">Sobre mim</h2>
+        <hr class="about-divider">
+        <div class="about-body">
+          <p data-i18n="about-p1">Nos últimos 10 anos, trabalhei de forma colaborativa em equipes multidisciplinares, contribuindo para a definição de estratégias e entregando produtos que equilibram excelência em experiência do usuário, geração de valor para o negócio e o alcance de métricas-chave de produto. Ao longo desse período, também apoiei e conduzi pesquisas qualitativas e quantitativas com usuários, traduzindo insights em melhorias de design acionáveis.</p>
+          <p data-i18n="about-p2">Minha abordagem é orientada por dados, focada em criar experiências escaláveis e centradas no usuário que impulsionam a performance do produto e se alinham aos objetivos estratégicos da organização.</p>
+        </div>
+        <hr class="about-divider">
+      </div>
+    </section>
+
+    <!-- FEATURED WORK -->
+    <section class="cases" id="cases">
+      <div class="cases-header">
+        <span class="cases-header-label" data-i18n="cases-featured">Trabalhos em destaque</span>
+        <hr class="cases-header-line">
+        <span class="cases-header-label" data-i18n="cases-selected">Cases selecionados</span>
+      </div>
+
+      <div class="cases-list">
+
+        <!-- Case 1: texto esquerda, imagem direita -->
+        <article class="case-card">
+          <div class="case-text">
+            <h3 class="case-title" data-i18n="case1-title">Nova plataforma web - Remessa Online</h3>
+            <a href="case-1.html" class="case-btn"><span data-i18n="btn-view-project">Ver projeto</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+          <a href="case-1.html" class="case-image-wrap" aria-label="Ver case Nova plataforma web - Remessa Online" data-i18n-aria="case1-aria">
+            <img src="images/Case%201.png" alt="Nova plataforma web - Remessa Online" class="case-image" data-i18n-alt="case1-title">
+          </a>
+        </article>
+
+        <!-- Case 2: imagem esquerda, texto direita -->
+        <article class="case-card">
+          <a href="case-2.html" class="case-image-wrap" aria-label="Ver case Funcionalidade Melhor Cotação do Dia" data-i18n-aria="case2-aria">
+            <img src="images/Case%202.png" alt="Funcionalidade Melhor Cotação do Dia" class="case-image" data-i18n-alt="case2-title">
+          </a>
+          <div class="case-text">
+            <h3 class="case-title" data-i18n="case2-title">Funcionalidade Melhor Cotação do Dia</h3>
+            <a href="case-2.html" class="case-btn"><span data-i18n="btn-view-project">Ver projeto</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </article>
+
+        <!-- Case 3: texto esquerda, imagem direita -->
+        <article class="case-card">
+          <div class="case-text">
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <span class="coming-soon-tag" data-i18n="coming-soon">Em breve</span>
+              <h3 class="case-title" data-i18n="case3-title">App Pessoa Jurídica - Remessa Online</h3>
+            </div>
+            <a href="case-3.html" class="case-btn"><span data-i18n="btn-view-project">Ver projeto</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+          <a href="case-3.html" class="case-image-wrap" aria-label="Ver case App Pessoa Jurídica - Remessa Online" data-i18n-aria="case3-aria">
+            <img src="images/Case%203.png" alt="App Pessoa Jurídica - Remessa Online" class="case-image" data-i18n-alt="case3-title">
+          </a>
+        </article>
+
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const NAV_LINKS_GAP = 80; // deve bater com o `gap` de .nav-links no CSS
+      const nav          = document.querySelector('nav');
+      const navBg        = document.querySelector('.nav-bg');
+      const navIndicator = document.querySelector('.nav-indicator');
+      const hamburger    = document.querySelector('.hamburger');
+      const mobileMenu   = document.querySelector('.mobile-menu');
+      const mobileLinks  = document.querySelectorAll('.mobile-menu a');
+      const navLinks     = document.querySelectorAll('.nav-links a');
+
+      // ── Idioma (PT/EN) ────────────────────────────────────────
+      const translations = {
+        'nav-home':        { pt: 'Início',      en: 'Home' },
+        'nav-work':        { pt: 'Trabalhos',   en: 'Work' },
+        'nav-experience':  { pt: 'Experiência', en: 'Experience' },
+        'nav-contact':     { pt: 'Contato',      en: 'Contact' },
+        'nav-open-menu':   { pt: 'Abrir menu',  en: 'Open menu' },
+        'hero-bio':        { pt: 'Olá! Atuo como <strong>Product Designer</strong> e tenho sólida experiência em projetar e evoluir soluções digitais centradas no usuário.',
+                              en: 'Hi! I work as a <strong>Product Designer</strong> and have solid experience designing and evolving user-centered digital solutions.' },
+        'hero-find-me':    { pt: 'Onde você pode me encontrar', en: 'Where you can find me' },
+        'about-title':     { pt: 'Sobre mim', en: 'About me' },
+        'about-p1':        { pt: 'Nos últimos 10 anos, trabalhei de forma colaborativa em equipes multidisciplinares, contribuindo para a definição de estratégias e entregando produtos que equilibram excelência em experiência do usuário, geração de valor para o negócio e o alcance de métricas-chave de produto. Ao longo desse período, também apoiei e conduzi pesquisas qualitativas e quantitativas com usuários, traduzindo insights em melhorias de design acionáveis.',
+                              en: 'Over the past 10 years, I have worked collaboratively within multidisciplinary teams, contributing to strategy definition and delivering products that balance user experience excellence, business value generation, and the achievement of key product metrics. Throughout this period, I have also supported and conducted qualitative and quantitative user research, translating insights into actionable design improvements.' },
+        'about-p2':        { pt: 'Minha abordagem é orientada por dados, focada em criar experiências escaláveis e centradas no usuário que impulsionam a performance do produto e se alinham aos objetivos estratégicos da organização.',
+                              en: 'My approach is data-informed, focused on creating scalable, user-centered experiences that drive product performance and align with the organization\'s strategic goals.' },
+        'cases-featured':  { pt: 'Trabalhos em destaque', en: 'Featured work' },
+        'cases-selected':  { pt: 'Cases selecionados', en: 'Selected cases' },
+        'btn-view-project':{ pt: 'Ver projeto', en: 'View project' },
+        'case1-title':     { pt: 'Nova plataforma web - Remessa Online', en: 'New web platform - Remessa Online' },
+        'case1-aria':      { pt: 'Ver case Nova plataforma web - Remessa Online', en: 'View case New web platform - Remessa Online' },
+        'case2-title':     { pt: 'Funcionalidade Melhor Cotação do Dia', en: 'Best Daily Rate Feature' },
+        'case2-aria':      { pt: 'Ver case Funcionalidade Melhor Cotação do Dia', en: 'View case Best Daily Rate Feature' },
+        'case3-title':     { pt: 'App Pessoa Jurídica - Remessa Online', en: 'Business Account App - Remessa Online' },
+        'case3-aria':      { pt: 'Ver case App Pessoa Jurídica - Remessa Online', en: 'View case Business Account App - Remessa Online' },
+        'coming-soon':     { pt: 'Em breve', en: 'Coming soon' },
+      };
+
+      function applyLanguage(lang) {
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n')];
+          if (t && t[lang] != null) el.innerHTML = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-alt')];
+          if (t && t[lang] != null) el.alt = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-aria')];
+          if (t && t[lang] != null) el.setAttribute('aria-label', t[lang]);
+        });
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        localStorage.setItem('site-lang', lang);
+        positionIndicator(true);
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      });
+
+      applyLanguage(localStorage.getItem('site-lang') || 'pt');
+
+      // ── Indicador do item ativo: mesma largura da palavra ────
+      function positionIndicator(instant) {
+        const activeLink = document.querySelector('.nav-links a.active');
+        if (!activeLink) return;
+        const rect    = activeLink.getBoundingClientRect();
+        const navRect = nav.getBoundingClientRect();
+        if (instant) navIndicator.style.transition = 'none';
+        navIndicator.style.width = rect.width + 'px';
+        navIndicator.style.left  = (rect.left - navRect.left) + 'px';
+        if (instant) {
+          navIndicator.offsetHeight; // força reflow antes de reativar a transição
+          navIndicator.style.transition = '';
+        }
+      }
+
+      // Primeiro posicionamento é instantâneo (sem transition) para não
+      // "deslizar" a partir de left:0/width:0 no carregamento da página.
+      positionIndicator(true);
+      window.addEventListener('resize', positionIndicator);
+      if (document.fonts) document.fonts.ready.then(positionIndicator);
+
+      // ── Hamburger toggle ────────────────────────────────────
+      function openMenu() {
+        hamburger.classList.add('open');
+        mobileMenu.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+      });
+
+      // Fechar ao clicar num link do menu mobile
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          closeMenu();
+          if (href.startsWith('#') && href.length > 1) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) setTimeout(() => smoothScrollTo(target, 400), 10);
+          }
+        });
+      });
+
+      // ── Hover: fundo do nav encolhe em torno do item ─────────
+      navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          const rect    = link.getBoundingClientRect();
+          const navRect = nav.getBoundingClientRect();
+          const pad     = NAV_LINKS_GAP / 2;
+          navBg.style.left  = (rect.left - navRect.left - pad) + 'px';
+          navBg.style.width = (rect.width + NAV_LINKS_GAP) + 'px';
+        });
+
+        link.addEventListener('mouseleave', () => {
+          navBg.style.left  = '0px';
+          navBg.style.width = '100%';
+        });
+
+        link.addEventListener('click', (e) => {
+          const href = link.getAttribute('href');
+          if (href.startsWith('#') && href.length > 1) {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) smoothScrollTo(target, 400);
+          }
+        });
+      });
+
+      function smoothScrollTo(element, duration) {
+        const targetPosition = element.getBoundingClientRect().top + window.pageYOffset;
+        const startPosition  = window.pageYOffset;
+        const distance       = targetPosition - startPosition;
+        let startTime = null;
+
+        function animation(currentTime) {
+          if (startTime === null) startTime = currentTime;
+          const elapsed = currentTime - startTime;
+          window.scrollTo(0, easeInOutQuad(elapsed, startPosition, distance, duration));
+          if (elapsed < duration) requestAnimationFrame(animation);
+        }
+
+        function easeInOutQuad(t, b, c, d) {
+          t /= d / 2;
+          if (t < 1) return c / 2 * t * t + b;
+          t--;
+          return -c / 2 * (t * (t - 2) - 1) + b;
+        }
+
+        requestAnimationFrame(animation);
+      }
+    });
+  </script>
+</body>
+</html>

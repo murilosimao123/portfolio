@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funcionalidade Melhor Cotação do Dia — Murilo Simão</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:         #FBFAF5;
+      --text:       #2C2C2A;
+      --accent:     #DD4975;
+      --card-bg:    #2C2C2A;
+      --placeholder:#434343;
+      --border:     #E3E0D8;
+      --white:      #FFFFFF;
+      --max:        1128px;
+      --font:       'Inter', sans-serif;
+
+      --principle-bg:     #F6EAEE;
+      --principle-border: #DEC7CE;
+      --card-border:      #EEE5E8;
+      --image-border:     #EEE9E5;
+      --stat-bg:          #FAFAFA;
+      --stat-green:       #2BB34D;
+      --muted:            #9B9D9A;
+      --chart-track:      #DEC7CE;
+      --flow-blue:        #3B6FE0;
+      --flow-alert:       #E24C3C;
+
+      --stack-5: #DD4975;
+      --stack-4: #E88CA3;
+      --stack-3: #DEC7CE;
+      --stack-2: #AF9298;
+      --stack-1: #2C2C2A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background-color: var(--bg);
+      color: var(--text);
+    }
+
+    /* Transição nativa entre páginas: dissolve no conteúdo geral e
+       morph nas tabs de case (a pílula "cresce" a partir do círculo
+       correspondente na página anterior). Sem suporte, cai para a
+       navegação normal, sem nenhum efeito colateral. */
+    @view-transition {
+      navigation: auto;
+    }
+
+    /* O crossfade padrão do navegador usa mix-blend-mode:plus-lighter em
+       TODOS os grupos (root e os nomeados, como as tabs) — é isso que
+       gera aquele brilho/reflexo estranho quando duas imagens capturadas
+       se sobrepõem. Neutraliza o blend em todos eles (preservando o
+       morph de posição/tamanho, que é outra animação) e troca só o
+       crossfade do root por um dissolve simples. */
+    ::view-transition-old(*),
+    ::view-transition-new(*) {
+      mix-blend-mode: normal;
+      /* Por padrão block-size é "auto", então a imagem capturada mantém
+         a proporção original (ex: círculo 1:1) enquanto o grupo anima a
+         largura até virar a pílula — isso infla a altura da imagem bem
+         acima da caixa por uma fração de segundo (o "flash" gigante).
+         Forçar 100% trava a imagem ao tamanho real do grupo a cada frame. */
+      height: 100%;
+    }
+
+    ::view-transition-group(*) {
+      overflow: hidden;
+    }
+
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.3s;
+    }
+
+    ::view-transition-old(root) { animation-name: page-fade-out; }
+    ::view-transition-new(root) { animation-name: page-fade-in; }
+
+    @keyframes page-fade-out { to   { opacity: 0; } }
+    @keyframes page-fade-in  { from { opacity: 0; } }
+
+    img { display: block; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ── NAV (idêntico à Home) ─────────────────────────────── */
+    .nav-wrapper {
+      display: flex;
+      justify-content: center;
+      padding-top: 80px;
+      position: relative;
+      z-index: 100;
+    }
+
+    nav {
+      background: none;
+      border-radius: 80px;
+      height: 80px;
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 72px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .nav-links a {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
+      position: relative;
+      padding-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .nav-links a.active { font-weight: 900; }
+
+    .nav-indicator {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      height: 6px;
+      background: var(--text);
+      border-radius: 0 0 6px 6px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+    }
+
+    .nav-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      border-radius: 80px;
+      transition: left 0.3s, width 0.3s;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ── SWITCH DE IDIOMA ───────────────────────────────────── */
+    .lang-switch {
+      position: absolute;
+      right: 72px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      padding: 4px;
+      z-index: 2;
+    }
+
+    .lang-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid transparent;
+      padding: 0;
+      background: none;
+      cursor: pointer;
+      opacity: 0.5;
+      display: block;
+      line-height: 0;
+      transition: opacity 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .lang-btn svg { width: 100%; height: 100%; display: block; }
+
+    .lang-btn:hover { opacity: 0.85; }
+
+    .lang-btn.active {
+      opacity: 1;
+      border-color: var(--white);
+      transform: scale(1.08);
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 40px;
+      height: 40px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 50%;
+      transition: background 0.15s;
+      z-index: 10;
+    }
+
+    .hamburger:hover { background: rgba(255,255,255,0.15); }
+
+    .hamburger span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      background: var(--white);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 99;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .mobile-menu.open { opacity: 1; pointer-events: all; }
+
+    .mobile-menu a {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      position: relative;
+      padding-bottom: 6px;
+    }
+
+    .mobile-menu a.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 6px;
+      background: var(--accent);
+      border-radius: 4px;
+    }
+
+    /* ── LAYOUT BASE ────────────────────────────────────────── */
+    .wrap {
+      width: var(--max);
+      max-width: calc(100% - 48px);
+      margin: 0 auto;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      padding-top: 96px;
+      padding-bottom: 160px;
+    }
+
+    .page-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 112px;
+    }
+
+    .intro-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── CASE SWITCHER ──────────────────────────────────────── */
+    .case-switch-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .case-switch-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .case-switch-list {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .case-switch-list a {
+      height: 56px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 500;
+      text-transform: uppercase;
+      transition: opacity 0.15s, background 0.15s;
+    }
+
+    .case-switch-list a.active {
+      background: var(--text);
+      color: var(--white);
+      border-radius: 999px;
+      padding: 0 32px;
+      font-size: 16px;
+      letter-spacing: 0.03em;
+    }
+
+    .case-switch-list a:not(.active) {
+      width: 56px;
+      border-radius: 50%;
+      background: var(--white);
+      border: 1px solid var(--border);
+      color: var(--accent);
+      font-size: 16px;
+      text-transform: none;
+    }
+
+    .case-switch-list a:not(.active):hover { background: var(--principle-bg); }
+
+    .double-divider {
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      margin: 40px 0;
+    }
+
+    .double-divider hr {
+      border: none;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── TÍTULO DO CASE ─────────────────────────────────────── */
+    .case-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .case-title-block h1 {
+      font-size: 48px;
+      font-weight: 900;
+      line-height: 56px;
+      text-transform: uppercase;
+    }
+
+    .case-title-block p {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 36px;
+    }
+
+    /* ── IMAGEM PLACEHOLDER GENÉRICA ────────────────────────── */
+    .ph {
+      background: var(--placeholder);
+      border-radius: 40px;
+      overflow: hidden;
+      /* Sem isso o Chrome corta o border-radius sem anti-aliasing em
+         elementos com transition/transform, deixando o canto serrilhado. */
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      box-shadow: inset 0 0 0 2px var(--bg);
+      transition: box-shadow 0.25s ease, transform 0.25s ease;
+    }
+
+    .ph:hover {
+      box-shadow: 0 20px 40px rgba(44, 44, 42, 0.2), inset 0 0 0 2px var(--bg);
+      transform: translateY(-4px);
+    }
+
+    .ph img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .ph:hover img {
+      transform: scale(1.06);
+    }
+
+    /* overflow:hidden do .ph corta a própria box-shadow — por isso a
+       sombra (fixa, igual ao vídeo do topo) vai num wrapper externo,
+       sem overflow. No hover, só o zoom da imagem — sem elevação. */
+    .design-image-frame {
+      border-radius: 40px;
+      box-shadow: 0 10px 20px rgba(44, 42, 42, 0.10);
+    }
+
+    .design-image-frame .ph:hover {
+      box-shadow: inset 0 0 0 2px var(--bg);
+      transform: none;
+    }
+
+    .design-image-row {
+      display: flex;
+      gap: 24px;
+    }
+
+    .design-image-row .design-image-frame {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .design-image-row .ph { width: 100%; height: auto; }
+    .design-image-row .ph img { height: auto; object-fit: contain; }
+
+    /* overflow:hidden (necessário pra cortar o vídeo no border-radius)
+       corta também a própria box-shadow do elemento — por isso a sombra
+       de elevação vai num wrapper externo, que não tem overflow. */
+    .hero-video-frame {
+      border-radius: 40px;
+      box-shadow: 0 10px 20px rgba(44, 42, 42, 0.10);
+    }
+
+    .hero-image {
+      width: 100%;
+      height: auto;
+    }
+
+    .hero-image video {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    .hero-image:hover video {
+      transform: scale(1.06);
+    }
+
+    /* ── SEÇÕES ─────────────────────────────────────────────── */
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .subsection-title {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .body-text {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 28px;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+
+    /* ── TAGS ───────────────────────────────────────────────── */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-pill {
+      background: var(--white);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    /* ── PROBLEMAS / LISTAS COM MARCADOR ─────────────────────── */
+    .problems-box {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bullet-list li {
+      font-size: 18px;
+      line-height: 28px;
+      color: var(--text);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* ── CHECKLIST (insights / percepções) ───────────────────── */
+    .checklist-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .checklist-card {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .checklist-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
+      background: var(--accent);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .checklist-card p {
+      font-size: 18px;
+      line-height: 27px;
+    }
+
+    /* ── CALLOUT ("Importante:") ──────────────────────────────── */
+    .callout {
+      background: var(--principle-bg);
+      border-left: 4px solid var(--accent);
+      border-radius: 24px;
+      padding: 20px 24px;
+      margin: 32px 0;
+    }
+
+    .callout p { font-size: 18px; line-height: 28px; }
+
+    /* ── JORNADA (fluxo de etapas em estilo infográfico) ─────── */
+    .journey-row {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .journey-label {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+    }
+
+    .journey-steps {
+      display: flex;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .journey-step {
+      background: var(--white);
+      border: 2px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px;
+      width: 190px;
+      flex: 0 0 190px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .journey-step.highlight {
+      border-color: var(--accent);
+    }
+
+    .journey-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      flex-shrink: 0;
+    }
+
+    .journey-step.highlight .journey-icon {
+      border-color: var(--accent);
+      background: var(--accent);
+      color: var(--white);
+    }
+
+    .journey-step p {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 20px;
+    }
+
+    .journey-arrow {
+      color: var(--text);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      height: 48px;
+      margin-top: 20px;
+    }
+
+    /* ── RISCO (testes e validação) ──────────────────────────── */
+    .risk-block {
+      display: flex;
+      gap: 24px;
+    }
+
+    .risk-number {
+      flex: 0 0 56px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .risk-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .risk-field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .risk-label {
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+    }
+
+    .risk-field p { font-size: 18px; line-height: 28px; }
+
+    /* ── GRÁFICO DE BARRAS EMPILHADAS ─────────────────────────── */
+    .chart-block { display: flex; flex-direction: column; gap: 24px; }
+
+    .chart-card {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+    }
+
+    .stacked-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 24px;
+      margin-bottom: 32px;
+    }
+
+    .stacked-legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .stacked-legend i {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .stacked-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .stacked-row {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .stacked-label {
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .stacked-track {
+      display: flex;
+      gap: 3px;
+      height: 44px;
+    }
+
+    .stacked-seg {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--white);
+      white-space: nowrap;
+      overflow: hidden;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .stacked-seg.dark { color: var(--text); }
+    .stacked-seg.tiny { font-size: 0; }
+
+    /* ── STAT CARDS ─────────────────────────────────────────── */
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 24px;
+      width: 264px;
+      flex: 0 0 264px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .stat-badge {
+      background: var(--stat-bg);
+      border-radius: 8px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 16px;
+    }
+
+    .stat-badge .num {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--stat-green);
+      white-space: nowrap;
+    }
+
+    .stat-badge .label {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .stat-card p { font-size: 18px; line-height: 28px; }
+
+    /* ── SWOT ───────────────────────────────────────────────── */
+    .swot-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .swot-quadrant {
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .swot-quadrant h4 { font-size: 20px; font-weight: 800; }
+
+    .swot-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .swot-chip {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 16px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1 1 auto;
+      min-width: 150px;
+      text-align: center;
+    }
+
+    .swot-strengths     { background: #E1F0E5; }
+    .swot-strengths h4   { color: #2F7A45; }
+    .swot-weaknesses     { background: #FBF1DC; }
+    .swot-weaknesses h4  { color: #9A6B1E; }
+    .swot-opportunities  { background: #E7E9FA; }
+    .swot-opportunities h4 { color: #4A4FB0; }
+    .swot-threats        { background: #FBE1E3; }
+    .swot-threats h4     { color: #C13F4C; }
+
+    /* ── RESPONSIVO ─────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .main-content { padding-top: 64px; padding-bottom: 96px; }
+      .page-flow { gap: 80px; }
+      .case-title-block h1 { font-size: 40px; line-height: 52px; }
+      .case-title-block p { font-size: 18px; line-height: 28px; }
+      .checklist-grid { grid-template-columns: 1fr; }
+      .risk-block { flex-direction: column; gap: 16px; }
+      .swot-grid { grid-template-columns: 1fr; }
+      .journey-steps { flex-wrap: wrap; }
+      .journey-arrow { transform: rotate(90deg); margin: 0 auto; height: auto; }
+    }
+
+    @media (max-width: 768px) {
+      .wrap { max-width: calc(100% - 40px); }
+      .main-content { padding-top: 48px; padding-bottom: 64px; }
+      .page-flow { gap: 64px; }
+      .case-title-block h1 { font-size: 30px; line-height: 38px; }
+      .hero-video-frame, .hero-image { border-radius: 24px; }
+      .section-title { font-size: 26px; }
+      .subsection-title { font-size: 20px; }
+      .body-text, .bullet-list li, .stat-card p, .checklist-card p, .risk-field p, .callout p { font-size: 16px; }
+      .stat-card { width: 100%; flex-basis: 100%; }
+      .chart-card { padding: 20px; border-radius: 16px; }
+      .stacked-track { height: 32px; }
+      .stacked-seg { font-size: 10px; }
+      .risk-number { width: 44px; height: 44px; flex-basis: 44px; font-size: 16px; }
+      .journey-step { width: 100%; flex-basis: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <div class="nav-wrapper">
+    <nav>
+      <div class="nav-links">
+        <a href="index.html" data-i18n="nav-home">Início</a>
+        <a href="case-1.html" class="active" data-i18n="nav-work">Trabalhos</a>
+        <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+      </div>
+      <button class="hamburger" aria-label="Abrir menu" data-i18n-aria="nav-open-menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <div class="nav-bg"></div>
+      <div class="nav-indicator"></div>
+      <div class="lang-switch" role="group" aria-label="Idioma do site / Site language">
+        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#009C3B"/><polygon points="12,3 21,12 12,21 3,12" fill="#FFDF00"/><circle cx="12" cy="12" r="4.5" fill="#002776"/></svg>
+        </button>
+        <button type="button" class="lang-btn" data-lang="en" aria-label="English">
+          <svg viewBox="0 0 24 24"><defs><clipPath id="usaClip"><circle cx="12" cy="12" r="12"/></clipPath></defs><g clip-path="url(#usaClip)"><rect width="24" height="24" fill="#B22234"/><rect y="1.85" width="24" height="1.85" fill="#fff"/><rect y="5.54" width="24" height="1.85" fill="#fff"/><rect y="9.23" width="24" height="1.85" fill="#fff"/><rect y="12.92" width="24" height="1.85" fill="#fff"/><rect y="16.62" width="24" height="1.85" fill="#fff"/><rect y="20.31" width="24" height="1.85" fill="#fff"/><rect width="10.5" height="12.92" fill="#3C3B6E"/></g></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <!-- MENU MOBILE -->
+  <div class="mobile-menu" role="dialog" aria-label="Menu de navegação">
+    <a href="index.html" data-i18n="nav-home">Início</a>
+    <a href="case-1.html" class="active" data-i18n="nav-work">Trabalhos</a>
+    <a href="experience.html" data-i18n="nav-experience">Experiência</a>
+  </div>
+
+  <div class="main-content">
+    <div class="wrap page-flow">
+
+      <!-- INTRO: seletor de case + título + imagem hero -->
+      <div class="intro-block">
+
+        <!-- CASE SWITCHER -->
+        <div class="case-switch-header">
+          <span class="case-switch-title" data-i18n="my-work">Meus trabalhos</span>
+          <div class="case-switch-list">
+            <a href="case-1.html" style="view-transition-name: case-tab-1;">1</a>
+            <a href="case-2.html" class="active" style="view-transition-name: case-tab-2;" data-i18n="tab2-label">2 - Funcionalidade Melhor Cotação do Dia</a>
+            <a href="case-3.html" style="view-transition-name: case-tab-3;">3</a>
+          </div>
+        </div>
+
+        <div class="double-divider">
+          <hr>
+        </div>
+
+        <!-- TÍTULO -->
+        <div class="case-title-block">
+          <h1 data-i18n="c2-title">Funcionalidade Melhor Cotação do Dia</h1>
+          <p data-i18n="c2-intro">Auxiliando os clientes a reduzirem a insegurança causada pela volatilidade cambial com a criação de uma nova modalidade de transferência de envio ao exterior.</p>
+        </div>
+
+        <div class="hero-video-frame" style="margin-top:56px;">
+          <div class="ph hero-image">
+            <video src="images/Video%20case%202.mp4" autoplay muted playsinline></video>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CONTEXTO E OBJETIVOS -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="context-title">Contexto e objetivos</h2>
+        <p class="body-text" data-i18n="context-body">A volatilidade do câmbio fazia com que muitos clientes tivessem dificuldade em decidir o melhor momento para transferir dinheiro ao exterior, gerando insegurança e ansiedade.<br><br>O <strong>objetivo</strong> era aumentar a confiança nessa decisão, oferecendo uma forma de garantir uma cotação mais vantajosa. Para isso, criamos uma modalidade chamada de Melhor Cotação do dia, em que o cliente poderia agendar uma transação utilizando a menor cotação registrada entre 10h e 16h.</p>
+      </section>
+
+      <!-- MEU PAPEL -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="role2-title">Meu papel</h2>
+        <p class="body-text" data-i18n="role2-body">Como único Product Designer responsável pelo projeto, conduzi o desenvolvimento da funcionalidade de ponta a ponta: Discovery, ideação, definição da experiência, UX, UI, prototipação, testes com usuários, alinhamento com Produto e Engenharia, validação do MVP e acompanhamento do rollout. Além do desenho da solução, participei das decisões estratégicas para equilibrar necessidades dos clientes, viabilidade técnica e impacto no negócio.</p>
+        <div class="tag-row">
+          <span class="tag-pill" data-i18n="tag-ux-lead">Liderança de UX</span>
+          <span class="tag-pill">Discovery</span>
+          <span class="tag-pill" data-i18n="tag-architecture">Arquitetura</span>
+          <span class="tag-pill" data-i18n="tag-prototyping">Prototipação</span>
+          <span class="tag-pill" data-i18n="tag-research-validation">Pesquisa e validação</span>
+          <span class="tag-pill">Rollout</span>
+        </div>
+      </section>
+
+      <!-- DISCOVERY -->
+      <section class="section">
+        <h2 class="section-title">Discovery</h2>
+        <h3 class="subsection-title" data-i18n="discover2-subtitle">O que eu descobri</h3>
+        <p class="body-text" data-i18n="discover2-body">Minha investigação mostrou que o problema não era a experiência de envio, mas a decisão que acontecia antes dela. A volatilidade do câmbio fazia com que muitos clientes acompanhassem a cotação durante dias, postergassem suas transferências e permanecessem inseguros mesmo após concluir a operação. O desafio, portanto, deixou de ser oferecer uma cotação mais competitiva e passou a ser reduzir a ansiedade associada à decisão de enviar dinheiro ao exterior.</p>
+
+        <div style="margin-top:16px;">
+          <h3 class="subsection-title" style="margin-bottom:24px;" data-i18n="insights2-title">Principais insights</h3>
+          <div class="checklist-grid">
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
+              <p data-i18n="d2-insight1">A volatilidade do câmbio gerava ansiedade e dificultava a tomada de decisão.</p>
+            </div>
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
+              <p data-i18n="d2-insight2">Muitos clientes adiavam suas transferências esperando uma cotação melhor.</p>
+            </div>
+            <div class="checklist-card">
+              <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
+              <p data-i18n="d2-insight3">O receio de "perder dinheiro" após uma oscilação do câmbio era uma dor mais relevante do que a busca pelo menor preço em si.</p>
+            </div>
+          </div>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- IDEAÇÃO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ideation-title">Ideação</h2>
+        <p class="body-text" data-i18n="ideation-body">A partir do desejo dos clientes de garantirem a melhor cotação em um período de tempo, ideei em cima de algumas possibilidades, e a experiência que melhor atende às necessidades dos clientes é a garantia da melhor cotação do dia.</p>
+
+        <div style="margin-top:16px; display:flex; flex-direction:column; gap:32px;">
+          <h3 class="subsection-title" data-i18n="journey-title">O que altera na jornada atual?</h3>
+          <p class="body-text" style="margin-top:-16px;" data-i18n="journey-intro">Hoje, o cliente que envia ao exterior, fecha uma transação com a cotação do momento e paga em reais via Pix ou Ted à Remessa Online, que converte e envia ao beneficiário no exterior o valor equivalente na moeda estrangeira.</p>
+
+          <div class="journey-row">
+            <span class="journey-label" data-i18n="journey-today">Hoje</span>
+            <div class="journey-steps">
+              <div class="journey-step">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11M7 7l3-3M7 7l3 3M17 17H6M17 17l-3-3M17 17l-3 3"/></svg></div>
+                <p data-i18n="js-1">Define a moeda e o valor do envio</p>
+              </div>
+              <span class="journey-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div class="journey-step">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></div>
+                <p data-i18n="js-2">Fecha a cotação</p>
+              </div>
+              <span class="journey-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div class="journey-step">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
+                <p data-i18n="js-3">Cliente paga à Remessa Online</p>
+              </div>
+              <span class="journey-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div class="journey-step">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                <p data-i18n="js-4">Dinheiro enviado ao beneficiário</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="journey-row">
+            <span class="journey-label" data-i18n="journey-better">Com a melhor cotação</span>
+            <div class="journey-steps">
+              <div class="journey-step">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7h11M7 7l3-3M7 7l3 3M17 17H6M17 17l-3-3M17 17l-3 3"/></svg></div>
+                <p data-i18n="js-1">Define a moeda e o valor do envio</p>
+              </div>
+              <span class="journey-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div class="journey-step highlight">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+                <p data-i18n="js-5">Agenda o fechamento para as 16h</p>
+              </div>
+              <span class="journey-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div class="journey-step highlight">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 17l-8.5-8.5-5 5L2 7"/><path d="M16 17h6v-6"/></svg></div>
+                <p data-i18n="js-6">A Remessa fecha a transação com a menor cotação observada no período</p>
+              </div>
+              <span class="journey-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div class="journey-step">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div>
+                <p data-i18n="js-3">Cliente paga à Remessa Online</p>
+              </div>
+              <span class="journey-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+              <div class="journey-step">
+                <div class="journey-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+                <p data-i18n="js-4">Dinheiro enviado ao beneficiário</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:32px; display:flex; flex-direction:column; gap:24px;">
+          <h3 class="subsection-title" data-i18n="design-title">Desenho da experiência</h3>
+          <p class="body-text" style="margin-top:-16px;" data-i18n="design-body">Nesta etapa, desenhei a jornada com base nas regras de negócio que foram definidas em conjunto com outras áreas e toda a nova experiência que acrescenta o agendamento da transação à transação de envio.</p>
+          <div class="callout">
+            <p data-i18n="callout-important"><strong>Importante:</strong> a funcionalidade da melhor cotação teria um spread ligeiramente maior, porém esta alteração deveria ser apresentada de forma transparente aos clientes.</p>
+          </div>
+          <div class="design-image-frame">
+            <div class="ph hero-image" style="height:600px;">
+              <img src="images/Case%202%20-%201.png" alt="Desenho da experiência" data-i18n-alt="design-title">
+            </div>
+          </div>
+          <div class="design-image-row">
+            <div class="design-image-frame">
+              <div class="ph"><img src="images/Case%202%20-%202.png" alt="Desenho da experiência 2"></div>
+            </div>
+            <div class="design-image-frame">
+              <div class="ph"><img src="images/Case%202%20-%202-1.png" alt="Desenho da experiência 3"></div>
+            </div>
+            <div class="design-image-frame">
+              <div class="ph"><img src="images/Case%202%20-%202-2.png" alt="Desenho da experiência 4"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TESTES E VALIDAÇÃO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="testing-title">Testes e validação</h2>
+        <p class="body-text" data-i18n="testing-body">Antes de iniciar o desenvolvimento completo da funcionalidade, busquei reduzir os principais riscos do projeto por meio de experimentos rápidos e de baixo custo. Cada experimento foi desenhado para responder uma hipótese específica, permitindo validar valor, usabilidade, viabilidade de negócio e execução antes de um investimento maior.</p>
+
+        <div style="margin-top:32px; display:flex; flex-direction:column; gap:56px;">
+
+          <!-- 1) Risco de valor -->
+          <div class="risk-block">
+            <div class="risk-number">1</div>
+            <div class="risk-content">
+              <h3 class="subsection-title" data-i18n="risk1-title">Risco de valor</h3>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-hypothesis">Hipótese</span>
+                <p data-i18n="risk1-hyp">A funcionalidade resolve uma dor real dos clientes e representa uma proposta de valor relevante.</p>
+              </div>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-validation">Como validei</span>
+                <p data-i18n="risk1-val">Utilizei uma pesquisa conduzida pelo time de UX Research para avaliar diferentes oportunidades de produto e medir o interesse dos clientes.</p>
+              </div>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-learning">O que aprendi</span>
+                <p data-i18n="risk1-learn">A proposta da Melhor Cotação do Dia recebeu o maior índice de avaliações 4 e 5 ("atende" ou "atende totalmente"), indicando forte aderência à necessidade identificada durante o Discovery.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-block">
+            <h3 class="subsection-title" data-i18n="chart4-title">Quanto cada proposta atende às necessidades dos clientes</h3>
+            <div class="chart-card">
+              <div class="stacked-legend">
+                <span><i style="background:var(--stack-5)"></i><span data-i18n="legend-5">5 - Atende completamente</span></span>
+                <span><i style="background:var(--stack-4)"></i><span data-i18n="legend-4">4 - Atende</span></span>
+                <span><i style="background:var(--stack-3)"></i><span data-i18n="legend-3">3 - Nem um, nem outro</span></span>
+                <span><i style="background:var(--stack-2)"></i><span data-i18n="legend-2">2 - Pouco atende</span></span>
+                <span><i style="background:var(--stack-1)"></i><span data-i18n="legend-1">1 - Não atende</span></span>
+              </div>
+              <div class="stacked-list">
+                <div class="stacked-row">
+                  <span class="stacked-label" data-i18n="series-1">Alerta de Câmbio</span>
+                  <div class="stacked-track">
+                    <div class="stacked-seg" data-width="60.09" style="background:var(--stack-5); flex: 0 0 60.09%;" title="5 - Atende completamente: 60,09%">60,09%</div>
+                    <div class="stacked-seg" data-width="16.45" style="background:var(--stack-4); flex: 0 0 16.45%;" title="4 - Atende: 16,45%">16,45%</div>
+                    <div class="stacked-seg dark" data-width="10.53" style="background:var(--stack-3); flex: 0 0 10.53%;" title="3 - Nem um, nem outro: 10,53%">10,53%</div>
+                    <div class="stacked-seg tiny" data-width="3.95" style="background:var(--stack-2); flex: 0 0 3.95%;" title="2 - Pouco atende: 3,95%">3,95%</div>
+                    <div class="stacked-seg" data-width="8.99" style="background:var(--stack-1); flex: 0 0 8.99%;" title="1 - Não atende: 8,99%">8,99%</div>
+                  </div>
+                </div>
+                <div class="stacked-row">
+                  <span class="stacked-label" data-i18n="series-2">Garantia Melhor Câmbio do Dia</span>
+                  <div class="stacked-track">
+                    <div class="stacked-seg" data-width="59.49" style="background:var(--stack-5); flex: 0 0 59.49%;" title="5 - Atende completamente: 59,49%">59,49%</div>
+                    <div class="stacked-seg" data-width="18.12" style="background:var(--stack-4); flex: 0 0 18.12%;" title="4 - Atende: 18,12%">18,12%</div>
+                    <div class="stacked-seg dark" data-width="14.39" style="background:var(--stack-3); flex: 0 0 14.39%;" title="3 - Nem um, nem outro: 14,39%">14,39%</div>
+                    <div class="stacked-seg tiny" data-width="4.48" style="background:var(--stack-2); flex: 0 0 4.48%;" title="2 - Pouco atende: 4,48%">4,48%</div>
+                    <div class="stacked-seg tiny" data-width="3.52" style="background:var(--stack-1); flex: 0 0 3.52%;" title="1 - Não atende: 3,52%">3,52%</div>
+                  </div>
+                </div>
+                <div class="stacked-row">
+                  <span class="stacked-label" data-i18n="series-3">Trava de Câmbio</span>
+                  <div class="stacked-track">
+                    <div class="stacked-seg" data-width="51.37" style="background:var(--stack-5); flex: 0 0 51.37%;" title="5 - Atende completamente: 51,37%">51,37%</div>
+                    <div class="stacked-seg" data-width="20.51" style="background:var(--stack-4); flex: 0 0 20.51%;" title="4 - Atende: 20,51%">20,51%</div>
+                    <div class="stacked-seg dark" data-width="16.60" style="background:var(--stack-3); flex: 0 0 16.60%;" title="3 - Nem um, nem outro: 16,60%">16,60%</div>
+                    <div class="stacked-seg tiny" data-width="4.30" style="background:var(--stack-2); flex: 0 0 4.30%;" title="2 - Pouco atende: 4,30%">4,30%</div>
+                    <div class="stacked-seg tiny" data-width="7.23" style="background:var(--stack-1); flex: 0 0 7.23%;" title="1 - Não atende: 7,23%">7,23%</div>
+                  </div>
+                </div>
+                <div class="stacked-row">
+                  <span class="stacked-label" data-i18n="series-4">Câmbio Programado</span>
+                  <div class="stacked-track">
+                    <div class="stacked-seg" data-width="43.99" style="background:var(--stack-5); flex: 0 0 43.99%;" title="5 - Atende completamente: 43,99%">43,99%</div>
+                    <div class="stacked-seg" data-width="20.29" style="background:var(--stack-4); flex: 0 0 20.29%;" title="4 - Atende: 20,29%">20,29%</div>
+                    <div class="stacked-seg dark" data-width="17.56" style="background:var(--stack-3); flex: 0 0 17.56%;" title="3 - Nem um, nem outro: 17,56%">17,56%</div>
+                    <div class="stacked-seg tiny" data-width="6.49" style="background:var(--stack-2); flex: 0 0 6.49%;" title="2 - Pouco atende: 6,49%">6,49%</div>
+                    <div class="stacked-seg" data-width="11.71" style="background:var(--stack-1); flex: 0 0 11.71%;" title="1 - Não atende: 11,71%">11,71%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 2) Risco de usabilidade -->
+          <div class="risk-block">
+            <div class="risk-number">2</div>
+            <div class="risk-content">
+              <h3 class="subsection-title" data-i18n="risk2-title">Risco de usabilidade</h3>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-hypothesis">Hipótese</span>
+                <p data-i18n="risk2-hyp">Mesmo alterando significativamente a jornada de envio, os clientes compreenderão o funcionamento da nova modalidade e conseguirão utilizá-la sem dificuldades.</p>
+              </div>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-validation">Como validei</span>
+                <p data-i18n="risk2-val">Conduzi testes de conceito utilizando um protótipo navegável, observando a compreensão da experiência e pedindo que os participantes explicassem o funcionamento da funcionalidade com suas próprias palavras.</p>
+              </div>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-learning">O que aprendi</span>
+                <ul class="bullet-list">
+                  <li data-i18n="risk2-li1">Todos os participantes compreenderam corretamente o novo fluxo.</li>
+                  <li data-i18n="risk2-li2">A espera pelo fechamento da cotação não foi percebida como uma barreira.</li>
+                  <li data-i18n="risk2-li3">O spread adicional foi entendido como um trade-off aceitável.</li>
+                  <li data-i18n="risk2-li4">O principal benefício percebido foi eliminar a necessidade de acompanhar o câmbio ao longo do dia.</li>
+                  <li data-i18n="risk2-li5">As únicas dúvidas apareceram em relação aos horários e prazos, gerando pequenos ajustes na comunicação da interface.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3) Risco de negócio -->
+          <div class="risk-block">
+            <div class="risk-number">3</div>
+            <div class="risk-content">
+              <h3 class="subsection-title" data-i18n="risk3-title">Risco de negócio</h3>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-hypothesis">Hipótese</span>
+                <p data-i18n="risk3-hyp">Era possível oferecer a nova modalidade sem comprometer a sustentabilidade financeira da operação.</p>
+              </div>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-validation">Como validei</span>
+                <p data-i18n="risk3-val">Trabalhei junto ao time de Produto na definição das regras de negócio, simulando diferentes cenários de oscilação cambial.</p>
+              </div>
+              <div class="risk-field">
+                <span class="risk-label" data-i18n="field-learning">O que aprendi</span>
+                <p data-i18n="risk3-learn">A inclusão de um spread ligeiramente maior permitiu absorver oscilações bruscas do câmbio, preservando a receita da Remessa Online enquanto mantinha uma proposta de valor atrativa para os clientes.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4) Risco de execução -->
+          <div class="risk-block">
+            <div class="risk-number">4</div>
+            <div class="risk-content">
+              <h3 class="subsection-title" data-i18n="risk4-title">Risco de execução</h3>
+              <p class="body-text" data-i18n="risk4-p1">Antes de investir em uma implementação completa, quis reduzir o risco de construir uma funcionalidade complexa sem evidências de adoção. Por isso, optei por um experimento do tipo <strong>Mágico de Oz</strong>, desenvolvendo apenas a experiência mínima necessária para que os clientes acreditassem estar utilizando a funcionalidade em sua versão final, enquanto todo o processamento operacional acontecia manualmente pelo backoffice.</p>
+              <p class="body-text" data-i18n="risk4-p2">Meu objetivo não era validar a interface, mas responder uma pergunta de negócio: <strong>os clientes realmente adotariam essa modalidade antes que investíssemos em uma implementação completa?</strong> O experimento permitiu responder essa hipótese rapidamente, reduzindo o custo da validação e direcionando os esforços de engenharia apenas após a confirmação do interesse dos usuários.</p>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ROLLOUT FASEADO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="rollout2-title">Rollout faseado</h2>
+        <p class="body-text" data-i18n="rollout2-body">Primeiramente, a funcionalidade foi desenvolvida apenas no aplicativo Pessoa Física. Somente 8 meses depois foi implementada na plataforma web Pessoa Física.<br><br>Com isso, consegui testar em produção primeiro em um de nossos canais, medir a adesão dos clientes e se o acréscimo da nova modalidade, que forçaria toda a base de clientes a escolher entre a cotação do momento ou a melhor cotação do dia, seria uma fricção na jornada afetando a conversão.</p>
+      </section>
+
+      <!-- PESQUISA PÓS-LANÇAMENTO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="postlaunch-title">Pesquisa pós-lançamento</h2>
+        <p class="body-text" data-i18n="postlaunch-body">Após o lançamento, entrevistei clientes que utilizaram a funcionalidade para entender em quais contextos ela realmente gerava valor. O objetivo era validar se a proposta atendia diferentes perfis de usuários e identificar oportunidades de evolução.</p>
+
+        <div style="margin-top:16px; display:flex; flex-direction:column; gap:16px;">
+          <h3 class="subsection-title" data-i18n="where-value-title">Onde a funcionalidade gerou mais valor</h3>
+          <p class="body-text" style="font-weight:700; margin-top:-8px;" data-i18n="where-value-sub">Envio para terceiros e mesma titularidade</p>
+          <p class="body-text" style="margin-top:-16px;" data-i18n="where-value-body">Para clientes que não tinham urgência na conclusão da operação, aguardar o fechamento da cotação ao final do dia não representava um obstáculo. Nesses casos, a funcionalidade reduziu a ansiedade em relação às oscilações do câmbio e foi percebida como uma alternativa conveniente para economizar na conversão.</p>
+          <div class="problems-box" style="margin-top:8px;">
+            <p class="subsection-title" style="font-size:18px; margin-bottom:16px;" data-i18n="perceptions-title">Principais percepções</p>
+            <ul class="bullet-list">
+              <li data-i18n="perception1">Elimina a necessidade de acompanhar o câmbio ao longo do dia.</li>
+              <li data-i18n="perception2">Aumenta a sensação de segurança na decisão de enviar dinheiro.</li>
+              <li data-i18n="perception3">Possibilita economia sem exigir acompanhamento constante do mercado.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:40px; display:flex; flex-direction:column; gap:16px;">
+          <h3 class="subsection-title" data-i18n="where-limits-title">Onde a funcionalidade apresentou limitações</h3>
+          <p class="body-text" style="font-weight:700; margin-top:-8px;" data-i18n="where-limits-sub">Envios para investimento</p>
+          <p class="body-text" style="margin-top:-16px;" data-i18n="where-limits-body">Para clientes que realizam transferências motivadas por oportunidades imediatas de investimento, a espera pelo fechamento da cotação reduz significativamente o valor da proposta. A necessidade de executar a operação rapidamente prevalece sobre a possibilidade de obter uma cotação melhor.</p>
+          <div class="problems-box" style="margin-top:8px;">
+            <p class="subsection-title" style="font-size:18px; margin-bottom:16px;" data-i18n="learnings2-title">Principais aprendizados</p>
+            <ul class="bullet-list">
+              <li data-i18n="limit1">O prazo adicional limita a adoção em cenários de urgência.</li>
+              <li data-i18n="limit2">O spread mais elevado pode reduzir o interesse em usos recorrentes.</li>
+              <li data-i18n="limit3">Clientes residentes no exterior encontram restrições devido ao horário limite para agendamento.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div style="margin-top:40px; display:flex; flex-direction:column; gap:24px;">
+          <h3 class="subsection-title" data-i18n="swot-title">Análise SWOT</h3>
+          <div class="swot-grid">
+            <div class="swot-quadrant swot-strengths">
+              <h4 data-i18n="swot-strengths-title">Forças</h4>
+              <div class="swot-chips">
+                <span class="swot-chip" data-i18n="swot-s1">Comodidade</span>
+                <span class="swot-chip" data-i18n="swot-s2">Comunicação e usabilidade</span>
+                <span class="swot-chip" data-i18n="swot-s3">Exclusividade</span>
+              </div>
+            </div>
+            <div class="swot-quadrant swot-weaknesses">
+              <h4 data-i18n="swot-weaknesses-title">Fraquezas</h4>
+              <div class="swot-chips">
+                <span class="swot-chip" data-i18n="swot-w1">Falta transparência do ganho</span>
+                <span class="swot-chip" data-i18n="swot-w2">Limitação de horário</span>
+              </div>
+            </div>
+            <div class="swot-quadrant swot-opportunities">
+              <h4 data-i18n="swot-opportunities-title">Oportunidades</h4>
+              <div class="swot-chips">
+                <span class="swot-chip" data-i18n="swot-o1">Derivações: outros formatos</span>
+                <span class="swot-chip" data-i18n="swot-o2">Estimular o FOMO em dias de volatilidade</span>
+              </div>
+            </div>
+            <div class="swot-quadrant swot-threats">
+              <h4 data-i18n="swot-threats-title">Ameaças</h4>
+              <div class="swot-chips">
+                <span class="swot-chip" data-i18n="swot-t1">Custo elevado</span>
+                <span class="swot-chip" data-i18n="swot-t2">Horário de funcionamento e prazo</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- RESULTADO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="result-title">Resultado</h2>
+        <p class="body-text" data-i18n="result-body">A modalidade foi lançada no final de 2024 e vem mantendo a adoção dentro da expectativa definida durante o planejamento do projeto. A hipótese inicial estabelecia que a funcionalidade seria considerada saudável caso representasse 3% das transações de envio, meta que vem sendo sustentada desde o lançamento.</p>
+        <div class="stats-grid" style="margin-top:16px;">
+          <div class="stat-card">
+            <div class="stat-badge"><span class="num">3%</span><span class="label" data-i18n="result-stat-label">das transações</span></div>
+            <p data-i18n="result-stat-p">Meta de adoção definida no planejamento, sustentada desde o lançamento.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRINCIPAL APRENDIZADO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="final-learning-title">Principal aprendizado</h2>
+        <p class="body-text" data-i18n="final-learning-body">Este projeto reforçou que a proposta de valor não era oferecer simplesmente uma cotação mais baixa, mas reduzir a ansiedade da decisão de enviar dinheiro ao exterior. Também evidenciou a importância de validar separadamente riscos de valor, usabilidade, negócio e execução antes de investir em uma implementação completa, permitindo evoluir a solução com mais confiança e menor custo.</p>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const nav          = document.querySelector('nav');
+      const navBg        = document.querySelector('.nav-bg');
+      const navIndicator = document.querySelector('.nav-indicator');
+      const hamburger    = document.querySelector('.hamburger');
+      const mobileMenu   = document.querySelector('.mobile-menu');
+      const mobileLinks  = document.querySelectorAll('.mobile-menu a');
+      const navLinks     = document.querySelectorAll('.nav-links a');
+      const NAV_LINKS_GAP = 80; // deve bater com o `gap` de .nav-links no CSS
+
+      // ── Idioma (PT/EN) ────────────────────────────────────────
+      const translations = {
+        "nav-home": { pt: "Início", en: "Home" },
+        "nav-work": { pt: "Trabalhos", en: "Work" },
+        "nav-experience": { pt: "Experiência", en: "Experience" },
+        "nav-contact": { pt: "Contato", en: "Contact" },
+        "nav-open-menu": { pt: "Abrir menu", en: "Open menu" },
+        "my-work": { pt: "Meus trabalhos", en: "My work" },
+        "tab2-label": { pt: "2 - Funcionalidade Melhor Cotação do Dia", en: "2 - Best Daily Rate Feature" },
+        "c2-title": { pt: "Funcionalidade Melhor Cotação do Dia", en: "Best Daily Rate Feature" },
+        "c2-intro": { pt: "Auxiliando os clientes a reduzirem a insegurança causada pela volatilidade cambial com a criação de uma nova modalidade de transferência de envio ao exterior.", en: "Helping customers reduce the insecurity caused by exchange rate volatility by creating a new type of international transfer." },
+        "context-title": { pt: "Contexto e objetivos", en: "Context and objectives" },
+        "context-body": { pt: "A volatilidade do câmbio fazia com que muitos clientes tivessem dificuldade em decidir o melhor momento para transferir dinheiro ao exterior, gerando insegurança e ansiedade.<br><br>O <strong>objetivo</strong> era aumentar a confiança nessa decisão, oferecendo uma forma de garantir uma cotação mais vantajosa. Para isso, criamos uma modalidade chamada de Melhor Cotação do dia, em que o cliente poderia agendar uma transação utilizando a menor cotação registrada entre 10h e 16h.", en: "Exchange rate volatility made it hard for many customers to decide the best time to transfer money abroad, creating insecurity and anxiety.<br><br>The <strong>goal</strong> was to increase confidence in that decision by offering a way to lock in a more favorable rate. To do this, we created a feature called Best Rate of the Day, where the customer could schedule a transaction using the lowest rate recorded between 10am and 4pm." },
+        "role2-title": { pt: "Meu papel", en: "My role" },
+        "role2-body": { pt: "Como único Product Designer responsável pelo projeto, conduzi o desenvolvimento da funcionalidade de ponta a ponta: Discovery, ideação, definição da experiência, UX, UI, prototipação, testes com usuários, alinhamento com Produto e Engenharia, validação do MVP e acompanhamento do rollout. Além do desenho da solução, participei das decisões estratégicas para equilibrar necessidades dos clientes, viabilidade técnica e impacto no negócio.", en: "As the sole Product Designer responsible for the project, I led the feature's development end to end: Discovery, ideation, experience definition, UX, UI, prototyping, user testing, alignment with Product and Engineering, MVP validation, and rollout follow-up. Beyond designing the solution, I took part in the strategic decisions to balance customer needs, technical feasibility, and business impact." },
+        "tag-ux-lead": { pt: "Liderança de UX", en: "UX Leadership" },
+        "tag-architecture": { pt: "Arquitetura", en: "Architecture" },
+        "tag-prototyping": { pt: "Prototipação", en: "Prototyping" },
+        "tag-research-validation": { pt: "Pesquisa e validação", en: "Research and validation" },
+        "discover2-subtitle": { pt: "O que eu descobri", en: "What I discovered" },
+        "discover2-body": { pt: "Minha investigação mostrou que o problema não era a experiência de envio, mas a decisão que acontecia antes dela. A volatilidade do câmbio fazia com que muitos clientes acompanhassem a cotação durante dias, postergassem suas transferências e permanecessem inseguros mesmo após concluir a operação. O desafio, portanto, deixou de ser oferecer uma cotação mais competitiva e passou a ser reduzir a ansiedade associada à decisão de enviar dinheiro ao exterior.", en: "My investigation showed that the problem wasn't the sending experience, but the decision that happened before it. Exchange rate volatility led many customers to track the rate for days, postpone their transfers, and remain uneasy even after completing the transaction. The challenge, therefore, shifted from offering a more competitive rate to reducing the anxiety tied to the decision to send money abroad." },
+        "insights2-title": { pt: "Principais insights", en: "Key insights" },
+        "d2-insight1": { pt: "A volatilidade do câmbio gerava ansiedade e dificultava a tomada de decisão.", en: "Exchange rate volatility created anxiety and made decision-making harder." },
+        "d2-insight2": { pt: "Muitos clientes adiavam suas transferências esperando uma cotação melhor.", en: "Many customers postponed their transfers waiting for a better rate." },
+        "d2-insight3": { pt: "O receio de \"perder dinheiro\" após uma oscilação do câmbio era uma dor mais relevante do que a busca pelo menor preço em si.", en: "The fear of \"losing money\" after a rate swing was a more relevant pain point than the search for the lowest price itself." },
+        "ideation-title": { pt: "Ideação", en: "Ideation" },
+        "ideation-body": { pt: "A partir do desejo dos clientes de garantirem a melhor cotação em um período de tempo, ideei em cima de algumas possibilidades, e a experiência que melhor atende às necessidades dos clientes é a garantia da melhor cotação do dia.", en: "Based on customers' desire to lock in the best rate over a period of time, I ideated around a few possibilities, and the experience that best meets customer needs is guaranteeing the best rate of the day." },
+        "journey-title": { pt: "O que altera na jornada atual?", en: "What changes in the current journey?" },
+        "journey-intro": { pt: "Hoje, o cliente que envia ao exterior, fecha uma transação com a cotação do momento e paga em reais via Pix ou Ted à Remessa Online, que converte e envia ao beneficiário no exterior o valor equivalente na moeda estrangeira.", en: "Today, a customer sending money abroad closes a transaction at the current rate and pays in reais via Pix or bank transfer to Remessa Online, which converts and sends the equivalent amount in foreign currency to the beneficiary abroad." },
+        "journey-today": { pt: "Hoje", en: "Today" },
+        "journey-better": { pt: "Com a melhor cotação", en: "With the best rate" },
+        "js-1": { pt: "Define a moeda e o valor do envio", en: "Sets the currency and amount to send" },
+        "js-2": { pt: "Fecha a cotação", en: "Locks in the rate" },
+        "js-3": { pt: "Cliente paga à Remessa Online", en: "Customer pays Remessa Online" },
+        "js-4": { pt: "Dinheiro enviado ao beneficiário", en: "Money sent to the beneficiary" },
+        "js-5": { pt: "Agenda o fechamento para as 16h", en: "Schedules the closing for 4pm" },
+        "js-6": { pt: "A Remessa fecha a transação com a menor cotação observada no período", en: "Remessa closes the transaction at the lowest rate observed during the period" },
+        "design-title": { pt: "Desenho da experiência", en: "Experience design" },
+        "design-body": { pt: "Nesta etapa, desenhei a jornada com base nas regras de negócio que foram definidas em conjunto com outras áreas e toda a nova experiência que acrescenta o agendamento da transação à transação de envio.", en: "At this stage, I designed the journey based on the business rules defined together with other teams, and the entire new experience that adds the transaction scheduling step to the sending transaction." },
+        "callout-important": { pt: "<strong>Importante:</strong> a funcionalidade da melhor cotação teria um spread ligeiramente maior, porém esta alteração deveria ser apresentada de forma transparente aos clientes.", en: "<strong>Important:</strong> the best-rate feature would carry a slightly higher spread, but this change had to be presented transparently to customers." },
+        "testing-title": { pt: "Testes e validação", en: "Testing and validation" },
+        "testing-body": { pt: "Antes de iniciar o desenvolvimento completo da funcionalidade, busquei reduzir os principais riscos do projeto por meio de experimentos rápidos e de baixo custo. Cada experimento foi desenhado para responder uma hipótese específica, permitindo validar valor, usabilidade, viabilidade de negócio e execução antes de um investimento maior.", en: "Before starting full development of the feature, I sought to reduce the project's main risks through quick, low-cost experiments. Each experiment was designed to answer a specific hypothesis, allowing us to validate value, usability, business viability, and execution before a larger investment." },
+        "field-hypothesis": { pt: "Hipótese", en: "Hypothesis" },
+        "field-validation": { pt: "Como validei", en: "How I validated it" },
+        "field-learning": { pt: "O que aprendi", en: "What I learned" },
+        "risk1-title": { pt: "Risco de valor", en: "Value risk" },
+        "risk1-hyp": { pt: "A funcionalidade resolve uma dor real dos clientes e representa uma proposta de valor relevante.", en: "The feature solves a real customer pain point and represents a relevant value proposition." },
+        "risk1-val": { pt: "Utilizei uma pesquisa conduzida pelo time de UX Research para avaliar diferentes oportunidades de produto e medir o interesse dos clientes.", en: "I used a survey run by the UX Research team to assess different product opportunities and measure customer interest." },
+        "risk1-learn": { pt: "A proposta da Melhor Cotação do Dia recebeu o maior índice de avaliações 4 e 5 (\"atende\" ou \"atende totalmente\"), indicando forte aderência à necessidade identificada durante o Discovery.", en: "The Best Rate of the Day proposal received the highest share of 4 and 5 ratings (\"meets\" or \"fully meets\"), indicating strong alignment with the need identified during Discovery." },
+        "chart4-title": { pt: "Quanto cada proposta atende às necessidades dos clientes", en: "How much each proposal meets customer needs" },
+        "legend-5": { pt: "5 - Atende completamente", en: "5 - Fully meets" },
+        "legend-4": { pt: "4 - Atende", en: "4 - Meets" },
+        "legend-3": { pt: "3 - Nem um, nem outro", en: "3 - Neither" },
+        "legend-2": { pt: "2 - Pouco atende", en: "2 - Barely meets" },
+        "legend-1": { pt: "1 - Não atende", en: "1 - Does not meet" },
+        "series-1": { pt: "Alerta de Câmbio", en: "Exchange Rate Alert" },
+        "series-2": { pt: "Garantia Melhor Câmbio do Dia", en: "Best Exchange Rate Guarantee" },
+        "series-3": { pt: "Trava de Câmbio", en: "Rate Lock" },
+        "series-4": { pt: "Câmbio Programado", en: "Scheduled Exchange" },
+        "risk2-title": { pt: "Risco de usabilidade", en: "Usability risk" },
+        "risk2-hyp": { pt: "Mesmo alterando significativamente a jornada de envio, os clientes compreenderão o funcionamento da nova modalidade e conseguirão utilizá-la sem dificuldades.", en: "Even with a significant change to the sending journey, customers will understand how the new option works and be able to use it without difficulty." },
+        "risk2-val": { pt: "Conduzi testes de conceito utilizando um protótipo navegável, observando a compreensão da experiência e pedindo que os participantes explicassem o funcionamento da funcionalidade com suas próprias palavras.", en: "I ran concept tests using a clickable prototype, observing how well the experience was understood and asking participants to explain how the feature worked in their own words." },
+        "risk2-li1": { pt: "Todos os participantes compreenderam corretamente o novo fluxo.", en: "All participants correctly understood the new flow." },
+        "risk2-li2": { pt: "A espera pelo fechamento da cotação não foi percebida como uma barreira.", en: "Waiting for the rate to close was not perceived as a barrier." },
+        "risk2-li3": { pt: "O spread adicional foi entendido como um trade-off aceitável.", en: "The additional spread was understood as an acceptable trade-off." },
+        "risk2-li4": { pt: "O principal benefício percebido foi eliminar a necessidade de acompanhar o câmbio ao longo do dia.", en: "The main perceived benefit was eliminating the need to track the exchange rate throughout the day." },
+        "risk2-li5": { pt: "As únicas dúvidas apareceram em relação aos horários e prazos, gerando pequenos ajustes na comunicação da interface.", en: "The only doubts were about times and deadlines, leading to small adjustments in the interface copy." },
+        "risk3-title": { pt: "Risco de negócio", en: "Business risk" },
+        "risk3-hyp": { pt: "Era possível oferecer a nova modalidade sem comprometer a sustentabilidade financeira da operação.", en: "It was possible to offer the new option without compromising the financial sustainability of the operation." },
+        "risk3-val": { pt: "Trabalhei junto ao time de Produto na definição das regras de negócio, simulando diferentes cenários de oscilação cambial.", en: "I worked with the Product team to define the business rules, simulating different exchange rate fluctuation scenarios." },
+        "risk3-learn": { pt: "A inclusão de um spread ligeiramente maior permitiu absorver oscilações bruscas do câmbio, preservando a receita da Remessa Online enquanto mantinha uma proposta de valor atrativa para os clientes.", en: "Including a slightly higher spread made it possible to absorb sharp exchange rate swings, preserving Remessa Online's revenue while keeping an attractive value proposition for customers." },
+        "risk4-title": { pt: "Risco de execução", en: "Execution risk" },
+        "risk4-p1": { pt: "Antes de investir em uma implementação completa, quis reduzir o risco de construir uma funcionalidade complexa sem evidências de adoção. Por isso, optei por um experimento do tipo <strong>Mágico de Oz</strong>, desenvolvendo apenas a experiência mínima necessária para que os clientes acreditassem estar utilizando a funcionalidade em sua versão final, enquanto todo o processamento operacional acontecia manualmente pelo backoffice.", en: "Before investing in a full implementation, I wanted to reduce the risk of building a complex feature with no evidence of adoption. So I opted for a <strong>Wizard of Oz</strong> experiment, building only the minimal experience needed for customers to believe they were using the final version of the feature, while all operational processing happened manually via the back office." },
+        "risk4-p2": { pt: "Meu objetivo não era validar a interface, mas responder uma pergunta de negócio: <strong>os clientes realmente adotariam essa modalidade antes que investíssemos em uma implementação completa?</strong> O experimento permitiu responder essa hipótese rapidamente, reduzindo o custo da validação e direcionando os esforços de engenharia apenas após a confirmação do interesse dos usuários.", en: "My goal wasn't to validate the interface, but to answer a business question: <strong>would customers actually adopt this option before we invested in a full implementation?</strong> The experiment let us answer that hypothesis quickly, reducing validation cost and directing engineering effort only after confirming user interest." },
+        "rollout2-title": { pt: "Rollout faseado", en: "Phased rollout" },
+        "rollout2-body": { pt: "Primeiramente, a funcionalidade foi desenvolvida apenas no aplicativo Pessoa Física. Somente 8 meses depois foi implementada na plataforma web Pessoa Física.<br><br>Com isso, consegui testar em produção primeiro em um de nossos canais, medir a adesão dos clientes e se o acréscimo da nova modalidade, que forçaria toda a base de clientes a escolher entre a cotação do momento ou a melhor cotação do dia, seria uma fricção na jornada afetando a conversão.", en: "The feature was first developed only in the Individual app. Only 8 months later was it implemented on the Individual web platform.<br><br>This let me test in production first on one of our channels, measure customer adoption, and see whether adding the new option — which would force the entire customer base to choose between the current rate and the best rate of the day — would create friction in the journey and affect conversion." },
+        "postlaunch-title": { pt: "Pesquisa pós-lançamento", en: "Post-launch research" },
+        "postlaunch-body": { pt: "Após o lançamento, entrevistei clientes que utilizaram a funcionalidade para entender em quais contextos ela realmente gerava valor. O objetivo era validar se a proposta atendia diferentes perfis de usuários e identificar oportunidades de evolução.", en: "After launch, I interviewed customers who used the feature to understand in which contexts it actually generated value. The goal was to validate whether the proposal met the needs of different user profiles and identify opportunities for evolution." },
+        "where-value-title": { pt: "Onde a funcionalidade gerou mais valor", en: "Where the feature generated the most value" },
+        "where-value-sub": { pt: "Envio para terceiros e mesma titularidade", en: "Sending to third parties and same-ownership transfers" },
+        "where-value-body": { pt: "Para clientes que não tinham urgência na conclusão da operação, aguardar o fechamento da cotação ao final do dia não representava um obstáculo. Nesses casos, a funcionalidade reduziu a ansiedade em relação às oscilações do câmbio e foi percebida como uma alternativa conveniente para economizar na conversão.", en: "For customers with no urgency to complete the transaction, waiting for the rate to close at the end of the day wasn't an obstacle. In these cases, the feature reduced anxiety about exchange rate swings and was seen as a convenient way to save on the conversion." },
+        "perceptions-title": { pt: "Principais percepções", en: "Key perceptions" },
+        "perception1": { pt: "Elimina a necessidade de acompanhar o câmbio ao longo do dia.", en: "Eliminates the need to track the exchange rate throughout the day." },
+        "perception2": { pt: "Aumenta a sensação de segurança na decisão de enviar dinheiro.", en: "Increases the sense of security in the decision to send money." },
+        "perception3": { pt: "Possibilita economia sem exigir acompanhamento constante do mercado.", en: "Enables savings without requiring constant market monitoring." },
+        "where-limits-title": { pt: "Onde a funcionalidade apresentou limitações", en: "Where the feature showed limitations" },
+        "where-limits-sub": { pt: "Envios para investimento", en: "Investment-related transfers" },
+        "where-limits-body": { pt: "Para clientes que realizam transferências motivadas por oportunidades imediatas de investimento, a espera pelo fechamento da cotação reduz significativamente o valor da proposta. A necessidade de executar a operação rapidamente prevalece sobre a possibilidade de obter uma cotação melhor.", en: "For customers making transfers driven by immediate investment opportunities, waiting for the rate to close significantly reduces the value of the proposal. The need to execute the operation quickly outweighs the chance of getting a better rate." },
+        "learnings2-title": { pt: "Principais aprendizados", en: "Key learnings" },
+        "limit1": { pt: "O prazo adicional limita a adoção em cenários de urgência.", en: "The extra waiting time limits adoption in urgent scenarios." },
+        "limit2": { pt: "O spread mais elevado pode reduzir o interesse em usos recorrentes.", en: "The higher spread can reduce interest in recurring use." },
+        "limit3": { pt: "Clientes residentes no exterior encontram restrições devido ao horário limite para agendamento.", en: "Customers living abroad face restrictions due to the scheduling cutoff time." },
+        "swot-title": { pt: "Análise SWOT", en: "SWOT analysis" },
+        "swot-strengths-title": { pt: "Forças", en: "Strengths" },
+        "swot-s1": { pt: "Comodidade", en: "Convenience" },
+        "swot-s2": { pt: "Comunicação e usabilidade", en: "Communication and usability" },
+        "swot-s3": { pt: "Exclusividade", en: "Exclusivity" },
+        "swot-weaknesses-title": { pt: "Fraquezas", en: "Weaknesses" },
+        "swot-w1": { pt: "Falta transparência do ganho", en: "Lack of transparency on the gain" },
+        "swot-w2": { pt: "Limitação de horário", en: "Time restriction" },
+        "swot-opportunities-title": { pt: "Oportunidades", en: "Opportunities" },
+        "swot-o1": { pt: "Derivações: outros formatos", en: "Spin-offs: other formats" },
+        "swot-o2": { pt: "Estimular o FOMO em dias de volatilidade", en: "Drive FOMO on volatile days" },
+        "swot-threats-title": { pt: "Ameaças", en: "Threats" },
+        "swot-t1": { pt: "Custo elevado", en: "High cost" },
+        "swot-t2": { pt: "Horário de funcionamento e prazo", en: "Operating hours and deadline" },
+        "result-title": { pt: "Resultado", en: "Result" },
+        "result-body": { pt: "A modalidade foi lançada no final de 2024 e vem mantendo a adoção dentro da expectativa definida durante o planejamento do projeto. A hipótese inicial estabelecia que a funcionalidade seria considerada saudável caso representasse 3% das transações de envio, meta que vem sendo sustentada desde o lançamento.", en: "The feature launched in late 2024 and has maintained adoption within the expectation set during project planning. The initial hypothesis was that the feature would be considered healthy if it represented 3% of sending transactions — a target that has held since launch." },
+        "result-stat-label": { pt: "das transações", en: "of transactions" },
+        "result-stat-p": { pt: "Meta de adoção definida no planejamento, sustentada desde o lançamento.", en: "Adoption target set during planning, sustained since launch." },
+        "final-learning-title": { pt: "Principal aprendizado", en: "Key takeaway" },
+        "final-learning-body": { pt: "Este projeto reforçou que a proposta de valor não era oferecer simplesmente uma cotação mais baixa, mas reduzir a ansiedade da decisão de enviar dinheiro ao exterior. Também evidenciou a importância de validar separadamente riscos de valor, usabilidade, negócio e execução antes de investir em uma implementação completa, permitindo evoluir a solução com mais confiança e menor custo.", en: "This project reinforced that the value proposition wasn't simply offering a lower rate, but reducing the anxiety of the decision to send money abroad. It also highlighted the importance of separately validating value, usability, business, and execution risks before investing in a full implementation, allowing the solution to evolve with more confidence and lower cost." },
+      };
+
+      function applyLanguage(lang) {
+        document.documentElement.lang = lang === 'en' ? 'en' : 'pt-BR';
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n')];
+          if (t && t[lang] != null) el.innerHTML = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-alt')];
+          if (t && t[lang] != null) el.alt = t[lang];
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+          const t = translations[el.getAttribute('data-i18n-aria')];
+          if (t && t[lang] != null) el.setAttribute('aria-label', t[lang]);
+        });
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        localStorage.setItem('site-lang', lang);
+        positionIndicator(true);
+      }
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => applyLanguage(btn.dataset.lang));
+      });
+
+      applyLanguage(localStorage.getItem('site-lang') || 'pt');
+
+      // ── Vídeo do hero: reproduzir em câmera lenta (0.7x) e, ao
+      // terminar, esperar 2s antes de reiniciar o loop ────────
+      const heroVideo = document.querySelector('.hero-image video');
+      if (heroVideo) {
+        heroVideo.defaultPlaybackRate = 0.7;
+        heroVideo.playbackRate = 0.7;
+        heroVideo.addEventListener('ended', () => {
+          setTimeout(() => {
+            heroVideo.currentTime = 0;
+            heroVideo.play();
+          }, 2000);
+        });
+      }
+
+      // ── Gráfico empilhado: segmentos "carregam" ao entrar na tela ──
+      const chartObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const segs = entry.target.querySelectorAll('.stacked-seg');
+          segs.forEach((seg, i) => {
+            setTimeout(() => { seg.style.transform = 'scaleX(1)'; }, i * 70);
+          });
+          chartObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('.chart-card').forEach(card => chartObserver.observe(card));
+
+      function positionIndicator(instant) {
+        const activeLink = document.querySelector('.nav-links a.active');
+        if (!activeLink) return;
+        const rect    = activeLink.getBoundingClientRect();
+        const navRect = nav.getBoundingClientRect();
+        if (instant) navIndicator.style.transition = 'none';
+        navIndicator.style.width = rect.width + 'px';
+        navIndicator.style.left  = (rect.left - navRect.left) + 'px';
+        if (instant) {
+          navIndicator.offsetHeight; // força reflow antes de reativar a transição
+          navIndicator.style.transition = '';
+        }
+      }
+
+      // Primeiro posicionamento é instantâneo (sem transition) para não
+      // "deslizar" a partir de left:0/width:0 — isso ficava visível durante
+      // a transição de página entre os cases.
+      positionIndicator(true);
+      window.addEventListener('resize', positionIndicator);
+      if (document.fonts) document.fonts.ready.then(positionIndicator);
+
+      function openMenu() {
+        hamburger.classList.add('open');
+        mobileMenu.classList.add('open');
+        hamburger.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeMenu() {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        hamburger.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+
+      hamburger.addEventListener('click', () => {
+        mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+      });
+
+      mobileLinks.forEach(link => {
+        link.addEventListener('click', () => closeMenu());
+      });
+
+      navLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          const rect    = link.getBoundingClientRect();
+          const navRect = nav.getBoundingClientRect();
+          const pad     = NAV_LINKS_GAP / 2;
+          navBg.style.left  = (rect.left - navRect.left - pad) + 'px';
+          navBg.style.width = (rect.width + NAV_LINKS_GAP) + 'px';
+        });
+
+        link.addEventListener('mouseleave', () => {
+          navBg.style.left  = '0px';
+          navBg.style.width = '100%';
+        });
+      });
+    });
+  </script>
+</body>
+</html>
