@@ -428,6 +428,8 @@
     .design-image-row .ph { width: 100%; height: auto; }
     .design-image-row .ph img { height: auto; object-fit: contain; }
 
+    .design-hero-photo { height: 600px; }
+
     /* overflow:hidden (necessário pra cortar o vídeo no border-radius)
        corta também a própria box-shadow do elemento — por isso a sombra
        de elevação vai num wrapper externo, que não tem overflow. */
@@ -873,7 +875,55 @@
     }
 
     @media (max-width: 768px) {
-      .wrap { max-width: calc(100% - 40px); }
+      .nav-wrapper { padding-top: 24px; }
+
+      nav {
+        padding: 0 16px;
+        height: 64px;
+        justify-content: space-between;
+        max-width: calc(100% - 32px);
+      }
+
+      .lang-switch { right: 16px; }
+
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+
+      .mobile-menu { display: flex; }
+
+      .case-switch-list { flex-wrap: nowrap; }
+
+      .case-switch-list a.active {
+        font-size: 11px;
+        padding: 10px 16px;
+        height: auto;
+        min-height: 32px;
+        white-space: normal;
+        line-height: 14px;
+        text-align: center;
+      }
+
+      .case-switch-list a:not(.active) {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        background: none;
+        border: none;
+        color: transparent;
+        font-size: 0;
+        position: relative;
+      }
+
+      .case-switch-list a:not(.active)::before {
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      .wrap { max-width: calc(100% - 48px); }
       .main-content { padding-top: 48px; padding-bottom: 64px; }
       .page-flow { gap: 64px; }
       .case-title-block h1 { font-size: 30px; line-height: 38px; }
@@ -885,8 +935,44 @@
       .chart-card { padding: 20px; border-radius: 16px; }
       .stacked-track { height: 32px; }
       .stacked-seg { font-size: 10px; }
-      .risk-number { width: 44px; height: 44px; flex-basis: 44px; font-size: 16px; }
-      .journey-step { width: 100%; flex-basis: 100%; }
+      .risk-number { width: 40px; height: 40px; flex-basis: 40px; font-size: 15px; }
+      .journey-step {
+        width: 100%;
+        flex-basis: 100%;
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+      }
+
+      /* Ícones em círculo/retângulo no máximo 40px no mobile */
+      .journey-icon { width: 40px; height: 40px; }
+
+      /* Menos padding lateral nos cards de fundo branco */
+      .problems-box { padding: 20px; }
+
+      /* Imagem "Desenho da experiência" sem crop no mobile */
+      .design-hero-photo { height: auto; }
+      .design-hero-photo img { height: auto; object-fit: contain; }
+
+      /* Imagens lado a lado empilhadas no mobile, largura toda */
+      .design-image-row { flex-direction: column; }
+
+      /* Checklist de insights escondido no mobile */
+      .checklist-grid { display: none; }
+
+      /* Cards de resultado bem menores e alinhados à esquerda */
+      .stats-grid { justify-content: flex-start; }
+      .stat-card {
+        width: auto;
+        flex: 0 0 auto;
+        padding: 10px;
+        border-radius: 12px;
+        gap: 6px;
+      }
+      .stat-badge { height: 32px; padding: 0 8px; gap: 4px; border-radius: 6px; }
+      .stat-badge .num { font-size: 16px; }
+      .stat-badge .label { font-size: 8px; }
+      .stat-card p { font-size: 11px; line-height: 15px; max-width: 160px; }
     }
   </style>
 </head>
@@ -953,7 +1039,7 @@
 
         <div class="hero-video-frame" style="margin-top:56px;">
           <div class="ph hero-image">
-            <video src="images/Video%20case%202.mp4" autoplay muted playsinline></video>
+            <video src="images/Video%20case%202.mp4" autoplay muted playsinline preload="auto"></video>
           </div>
         </div>
 
@@ -1077,7 +1163,7 @@
             <p data-i18n="callout-important"><strong>Importante:</strong> a funcionalidade da melhor cotação teria um spread ligeiramente maior, porém esta alteração deveria ser apresentada de forma transparente aos clientes.</p>
           </div>
           <div class="design-image-frame">
-            <div class="ph hero-image" style="height:600px;">
+            <div class="ph hero-image design-hero-photo">
               <img src="images/Case%202%20-%201.png" alt="Desenho da experiência" data-i18n-alt="design-title">
             </div>
           </div>

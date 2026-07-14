@@ -973,7 +973,55 @@
     }
 
     @media (max-width: 768px) {
-      .wrap { max-width: calc(100% - 40px); }
+      .nav-wrapper { padding-top: 24px; }
+
+      nav {
+        padding: 0 16px;
+        height: 64px;
+        justify-content: space-between;
+        max-width: calc(100% - 32px);
+      }
+
+      .lang-switch { right: 16px; }
+
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+
+      .mobile-menu { display: flex; }
+
+      .case-switch-list { flex-wrap: nowrap; }
+
+      .case-switch-list a.active {
+        font-size: 11px;
+        padding: 10px 16px;
+        height: auto;
+        min-height: 32px;
+        white-space: normal;
+        line-height: 14px;
+        text-align: center;
+      }
+
+      .case-switch-list a:not(.active) {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        background: none;
+        border: none;
+        color: transparent;
+        font-size: 0;
+        position: relative;
+      }
+
+      .case-switch-list a:not(.active)::before {
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      .wrap { max-width: calc(100% - 48px); }
       .main-content { padding-top: 48px; padding-bottom: 64px; }
       .page-flow { gap: 64px; }
       .case-title-block h1 { font-size: 30px; line-height: 38px; }
@@ -993,6 +1041,36 @@
       .survey-card.branch { grid-column: auto; margin-top: 0; }
       .survey-arrow-icon { display: none; }
       .survey-connector { display: none; }
+
+      /* Ícones em círculo/retângulo no máximo 40px no mobile */
+      .problem-number { flex: 0 0 40px; width: 40px; height: 40px; }
+      .principle-icon { width: 40px; height: 40px; }
+      .survey-badge { width: 40px; height: 40px; top: -20px; }
+
+      /* Menos padding lateral nos cards de fundo branco */
+      .problems-box { padding: 20px; }
+
+      /* Imagens da área logada sem crop: altura acompanha a imagem */
+      .al-image-frame { height: auto; }
+      .al-image-frame .ph { height: auto; }
+      .al-image-frame .ph img { height: auto; object-fit: contain; }
+
+      /* Checklist de melhorias escondido no mobile */
+      .checklist-grid { display: none; }
+
+      /* Cards de resultado bem menores e alinhados à esquerda */
+      .stats-grid { justify-content: flex-start; }
+      .stat-card {
+        width: auto;
+        flex: 0 0 auto;
+        padding: 10px;
+        border-radius: 12px;
+        gap: 6px;
+      }
+      .stat-badge { height: 32px; padding: 0 8px; gap: 4px; border-radius: 6px; }
+      .stat-badge .num { font-size: 16px; }
+      .stat-badge .label { font-size: 8px; }
+      .stat-card p { font-size: 11px; line-height: 15px; max-width: 160px; }
     }
   </style>
 </head>
@@ -1059,7 +1137,7 @@
 
         <div class="hero-video-frame" style="margin-top:56px;">
           <div class="ph hero-image">
-            <video src="images/Video%20principal%203.mp4" autoplay muted playsinline></video>
+            <video src="images/Video%20principal%203.mp4" autoplay muted playsinline preload="auto"></video>
           </div>
         </div>
 

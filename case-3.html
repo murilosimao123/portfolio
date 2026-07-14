@@ -356,7 +356,55 @@
     }
 
     @media (max-width: 768px) {
-      .wrap { max-width: calc(100% - 40px); }
+      .nav-wrapper { padding-top: 24px; }
+
+      nav {
+        padding: 0 16px;
+        height: 64px;
+        justify-content: space-between;
+        max-width: calc(100% - 32px);
+      }
+
+      .lang-switch { right: 16px; }
+
+      .nav-links { display: none; }
+
+      .hamburger { display: flex; }
+
+      .mobile-menu { display: flex; }
+
+      .case-switch-list { flex-wrap: nowrap; }
+
+      .case-switch-list a.active {
+        font-size: 11px;
+        padding: 10px 16px;
+        height: auto;
+        min-height: 32px;
+        white-space: normal;
+        line-height: 14px;
+        text-align: center;
+      }
+
+      .case-switch-list a:not(.active) {
+        flex-shrink: 0;
+        width: 32px;
+        height: 32px;
+        background: none;
+        border: none;
+        color: transparent;
+        font-size: 0;
+        position: relative;
+      }
+
+      .case-switch-list a:not(.active)::before {
+        content: '';
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--accent);
+      }
+
+      .wrap { max-width: calc(100% - 48px); }
       .main-content { padding-top: 48px; padding-bottom: 120px; }
       .page-flow { gap: 64px; }
       .case-title-block h1 { font-size: 30px; line-height: 38px; }

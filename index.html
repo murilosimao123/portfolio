@@ -522,6 +522,10 @@
     /* Mobile */
     @media (max-width: 768px) {
       /* Nav */
+      .nav-wrapper {
+        padding-top: 24px;
+      }
+
       nav {
         padding: 0 16px;
         height: 64px;
@@ -541,6 +545,11 @@
 
       .mobile-menu {
         display: flex;
+        gap: 40px;
+      }
+
+      .mobile-menu a {
+        font-size: 24px;
       }
 
       /* Main spacing */
@@ -553,12 +562,12 @@
       /* Hero */
       .hero {
         gap: 40px;
-        padding: 0 20px;
+        padding: 0 24px;
       }
 
       .hero-name { font-size: 36px; line-height: 42px; }
 
-      .hero-bio { font-size: 22px; line-height: 32px; }
+      .hero-bio { font-size: 22px; line-height: 28px; }
 
       .hero-photo {
         width: 100%;
@@ -572,15 +581,18 @@
       .icon-btn { width: 48px; height: 48px; }
 
       /* About */
-      .about { padding: 64px 20px; }
+      .about { padding: 64px 24px; }
 
       .about-body { font-size: 16px; }
 
       /* Cases */
       .cases {
         gap: 64px;
-        padding: 0 20px;
       }
+
+      .cases-header { gap: 16px; }
+
+      .cases-header-label { font-size: 10px; }
 
       .cases-list { gap: 48px; }
 
@@ -600,7 +612,7 @@
 
       .case-title {
         font-size: 26px;
-        line-height: 32px;
+        line-height: 28px;
       }
 
       .case-image-wrap {
