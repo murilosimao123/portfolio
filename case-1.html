@@ -554,47 +554,20 @@
     .lightbox-close:hover { background: rgba(255,255,255,0.24); }
 
     /* ── PROBLEMAS E OPORTUNIDADES ──────────────────────────── */
-    .problems-box {
-      background: var(--white);
-      border-bottom: 6px solid var(--card-border);
-      border-radius: 24px;
-      padding: 40px;
-    }
-
     .problems-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 40px 92px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
     }
 
     .problem-card {
       display: flex;
-      gap: 24px;
-    }
-
-    .problem-number {
-      flex: 0 0 56px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--flow-alert);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .problem-content {
-      flex: 1;
-      min-width: 0;
+      flex-direction: column;
     }
 
     .problem-card h4 {
       font-size: 20px;
       font-weight: 800;
-      height: 56px;
-      display: flex;
-      align-items: center;
       margin-bottom: 12px;
     }
 
@@ -636,9 +609,16 @@
       border-bottom: 6px solid var(--principle-border);
       border-radius: 24px;
       padding: 32px 24px;
+      height: 248px;
       display: flex;
       flex-direction: column;
       gap: 16px;
+    }
+
+    .principle-divider {
+      border: none;
+      border-top: 1px solid var(--principle-border);
+      margin: 0;
     }
 
     .principle-icon {
@@ -658,8 +638,8 @@
     }
 
     .principle-card p {
-      font-size: 18px;
-      line-height: 28px;
+      font-size: 16px;
+      line-height: 24px;
     }
 
     /* ── GALERIA DE IMAGENS (Área não logada / logada) ──────── */
@@ -1043,12 +1023,8 @@
       .survey-connector { display: none; }
 
       /* Ícones em círculo/retângulo no máximo 40px no mobile */
-      .problem-number { flex: 0 0 40px; width: 40px; height: 40px; }
       .principle-icon { width: 40px; height: 40px; }
       .survey-badge { width: 40px; height: 40px; top: -20px; }
-
-      /* Menos padding lateral nos cards de fundo branco */
-      .problems-box { padding: 20px; }
 
       /* Imagens da área logada sem crop: altura acompanha a imagem */
       .al-image-frame { height: auto; }
@@ -1181,54 +1157,40 @@
         <p class="body-text" data-i18n="discover-body">Durante o Discovery, consolidei pesquisas, feedbacks de clientes e análises da experiência existente para identificar os principais fatores que comprometiam a evolução do produto.</p>
         <div style="margin-top:16px;">
           <h3 class="subsection-title" style="margin-bottom:24px;" data-i18n="problems-title">Problemas e oportunidades</h3>
-          <div class="problems-box">
-            <div class="problems-grid">
-              <div class="problem-card">
-                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-                <div class="problem-content">
-                  <h4 data-i18n="prob1-h4">Onboarding com alta fricção</h4>
-                  <ul>
-                    <li data-i18n="prob1-li1">Cadastro longo e pouco orientado.</li>
-                    <li data-i18n="prob1-li2">Sem visibilidade de progresso.</li>
-                    <li data-i18n="prob1-li3">Envio de documentos com restrições técnicas.</li>
-                    <li data-i18n="prob1-li4">Baixa percepção de segurança.</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="problem-card">
-                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-                <div class="problem-content">
-                  <h4 data-i18n="prob2-h4">Arquitetura da informação confusa</h4>
-                  <ul>
-                    <li data-i18n="prob2-li1">Navegação pouco escalável.</li>
-                    <li data-i18n="prob2-li2">Terminologias distantes do modelo mental dos clientes.</li>
-                    <li data-i18n="prob2-li3">Organização inconsistente entre funcionalidades.</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="problem-card">
-                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-                <div class="problem-content">
-                  <h4 data-i18n="prob3-h4">Experiência pouco personalizada</h4>
-                  <ul>
-                    <li data-i18n="prob3-li1">Home genérica para diferentes perfis.</li>
-                    <li data-i18n="prob3-li2">Pouco suporte durante a jornada.</li>
-                    <li data-i18n="prob3-li3">Acompanhamento de transações dependente de e-mails.</li>
-                    <li data-i18n="prob3-li4">Feedbacks pouco claros.</li>
-                  </ul>
-                </div>
-              </div>
-              <div class="problem-card">
-                <div class="problem-number"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
-                <div class="problem-content">
-                  <h4 data-i18n="prob4-h4">Baixa consistência e escalabilidade</h4>
-                  <ul>
-                    <li data-i18n="prob4-li1">Ausência de Design System.</li>
-                    <li data-i18n="prob4-li2">Componentes e padrões visuais inconsistentes.</li>
-                    <li data-i18n="prob4-li3">Alto custo para evoluir o produto.</li>
-                  </ul>
-                </div>
-              </div>
+          <div class="problems-grid">
+            <div class="problem-card">
+              <h4 data-i18n="prob1-h4">Onboarding com alta fricção</h4>
+              <ul>
+                <li data-i18n="prob1-li1">Cadastro longo e pouco orientado.</li>
+                <li data-i18n="prob1-li2">Sem visibilidade de progresso.</li>
+                <li data-i18n="prob1-li3">Envio de documentos com restrições técnicas.</li>
+                <li data-i18n="prob1-li4">Baixa percepção de segurança.</li>
+              </ul>
+            </div>
+            <div class="problem-card">
+              <h4 data-i18n="prob3-h4">Experiência pouco personalizada</h4>
+              <ul>
+                <li data-i18n="prob3-li1">Home genérica para diferentes perfis.</li>
+                <li data-i18n="prob3-li2">Pouco suporte durante a jornada.</li>
+                <li data-i18n="prob3-li3">Acompanhamento de transações dependente de e-mails.</li>
+                <li data-i18n="prob3-li4">Feedbacks pouco claros.</li>
+              </ul>
+            </div>
+            <div class="problem-card">
+              <h4 data-i18n="prob2-h4">Arquitetura confusa</h4>
+              <ul>
+                <li data-i18n="prob2-li1">Navegação pouco escalável.</li>
+                <li data-i18n="prob2-li2">Terminologias distantes do modelo mental dos clientes.</li>
+                <li data-i18n="prob2-li3">Organização inconsistente entre funcionalidades.</li>
+              </ul>
+            </div>
+            <div class="problem-card">
+              <h4 data-i18n="prob4-h4">Baixa consistência</h4>
+              <ul>
+                <li data-i18n="prob4-li1">Ausência de Design System.</li>
+                <li data-i18n="prob4-li2">Componentes e padrões visuais inconsistentes.</li>
+                <li data-i18n="prob4-li3">Alto custo para evoluir o produto.</li>
+              </ul>
             </div>
           </div>
         </div>
@@ -1250,6 +1212,7 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20"/></svg>
             </div>
             <h4 data-i18n="princ1-h4">Escalabilidade</h4>
+            <hr class="principle-divider">
             <p data-i18n="princ1-p">Construir uma plataforma preparada para crescer.</p>
           </div>
           <div class="principle-card">
@@ -1257,6 +1220,7 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
             </div>
             <h4 data-i18n="princ2-h4">Encontrabilidade</h4>
+            <hr class="principle-divider">
             <p data-i18n="princ2-p">Facilitar a descoberta das funcionalidades.</p>
           </div>
           <div class="principle-card">
@@ -1264,6 +1228,7 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
             </div>
             <h4 data-i18n="princ3-h4">Personalização</h4>
+            <hr class="principle-divider">
             <p data-i18n="princ3-p">Mostrar o que é mais relevante para o caso de uso do cliente.</p>
           </div>
           <div class="principle-card">
@@ -1271,6 +1236,7 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l6 7-6 7M13 5l6 7-6 7"/></svg>
             </div>
             <h4 data-i18n="princ4-h4">Orientação</h4>
+            <hr class="principle-divider">
             <p data-i18n="princ4-p">Reduzir dúvidas em jornadas financeiras complexas.</p>
           </div>
           <div class="principle-card">
@@ -1278,6 +1244,7 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>
             </div>
             <h4 data-i18n="princ5-h4">Visibilidade</h4>
+            <hr class="principle-divider">
             <p data-i18n="princ5-p">Diminuir ansiedade durante as operações.</p>
           </div>
           <div class="principle-card">
@@ -1285,6 +1252,7 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>
             </div>
             <h4 data-i18n="princ6-h4">Consistência e clareza</h4>
+            <hr class="principle-divider">
             <p data-i18n="princ6-p">Padrão consistente nos componentes, diminuindo o esforço cognitivo.</p>
           </div>
           <div class="principle-card">
@@ -1292,6 +1260,7 @@
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"/><path d="M18 3v4h-4M6 21v-4h4"/></svg>
             </div>
             <h4 data-i18n="princ7-h4">Controle e Liberdade</h4>
+            <hr class="principle-divider">
             <p data-i18n="princ7-p">Caminhos claros para desfazer ações, cancelar processos ou voltar no fluxo.</p>
           </div>
         </div>
@@ -1699,7 +1668,7 @@
         "prob1-li2": { pt: "Sem visibilidade de progresso.", en: "No progress visibility." },
         "prob1-li3": { pt: "Envio de documentos com restrições técnicas.", en: "Document upload with technical restrictions." },
         "prob1-li4": { pt: "Baixa percepção de segurança.", en: "Low perceived security." },
-        "prob2-h4": { pt: "Arquitetura da informação confusa", en: "Confusing information architecture" },
+        "prob2-h4": { pt: "Arquitetura confusa", en: "Confusing architecture" },
         "prob2-li1": { pt: "Navegação pouco escalável.", en: "Poorly scalable navigation." },
         "prob2-li2": { pt: "Terminologias distantes do modelo mental dos clientes.", en: "Terminology far from customers' mental model." },
         "prob2-li3": { pt: "Organização inconsistente entre funcionalidades.", en: "Inconsistent organization across features." },
@@ -1708,7 +1677,7 @@
         "prob3-li2": { pt: "Pouco suporte durante a jornada.", en: "Little support throughout the journey." },
         "prob3-li3": { pt: "Acompanhamento de transações dependente de e-mails.", en: "Transaction tracking dependent on emails." },
         "prob3-li4": { pt: "Feedbacks pouco claros.", en: "Unclear feedback." },
-        "prob4-h4": { pt: "Baixa consistência e escalabilidade", en: "Low consistency and scalability" },
+        "prob4-h4": { pt: "Baixa consistência", en: "Low consistency" },
         "prob4-li1": { pt: "Ausência de Design System.", en: "No Design System." },
         "prob4-li2": { pt: "Componentes e padrões visuais inconsistentes.", en: "Inconsistent components and visual patterns." },
         "prob4-li3": { pt: "Alto custo para evoluir o produto.", en: "High cost to evolve the product." },
