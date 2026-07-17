@@ -258,12 +258,24 @@
       gap: 16px;
     }
 
+    /* ── ENTRADA ANIMADA (título e foto) ──────────────────────── */
+    @keyframes expFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes expPhotoIn {
+      from { opacity: 0; transform: translateY(40px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     .exp-title {
       font-size: 48px;
       font-weight: 900;
       line-height: 56px;
       color: var(--text);
       text-transform: uppercase;
+      animation: expFadeUp 0.6s ease-out both;
     }
 
     .exp-divider {
@@ -287,6 +299,7 @@
       overflow: hidden;
       -webkit-mask-image: -webkit-radial-gradient(white, black);
       box-shadow: inset 0 0 0 2px var(--bg);
+      animation: expPhotoIn 1.3s ease-out 0.2s both;
     }
 
     .exp-photo img {
