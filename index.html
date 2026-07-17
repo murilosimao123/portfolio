@@ -16,6 +16,7 @@
       --bg:         #FBFAF5;
       --text:       #2C2C2A;
       --accent:     #DD4975;
+      --nav-bg:     #E8E8E3;
       --about-bg:   #DD4975;
       --card-bg:    #2C2C2A;
       --placeholder:#434343;
@@ -68,7 +69,7 @@
     .nav-links a {
       font-size: 16px;
       font-weight: 400;
-      color: var(--white);
+      color: var(--text);
       position: relative;
       padding-bottom: 4px;
       text-transform: uppercase;
@@ -83,7 +84,7 @@
       top: 100%;
       left: 0;
       height: 6px;
-      background: var(--text);
+      background: var(--accent);
       border-radius: 0 0 6px 6px;
       transition: left 0.3s, width 0.3s;
       pointer-events: none;
@@ -95,7 +96,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: var(--accent);
+      background: var(--nav-bg);
       border-radius: 80px;
       transition: left 0.3s, width 0.3s;
       pointer-events: none;
@@ -111,7 +112,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(44, 44, 42, 0.08);
       border-radius: 999px;
       padding: 4px;
       z-index: 2;
@@ -138,7 +139,7 @@
 
     .lang-btn.active {
       opacity: 1;
-      border-color: var(--white);
+      border-color: var(--text);
       transform: scale(1.08);
     }
 
@@ -159,13 +160,13 @@
       z-index: 10;
     }
 
-    .hamburger:hover { background: rgba(255,255,255,0.15); }
+    .hamburger:hover { background: rgba(44,44,42,0.08); }
 
     .hamburger span {
       display: block;
       width: 100%;
       height: 2px;
-      background: var(--white);
+      background: var(--text);
       border-radius: 2px;
       transition: transform 0.3s, opacity 0.3s;
       transform-origin: center;
@@ -228,7 +229,7 @@
 
     /* ── FOOTER ─────────────────────────────────────────────── */
     .site-footer {
-      background: var(--text);
+      background: var(--nav-bg);
       height: 112px;
       margin-top: 200px;
       display: flex;
@@ -253,18 +254,18 @@
       width: 48px;
       height: 48px;
       border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(44, 44, 42, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--white);
+      color: var(--text);
       transition: opacity 0.15s;
     }
 
     .footer-icon-btn:hover { opacity: 0.7; }
 
     .footer-copyright {
-      color: var(--white);
+      color: var(--text);
       font-size: 14px;
       font-weight: 500;
     }
