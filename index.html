@@ -292,12 +292,26 @@
       gap: 16px;
     }
 
+    /* ── ENTRADA ANIMADA DO HERO ──────────────────────────────
+       Título, parágrafo e foto surgem em sequência ao abrir a
+       home, terminando juntos em 1,5s. */
+    @keyframes heroFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heroPhotoIn {
+      from { opacity: 0; transform: translateY(40px) scale(0.96); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
     .hero-name {
       font-size: 48px;
       font-weight: 900;
       line-height: 56px;
       color: var(--text);
       text-transform: uppercase;
+      animation: heroFadeUp 0.6s ease-out both;
     }
 
     .hero-divider {
@@ -310,6 +324,7 @@
       font-weight: 400;
       line-height: 40px;
       color: var(--text);
+      animation: heroFadeUp 0.6s ease-out 0.3s both;
     }
 
     .hero-bio strong {
@@ -329,6 +344,7 @@
       -webkit-mask-image: -webkit-radial-gradient(white, black);
       /* Contorno interno na cor do fundo disfarça o serrilhado residual. */
       box-shadow: inset 0 0 0 2px var(--bg);
+      animation: heroPhotoIn 1.3s ease-out 0.2s both;
     }
 
     .hero-photo img {
