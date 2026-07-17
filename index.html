@@ -459,6 +459,10 @@
     }
 
     /* ── CARD ───────────────────────────────────────────────── */
+    @keyframes caseCardReveal {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     .case-card {
       display: flex;
       align-items: stretch;
@@ -469,6 +473,14 @@
       width: 100%;
       height: 580px;
       transition: box-shadow 0.25s ease, transform 0.25s ease;
+      opacity: 0;
+      transform: translateY(40px);
+      animation: caseCardReveal 0.6s ease-out forwards;
+      animation-play-state: paused;
+    }
+
+    .case-card.in-view {
+      animation-play-state: running;
     }
 
     .case-card:hover {
@@ -1034,6 +1046,17 @@
 
         requestAnimationFrame(animation);
       }
+
+      // ── Cases: aparecem ao entrar na tela, na ordem do scroll ─
+      const caseCardObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('in-view');
+          caseCardObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.2 });
+
+      document.querySelectorAll('.case-card').forEach(card => caseCardObserver.observe(card));
     });
   </script>
 </body>
