@@ -21,6 +21,14 @@
       --white:      #FFFFFF;
       --max:        1128px;
       --font:       'Inter', sans-serif;
+
+      --principle-bg:     #F6EAEE;
+      --principle-border: #DEC7CE;
+      --card-border:      #EEE5E8;
+      --image-border:     #EEE9E5;
+      --stat-bg:          #FAFAFA;
+      --stat-green:       #2BB34D;
+      --muted:            #9B9D9A;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -247,7 +255,7 @@
       display: flex;
       flex-direction: column;
       padding-top: 96px;
-      padding-bottom: 240px;
+      padding-bottom: 160px;
     }
 
     .page-flow {
@@ -311,7 +319,7 @@
       text-transform: none;
     }
 
-    .case-switch-list a:not(.active):hover { background: var(--principle-bg, #F6EAEE); }
+    .case-switch-list a:not(.active):hover { background: var(--principle-bg); }
 
     .double-divider {
       display: flex;
@@ -332,27 +340,191 @@
       gap: 24px;
     }
 
+    /* ── ENTRADA ANIMADA DO TÍTULO ────────────────────────────── */
+    @keyframes titleFadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     .case-title-block h1 {
       font-size: 48px;
       font-weight: 900;
       line-height: 56px;
       text-transform: uppercase;
+      animation: titleFadeUp 0.6s ease-out both;
     }
 
     .case-title-block p {
       font-size: 24px;
       font-weight: 400;
       line-height: 36px;
+      animation: titleFadeUp 0.6s ease-out 0.25s both;
+    }
+
+    /* ── SEÇÕES ─────────────────────────────────────────────── */
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .section-title {
+      font-size: 32px;
+      font-weight: 800;
+    }
+
+    .subsection-title {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .body-text {
+      font-size: 18px;
+      font-weight: 400;
+      line-height: 28px;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin-top: 32px;
+    }
+
+    /* ── PROBLEMAS EM COLUNAS (texto, sem ícone) ─────────────── */
+    .problems-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 32px;
+    }
+
+    .problem-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .problem-card h4 {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .problem-card ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .problem-card li {
+      font-size: 18px;
+      line-height: 28px;
+      color: var(--text);
+      padding-left: 16px;
+      position: relative;
+    }
+
+    .problem-card li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* ── LISTAS COM MARCADOR ──────────────────────────────────── */
+    .problems-box {
+      background: var(--white);
+      border-bottom: 6px solid var(--card-border);
+      border-radius: 24px;
+      padding: 40px;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bullet-list li {
+      font-size: 18px;
+      line-height: 28px;
+      color: var(--text);
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .bullet-list li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 12px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* ── DESAFIOS NUMERADOS ───────────────────────────────────── */
+    .risk-block {
+      display: flex;
+      gap: 24px;
+    }
+
+    .risk-number {
+      flex: 0 0 56px;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .risk-content {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── TAGS ───────────────────────────────────────────────── */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-pill {
+      background: var(--white);
       color: var(--accent);
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
     }
 
     /* ── RESPONSIVO ─────────────────────────────────────────── */
     @media (max-width: 1024px) {
-      .main-content { padding-top: 64px; padding-bottom: 160px; }
+      .main-content { padding-top: 64px; padding-bottom: 96px; }
       .page-flow { gap: 80px; }
       .case-title-block h1 { font-size: 40px; line-height: 52px; }
       .case-title-block p { font-size: 18px; line-height: 28px; }
+      .problems-grid { grid-template-columns: 1fr; gap: 32px; }
+      .risk-block { flex-direction: column; gap: 16px; }
     }
 
     @media (max-width: 768px) {
@@ -405,9 +577,18 @@
       }
 
       .wrap { max-width: calc(100% - 48px); }
-      .main-content { padding-top: 48px; padding-bottom: 120px; }
+      .main-content { padding-top: 48px; padding-bottom: 64px; }
       .page-flow { gap: 64px; }
       .case-title-block h1 { font-size: 30px; line-height: 38px; }
+      .section-title { font-size: 26px; }
+      .subsection-title { font-size: 20px; }
+      .body-text, .problem-card li, .bullet-list li { font-size: 16px; }
+
+      /* Ícones em círculo no máximo 40px no mobile */
+      .risk-number { width: 40px; height: 40px; flex-basis: 40px; font-size: 15px; }
+
+      /* Menos padding lateral nos cards de fundo branco */
+      .problems-box { padding: 20px; }
     }
   </style>
 </head>
@@ -469,10 +650,160 @@
         <!-- TÍTULO -->
         <div class="case-title-block">
           <h1 data-i18n="c3-title">App Pessoa Jurídica - Remessa Online</h1>
-          <p data-i18n="coming-soon">Em breve</p>
+          <p data-i18n="c3-intro">Criação do aplicativo para clientes Pessoa Jurídica da Remessa Online.</p>
         </div>
 
+        <!-- TODO: imagem/vídeo hero a ser adicionado pelo usuário -->
+
       </div>
+
+      <!-- CONTEXTO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="context3-title">Contexto</h2>
+        <p class="body-text" data-i18n="context3-body">Pesquisas com clientes e análises de feedbacks em canais de atendimento e nas app stores evidenciaram a necessidade de um aplicativo para clientes Pessoa Jurídica, disponível até então apenas na plataforma web.<br><br>O maior desafio do projeto foi definir um MVP que entregasse valor desde o primeiro lançamento, equilibrando limitações de escopo com uma experiência capaz de atender às principais necessidades dos clientes.</p>
+        <!-- TODO: botões linkando às lojas (App Store / Google Play) -->
+        <hr class="section-divider">
+      </section>
+
+      <!-- MEU PAPEL -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="role3-title">Meu papel</h2>
+        <p class="body-text" data-i18n="role3-body">Como único Product Designer do projeto, liderei o desenvolvimento da solução de ponta a ponta, do Discovery ao rollout. Após o lançamento, fiz todo o acompanhamento e validações necessárias, medindo o impacto através de pesquisas que conduziram a evolução do produto.</p>
+      </section>
+
+      <!-- DISCOVERY -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="discovery3-title">Discovery</h2>
+        <h3 class="subsection-title" data-i18n="analysis3-title">Análise do problema</h3>
+        <p class="body-text" data-i18n="discover3-body">A nota do aplicativo vinha sendo impactada por avaliações negativas de clientes PJ, que só descobriam após o cadastro que o app atendia exclusivamente pessoas físicas.<br><br>Além de gerar frustração, essa limitação comprometia um importante canal de aquisição e o crescimento do produto PJ.</p>
+        <!-- TODO: prints de comentários da app store -->
+
+        <div style="margin-top:16px;">
+          <h3 class="subsection-title" style="margin-bottom:24px;" data-i18n="opportunities3-title">Principais oportunidades</h3>
+          <div class="problems-grid">
+            <div class="problem-card">
+              <h4 data-i18n="opp1-h4">Limitação para clientes PJ</h4>
+              <ul>
+                <li data-i18n="opp1-li1">Aplicativo restrito a transferências como pessoa física.</li>
+                <li data-i18n="opp1-li2">Clientes PJ descobriam a limitação apenas após o cadastro.</li>
+                <li data-i18n="opp1-li3">Frustração refletida em avaliações negativas na App Store.</li>
+              </ul>
+            </div>
+            <div class="problem-card">
+              <h4 data-i18n="opp2-h4">Comunicação pouco clara</h4>
+              <ul>
+                <li data-i18n="opp2-li1">A descrição da App Store não informava claramente a restrição para PJ.</li>
+                <li data-i18n="opp2-li2">A área não logada do aplicativo também não comunicava a limitação.</li>
+                <li data-i18n="opp2-li3">Expectativa do cliente desalinhada com a experiência oferecida.</li>
+              </ul>
+            </div>
+            <div class="problem-card">
+              <h4 data-i18n="opp3-h4">Impacto na aquisição e crescimento</h4>
+              <ul>
+                <li data-i18n="opp3-li1">Aplicativo era um importante canal de aquisição para a Remessa Online.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- DEFINIÇÕES -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="definitions-title">Definições</h2>
+        <h3 class="subsection-title" data-i18n="challenges-title">Desafios</h3>
+
+        <div style="display:flex; flex-direction:column; gap:40px; margin-top:8px;">
+          <div class="risk-block">
+            <div class="risk-number">1</div>
+            <div class="risk-content">
+              <h3 class="subsection-title" data-i18n="def1-title">Área não logada</h3>
+              <p class="body-text" data-i18n="def1-intro">O produto PJ passaria a dividir o mesmo aplicativo e arquitetura do PF.</p>
+              <ul class="bullet-list">
+                <li data-i18n="def1-li1">Revisão da comunicação e experiência do carrossel de destaques</li>
+                <li data-i18n="def1-li2">Revisão da comunicação nas lojas de aplicativos e dos previews de tela</li>
+                <li data-i18n="def1-li3">Redesign do login e onboarding para contemplar entrada de clientes PF e PJ</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="risk-block">
+            <div class="risk-number">2</div>
+            <div class="risk-content">
+              <h3 class="subsection-title" data-i18n="def2-title">Área logada</h3>
+              <p class="body-text" data-i18n="def2-intro">Definição do escopo da V1:</p>
+              <ul class="bullet-list">
+                <li data-i18n="def2-li1">Pesquisa mostrou que clientes querem acompanhar operações, chegada de dinheiro e resgate de qualquer lugar</li>
+                <li>
+                  <span data-i18n="def2-li2-lead">Avaliação do uso da plataforma web indicou:</span>
+                  <ul class="bullet-list" style="margin-top:8px;">
+                    <li data-i18n="def2-li2-sub1">Maioria recebe do exterior — notificações de novas ordens de pagamento seriam úteis</li>
+                    <li data-i18n="def2-li2-sub2">Necessidade frequente de resgatar o dinheiro com urgência após a chegada da ordem</li>
+                    <li data-i18n="def2-li2-sub3">Extrato é essencial para contabilidade e controle financeiro das empresas</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- IDEAÇÃO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="ideation3-title">Ideação</h2>
+        <h3 class="subsection-title" data-i18n="principles3-title">Princípios que guiaram o projeto</h3>
+        <div class="problems-box">
+          <ul class="bullet-list">
+            <li data-i18n="princ3-1">Entregar valor desde a primeira versão: priorizar funcionalidades que resolvessem as principais necessidades dos clientes PJ, garantindo um MVP útil e relevante.</li>
+            <li data-i18n="princ3-2">Alinhar expectativas desde o primeiro contato: comunicar de forma clara quem pode utilizar o aplicativo e o que estava disponível, reduzindo frustrações durante a jornada.</li>
+            <li data-i18n="princ3-3">Priorizar o contexto mobile: focar nas tarefas que exigem agilidade e mobilidade, permitindo que clientes acompanhassem operações e realizassem ações importantes de qualquer lugar.</li>
+            <li data-i18n="princ3-4">Destacar o que exige atenção imediata: tornar informações críticas, como novas ordens de pagamento e status das operações, facilmente acessíveis e visíveis.</li>
+            <li data-i18n="princ3-5">Projetar para evoluir: criar uma experiência simples para o lançamento inicial, mas preparada para incorporar novas funcionalidades sem perder consistência.</li>
+          </ul>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- ROLLOUT V1 E ACOMPANHAMENTO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="rollout3-title">Rollout V1 e acompanhamento</h2>
+        <h3 class="subsection-title" data-i18n="postlaunch3-title">Pesquisa pós-rollout</h3>
+        <p class="body-text" data-i18n="postlaunch3-body">Entender a percepção dos primeiros usuários da V1 do aplicativo PJ, validar hipóteses, identificar oportunidades de melhoria e apoiar a priorização da V2.</p>
+
+        <div style="margin-top:8px; display:flex; flex-direction:column; gap:16px;">
+          <p class="body-text" style="font-weight:700;" data-i18n="what-was-done-title">O que foi feito</p>
+          <p class="body-text" style="margin-top:-16px;" data-i18n="what-was-done-body">Pesquisa qualitativa com 6 clientes PJ para avaliar a experiência com a V1, expectativas e principais necessidades.</p>
+
+          <p class="body-text" style="font-weight:700;" data-i18n="insights3-title">Principais insights</p>
+          <ul class="bullet-list" style="margin-top:-8px;">
+            <li data-i18n="insight3-1">A V1 foi bem recebida e já entregava valor, mesmo com escopo reduzido.</li>
+            <li data-i18n="insight3-2">Usuários iniciantes precisavam de mais orientação e transparência durante a jornada.</li>
+            <li data-i18n="insight3-3">A principal dor era a ansiedade com os prazos de recebimento, mais do que com a cotação.</li>
+            <li data-i18n="insight3-4">Os achados direcionaram a evolução da V2, com foco em mais informações sobre as operações e novas funcionalidades financeiras.</li>
+          </ul>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- EVOLUÇÃO DO PRODUTO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="evolution-title">Evolução do produto</h2>
+        <p class="body-text" data-i18n="evolution-body">Após o lançamento do MVP, identificamos uma oportunidade de apoiar clientes PJ durante a primeira operação. Para validar essa hipótese, prototipamos um guia passo a passo e conduzimos testes de usabilidade com clientes que ainda não haviam recebido recursos pelo aplicativo.<br><br>Os testes mostraram que a funcionalidade era percebida como útil, mas seu propósito não estava claro. A partir dos aprendizados, simplificamos o conteúdo, reduzimos a quantidade de informações por etapa e refinamos a comunicação para tornar a jornada mais intuitiva, especialmente em conceitos técnicos como IBAN, SWIFT e banco intermediário.</p>
+        <hr class="section-divider">
+      </section>
+
+      <!-- IMPACTO PARA O NEGÓCIO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="impact-title">Impacto para o negócio e o valor percebido</h2>
+        <p class="body-text" data-i18n="impact-intro">Em pesquisa quantitativa para toda a base de clientes PJ, vimos que o aplicativo já era percebido como uma solução de alto valor, mesmo entre aqueles que ainda não o utilizavam:</p>
+        <ul class="bullet-list">
+          <li data-i18n="impact-li1">Alta demanda reprimida: 71% dos clientes não sabiam que o app existia, mas a maioria demonstrou alto interesse em utilizá-lo.</li>
+          <li data-i18n="impact-li2">Percepção de valor para os clientes já usuários: o app foi associado à praticidade, mobilidade e agilidade na gestão das operações.</li>
+        </ul>
+        <p class="body-text" data-i18n="impact-closing">A adoção do aplicativo seguiu com um crescimento orgânico e constante, ganhando em participação no volume de clientes da base ativa e número de operações.</p>
+        <!-- TODO: gráfico de adoção -->
+      </section>
 
     </div>
   </div>
@@ -498,7 +829,76 @@
         "my-work": { pt: "Meus trabalhos", en: "My work" },
         "tab3-label": { pt: "3 - App Pessoa Jurídica", en: "3 - Business Account App" },
         "c3-title": { pt: "App Pessoa Jurídica - Remessa Online", en: "Business Account App - Remessa Online" },
-        "coming-soon": { pt: "Em breve", en: "Coming soon" },
+        "c3-intro": { pt: "Criação do aplicativo para clientes Pessoa Jurídica da Remessa Online.", en: "Creating the app for Remessa Online's business (legal entity) customers." },
+
+        "context3-title": { pt: "Contexto", en: "Context" },
+        "context3-body": { pt: "Pesquisas com clientes e análises de feedbacks em canais de atendimento e nas app stores evidenciaram a necessidade de um aplicativo para clientes Pessoa Jurídica, disponível até então apenas na plataforma web.<br><br>O maior desafio do projeto foi definir um MVP que entregasse valor desde o primeiro lançamento, equilibrando limitações de escopo com uma experiência capaz de atender às principais necessidades dos clientes.",
+                          en: "Customer research and feedback analysis across service channels and app stores showed the need for an app for business (legal entity) customers, until then only available on the web platform.<br><br>The project's biggest challenge was defining an MVP that delivered value from the very first release, balancing scope limitations with an experience capable of meeting customers' main needs." },
+
+        "role3-title": { pt: "Meu papel", en: "My role" },
+        "role3-body": { pt: "Como único Product Designer do projeto, liderei o desenvolvimento da solução de ponta a ponta, do Discovery ao rollout. Após o lançamento, fiz todo o acompanhamento e validações necessárias, medindo o impacto através de pesquisas que conduziram a evolução do produto.",
+                        en: "As the sole Product Designer on the project, I led the solution's development end to end, from Discovery to rollout. After launch, I handled all the follow-up and validation work, measuring impact through research that guided the product's evolution." },
+
+        "discovery3-title": { pt: "Discovery", en: "Discovery" },
+        "analysis3-title": { pt: "Análise do problema", en: "Problem analysis" },
+        "discover3-body": { pt: "A nota do aplicativo vinha sendo impactada por avaliações negativas de clientes PJ, que só descobriam após o cadastro que o app atendia exclusivamente pessoas físicas.<br><br>Além de gerar frustração, essa limitação comprometia um importante canal de aquisição e o crescimento do produto PJ.",
+                            en: "The app's rating had been affected by negative reviews from business customers, who only discovered after signing up that the app served individual customers exclusively.<br><br>Besides causing frustration, this limitation compromised an important acquisition channel and the growth of the business product." },
+
+        "opportunities3-title": { pt: "Principais oportunidades", en: "Key opportunities" },
+        "opp1-h4": { pt: "Limitação para clientes PJ", en: "Limitation for business customers" },
+        "opp1-li1": { pt: "Aplicativo restrito a transferências como pessoa física.", en: "App restricted to individual-customer transfers." },
+        "opp1-li2": { pt: "Clientes PJ descobriam a limitação apenas após o cadastro.", en: "Business customers only discovered the limitation after signing up." },
+        "opp1-li3": { pt: "Frustração refletida em avaliações negativas na App Store.", en: "Frustration reflected in negative App Store reviews." },
+        "opp2-h4": { pt: "Comunicação pouco clara", en: "Unclear communication" },
+        "opp2-li1": { pt: "A descrição da App Store não informava claramente a restrição para PJ.", en: "The App Store description didn't clearly state the restriction for business customers." },
+        "opp2-li2": { pt: "A área não logada do aplicativo também não comunicava a limitação.", en: "The app's logged-out area also didn't communicate the limitation." },
+        "opp2-li3": { pt: "Expectativa do cliente desalinhada com a experiência oferecida.", en: "Customer expectations misaligned with the experience offered." },
+        "opp3-h4": { pt: "Impacto na aquisição e crescimento", en: "Impact on acquisition and growth" },
+        "opp3-li1": { pt: "Aplicativo era um importante canal de aquisição para a Remessa Online.", en: "The app was an important acquisition channel for Remessa Online." },
+
+        "definitions-title": { pt: "Definições", en: "Definitions" },
+        "challenges-title": { pt: "Desafios", en: "Challenges" },
+        "def1-title": { pt: "Área não logada", en: "Logged-out area" },
+        "def1-intro": { pt: "O produto PJ passaria a dividir o mesmo aplicativo e arquitetura do PF.", en: "The business product would now share the same app and architecture as the individual product." },
+        "def1-li1": { pt: "Revisão da comunicação e experiência do carrossel de destaques", en: "Review of the highlights carousel's communication and experience" },
+        "def1-li2": { pt: "Revisão da comunicação nas lojas de aplicativos e dos previews de tela", en: "Review of app store communication and screen previews" },
+        "def1-li3": { pt: "Redesign do login e onboarding para contemplar entrada de clientes PF e PJ", en: "Redesign of login and onboarding to accommodate both individual and business customers" },
+        "def2-title": { pt: "Área logada", en: "Logged-in area" },
+        "def2-intro": { pt: "Definição do escopo da V1:", en: "Defining the V1 scope:" },
+        "def2-li1": { pt: "Pesquisa mostrou que clientes querem acompanhar operações, chegada de dinheiro e resgate de qualquer lugar", en: "Research showed customers want to track operations, incoming funds, and withdrawals from anywhere" },
+        "def2-li2-lead": { pt: "Avaliação do uso da plataforma web indicou:", en: "Evaluating web platform usage showed:" },
+        "def2-li2-sub1": { pt: "Maioria recebe do exterior — notificações de novas ordens de pagamento seriam úteis", en: "Most receive funds from abroad — notifications for new payment orders would be useful" },
+        "def2-li2-sub2": { pt: "Necessidade frequente de resgatar o dinheiro com urgência após a chegada da ordem", en: "Frequent need to withdraw funds urgently after the order arrives" },
+        "def2-li2-sub3": { pt: "Extrato é essencial para contabilidade e controle financeiro das empresas", en: "Statement is essential for companies' accounting and financial control" },
+
+        "ideation3-title": { pt: "Ideação", en: "Ideation" },
+        "principles3-title": { pt: "Princípios que guiaram o projeto", en: "Principles that guided the project" },
+        "princ3-1": { pt: "<strong>Entregar valor desde a primeira versão:</strong> priorizar funcionalidades que resolvessem as principais necessidades dos clientes PJ, garantindo um MVP útil e relevante.", en: "<strong>Deliver value from the first version:</strong> prioritize features that solved business customers' main needs, ensuring a useful and relevant MVP." },
+        "princ3-2": { pt: "<strong>Alinhar expectativas desde o primeiro contato:</strong> comunicar de forma clara quem pode utilizar o aplicativo e o que estava disponível, reduzindo frustrações durante a jornada.", en: "<strong>Align expectations from the first contact:</strong> clearly communicate who can use the app and what was available, reducing frustration throughout the journey." },
+        "princ3-3": { pt: "<strong>Priorizar o contexto mobile:</strong> focar nas tarefas que exigem agilidade e mobilidade, permitindo que clientes acompanhassem operações e realizassem ações importantes de qualquer lugar.", en: "<strong>Prioritize the mobile context:</strong> focus on tasks that require speed and mobility, letting customers track operations and take important actions from anywhere." },
+        "princ3-4": { pt: "<strong>Destacar o que exige atenção imediata:</strong> tornar informações críticas, como novas ordens de pagamento e status das operações, facilmente acessíveis e visíveis.", en: "<strong>Highlight what needs immediate attention:</strong> make critical information, like new payment orders and operation status, easily accessible and visible." },
+        "princ3-5": { pt: "<strong>Projetar para evoluir:</strong> criar uma experiência simples para o lançamento inicial, mas preparada para incorporar novas funcionalidades sem perder consistência.", en: "<strong>Design to evolve:</strong> create a simple experience for the initial launch, but ready to incorporate new features without losing consistency." },
+
+        "rollout3-title": { pt: "Rollout V1 e acompanhamento", en: "V1 rollout and follow-up" },
+        "postlaunch3-title": { pt: "Pesquisa pós-rollout", en: "Post-rollout research" },
+        "postlaunch3-body": { pt: "Entender a percepção dos primeiros usuários da V1 do aplicativo PJ, validar hipóteses, identificar oportunidades de melhoria e apoiar a priorização da V2.", en: "Understand how the first users perceived the business app's V1, validate hypotheses, identify improvement opportunities, and support V2 prioritization." },
+        "what-was-done-title": { pt: "O que foi feito", en: "What was done" },
+        "what-was-done-body": { pt: "Pesquisa qualitativa com 6 clientes PJ para avaliar a experiência com a V1, expectativas e principais necessidades.", en: "Qualitative research with 6 business customers to assess the experience with V1, expectations, and main needs." },
+        "insights3-title": { pt: "Principais insights", en: "Key insights" },
+        "insight3-1": { pt: "A V1 foi bem recebida e já entregava valor, mesmo com escopo reduzido.", en: "V1 was well received and already delivered value, even with a reduced scope." },
+        "insight3-2": { pt: "Usuários iniciantes precisavam de mais orientação e transparência durante a jornada.", en: "First-time users needed more guidance and transparency throughout the journey." },
+        "insight3-3": { pt: "A principal dor era a ansiedade com os prazos de recebimento, mais do que com a cotação.", en: "The main pain point was anxiety about receiving timelines, more than about the exchange rate." },
+        "insight3-4": { pt: "Os achados direcionaram a evolução da V2, com foco em mais informações sobre as operações e novas funcionalidades financeiras.", en: "The findings guided V2's evolution, focusing on more information about operations and new financial features." },
+
+        "evolution-title": { pt: "Evolução do produto", en: "Product evolution" },
+        "evolution-body": { pt: "Após o lançamento do MVP, identificamos uma oportunidade de apoiar clientes PJ durante a primeira operação. Para validar essa hipótese, prototipamos um guia passo a passo e conduzimos testes de usabilidade com clientes que ainda não haviam recebido recursos pelo aplicativo.<br><br>Os testes mostraram que a funcionalidade era percebida como útil, mas seu propósito não estava claro. A partir dos aprendizados, simplificamos o conteúdo, reduzimos a quantidade de informações por etapa e refinamos a comunicação para tornar a jornada mais intuitiva, especialmente em conceitos técnicos como IBAN, SWIFT e banco intermediário.",
+                          en: "After the MVP launch, we identified an opportunity to support business customers during their first operation. To validate this hypothesis, we prototyped a step-by-step guide and ran usability tests with customers who hadn't yet received funds through the app.<br><br>The tests showed the feature was perceived as useful, but its purpose wasn't clear. Based on these learnings, we simplified the content, reduced the amount of information per step, and refined the copy to make the journey more intuitive, especially around technical concepts like IBAN, SWIFT, and intermediary bank." },
+
+        "impact-title": { pt: "Impacto para o negócio e o valor percebido", en: "Business impact and perceived value" },
+        "impact-intro": { pt: "Em pesquisa quantitativa para toda a base de clientes PJ, vimos que o aplicativo já era percebido como uma solução de alto valor, mesmo entre aqueles que ainda não o utilizavam:", en: "In quantitative research across the entire business customer base, we found the app was already perceived as a high-value solution, even among those who hadn't used it yet:" },
+        "impact-li1": { pt: "<strong>Alta demanda reprimida:</strong> 71% dos clientes não sabiam que o app existia, mas a maioria demonstrou alto interesse em utilizá-lo.", en: "<strong>High pent-up demand:</strong> 71% of customers didn't know the app existed, but most showed strong interest in using it." },
+        "impact-li2": { pt: "<strong>Percepção de valor para os clientes já usuários:</strong> o app foi associado à praticidade, mobilidade e agilidade na gestão das operações.", en: "<strong>Perceived value among existing users:</strong> the app was associated with convenience, mobility, and speed in managing operations." },
+        "impact-closing": { pt: "A adoção do aplicativo seguiu com um crescimento orgânico e constante, ganhando em participação no volume de clientes da base ativa e número de operações.", en: "App adoption continued to grow organically and steadily, gaining share in both active customer base volume and number of operations." },
       };
 
       function applyLanguage(lang) {
