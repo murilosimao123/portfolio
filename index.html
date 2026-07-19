@@ -518,6 +518,27 @@
       width: fit-content;
     }
 
+    /* ── TAGS (mesmo layout de "Meu papel" nos cases) ────────── */
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-pill {
+      background: var(--white);
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      height: 32px;
+      padding: 0 16px;
+      border-radius: 4px;
+      display: inline-flex;
+      align-items: center;
+    }
+
     .case-btn {
       display: inline-flex;
       align-items: center;
@@ -817,7 +838,14 @@
         <!-- Case 1: texto esquerda, imagem direita -->
         <article class="case-card">
           <div class="case-text">
-            <h3 class="case-title" data-i18n="case1-title">Nova plataforma web - Remessa Online</h3>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <h3 class="case-title" data-i18n="case1-title">Nova plataforma web - Remessa Online</h3>
+              <div class="tag-row">
+                <span class="tag-pill" data-i18n="tag-web">Web</span>
+                <span class="tag-pill" data-i18n="tag-web-mobile">Web Mobile</span>
+                <span class="tag-pill" data-i18n="tag-individual">Pessoa Física</span>
+              </div>
+            </div>
             <a href="case-1.html" class="case-btn"><span data-i18n="btn-view-project">Ver projeto</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
           <a href="case-1.html" class="case-image-wrap" aria-label="Ver case Nova plataforma web - Remessa Online" data-i18n-aria="case1-aria">
@@ -831,7 +859,15 @@
             <img src="images/Case%202%20-%201.png" alt="Funcionalidade Melhor Cotação do Dia" class="case-image" data-i18n-alt="case2-title">
           </a>
           <div class="case-text">
-            <h3 class="case-title" data-i18n="case2-title">Funcionalidade Melhor Cotação do Dia</h3>
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <h3 class="case-title" data-i18n="case2-title">Funcionalidade Melhor Cotação do Dia</h3>
+              <div class="tag-row">
+                <span class="tag-pill" data-i18n="tag-web">Web</span>
+                <span class="tag-pill" data-i18n="tag-web-mobile">Web Mobile</span>
+                <span class="tag-pill" data-i18n="tag-app">App</span>
+                <span class="tag-pill" data-i18n="tag-individual">Pessoa Física</span>
+              </div>
+            </div>
             <a href="case-2.html" class="case-btn"><span data-i18n="btn-view-project">Ver projeto</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
         </article>
@@ -842,6 +878,10 @@
             <div style="display:flex; flex-direction:column; gap:16px;">
               <span class="coming-soon-tag" data-i18n="coming-soon">Em breve</span>
               <h3 class="case-title" data-i18n="case3-title">App Pessoa Jurídica - Remessa Online</h3>
+              <div class="tag-row">
+                <span class="tag-pill" data-i18n="tag-app">App</span>
+                <span class="tag-pill" data-i18n="tag-business">Pessoa Jurídica</span>
+              </div>
             </div>
             <a href="case-3.html" class="case-btn"><span data-i18n="btn-view-project">Ver projeto</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M3 13L13 3M13 3H6M13 3V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
@@ -915,6 +955,11 @@
         'case3-title':     { pt: 'App Pessoa Jurídica - Remessa Online', en: 'Business Account App - Remessa Online' },
         'case3-aria':      { pt: 'Ver case App Pessoa Jurídica - Remessa Online', en: 'View case Business Account App - Remessa Online' },
         'coming-soon':     { pt: 'Em breve', en: 'Coming soon' },
+        'tag-web':         { pt: 'Web', en: 'Web' },
+        'tag-web-mobile':  { pt: 'Web Mobile', en: 'Web Mobile' },
+        'tag-app':         { pt: 'App', en: 'App' },
+        'tag-individual':  { pt: 'Pessoa Física', en: 'Individual' },
+        'tag-business':    { pt: 'Pessoa Jurídica', en: 'Business' },
       };
 
       function applyLanguage(lang) {
