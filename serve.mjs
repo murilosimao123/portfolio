@@ -16,6 +16,7 @@ const server = createServer((req, res) => {
   else if (ext === '.mp4') contentType = 'video/mp4';
   else if (ext === '.mov') contentType = 'video/quicktime';
   else if (ext === '.webp') contentType = 'image/webp';
+  else if (ext === '.svg') contentType = 'image/svg+xml';
 
   readFile(filePath, (err, data) => {
     if (err) {
