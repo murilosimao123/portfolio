@@ -320,9 +320,9 @@
     }
 
     .hero-bio {
-      font-size: 24px;
-      font-weight: 500;
-      line-height: 32px;
+      font-size: 20px;
+      font-weight: 300;
+      line-height: 28px;
       color: var(--text);
       animation: heroFadeUp 0.6s ease-out 0.3s both;
     }
@@ -352,6 +352,61 @@
       height: 100%;
       object-fit: cover;
       object-position: bottom;
+    }
+
+    /* ── CARROSSEL DE ESPECIALIDADES ──────────────────────────── */
+    .skills-carousel {
+      width: 100%;
+      overflow: hidden;
+      margin-top: -32px;
+      -webkit-mask-image: linear-gradient(to right, transparent 0, black 64px, black calc(100% - 64px), transparent 100%);
+      mask-image: linear-gradient(to right, transparent 0, black 64px, black calc(100% - 64px), transparent 100%);
+    }
+
+    .skills-track {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: max-content;
+      will-change: transform;
+    }
+
+    .skill-card {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+      flex-shrink: 0;
+      width: 192px;
+      height: 96px;
+      background: var(--nav-bg);
+      border: 2px solid #DEDEDE;
+      border-radius: 16px;
+      padding: 16px;
+      cursor: default;
+    }
+
+    .skill-icon {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .skill-icon img {
+      max-width: 24px;
+      max-height: 24px;
+      display: block;
+    }
+
+    .skill-label {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--text);
+      width: 100%;
     }
 
     .hero-links {
@@ -668,7 +723,7 @@
 
       .hero-name { font-size: 32px; line-height: 32px; }
 
-      .hero-bio { font-size: 22px; line-height: 28px; }
+      .hero-bio { font-size: 18px; line-height: 24px; }
 
       .hero-photo {
         width: 100%;
@@ -728,7 +783,7 @@
     /* Small mobile */
     @media (max-width: 480px) {
       .hero-name { font-size: 30px; line-height: 36px; }
-      .hero-bio { font-size: 19px; line-height: 28px; }
+      .hero-bio { font-size: 17px; line-height: 24px; }
     }
   </style>
 </head>
@@ -783,6 +838,75 @@
         <img src="images/imagem%20perfil%20home.JPEG" alt="Murilo Simão">
       </div>
 
+      <div class="skills-carousel">
+        <div class="skills-track">
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/chart-bar.svg" alt=""></span>
+            <span class="skill-label">Data-Driven Design</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/radar.svg" alt=""></span>
+            <span class="skill-label">Product Strategy</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/microchip-ai.svg" alt=""></span>
+            <span class="skill-label">AI-Centered Design</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/diagram-project.svg" alt=""></span>
+            <span class="skill-label">Systems Thinking</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/magnifying-glass.svg" alt=""></span>
+            <span class="skill-label">Discovery Culture</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/users.svg" alt=""></span>
+            <span class="skill-label">User-Centered Des.</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/radar.svg" alt=""></span>
+            <span class="skill-label">UX Research</span>
+          </div>
+          <div class="skill-card">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/laptop-mobile.svg" alt=""></span>
+            <span class="skill-label">Interaction Design</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/chart-bar.svg" alt=""></span>
+            <span class="skill-label">Data-Driven Design</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/radar.svg" alt=""></span>
+            <span class="skill-label">Product Strategy</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/microchip-ai.svg" alt=""></span>
+            <span class="skill-label">AI-Centered Design</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/diagram-project.svg" alt=""></span>
+            <span class="skill-label">Systems Thinking</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/magnifying-glass.svg" alt=""></span>
+            <span class="skill-label">Discovery Culture</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/users.svg" alt=""></span>
+            <span class="skill-label">User-Centered Des.</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/radar.svg" alt=""></span>
+            <span class="skill-label">UX Research</span>
+          </div>
+          <div class="skill-card" aria-hidden="true">
+            <span class="skill-icon"><img src="images/SVGs%20Carrossel/laptop-mobile.svg" alt=""></span>
+            <span class="skill-label">Interaction Design</span>
+          </div>
+        </div>
+      </div>
+
       <div class="hero-links">
         <hr class="hero-divider">
         <div>
@@ -814,7 +938,7 @@
         <h2 class="about-title" data-i18n="about-title">Sobre mim</h2>
         <hr class="about-divider">
         <div class="about-body">
-          <p data-i18n="about-p1">Nos últimos 10 anos, trabalhei de forma colaborativa em equipes multidisciplinares, contribuindo para a definição de estratégias e entregando produtos que equilibram excelência em experiência do usuário, geração de valor para o negócio e o alcance de métricas-chave de produto. Ao longo desse período, também apoiei e conduzi pesquisas qualitativas e quantitativas com usuários, traduzindo insights em melhorias de design acionáveis.</p>
+          <p data-i18n="about-p1">Trabalhei de forma colaborativa em equipes multidisciplinares, contribuindo para a definição de estratégias e entregando produtos que equilibram excelência em experiência do usuário, geração de valor para o negócio e o alcance de métricas-chave de produto. Ao longo desse período, também apoiei e conduzi pesquisas qualitativas e quantitativas com usuários, traduzindo insights em melhorias de design acionáveis.</p>
           <p data-i18n="about-p2">Minha abordagem é orientada por dados, focada em criar experiências escaláveis e centradas no usuário que impulsionam a performance do produto e se alinham aos objetivos estratégicos da organização.</p>
         </div>
         <hr class="about-divider">
@@ -931,13 +1055,13 @@
         'nav-experience':  { pt: 'Experiência', en: 'Experience' },
         'nav-contact':     { pt: 'Contato',      en: 'Contact' },
         'nav-open-menu':   { pt: 'Abrir menu',  en: 'Open menu' },
-        'hero-bio':        { pt: 'Olá! Sou <strong>Product Designer Sênior</strong> e tenho sólida experiência em projetar e evoluir soluções digitais centradas no usuário.',
-                              en: 'Hi! I am a <strong>Senior Product designer</strong> with solid experience in designing and evolving user-centered digital solutions.' },
+        'hero-bio':        { pt: 'Olá! Sou <strong>Product Designer</strong> com mais de 10 anos de experiência projetando e evoluindo produtos digitais centrados no usuário. Atuo em todo o ciclo de vida do produto, e atualmente estou focado em usar IA para otimizar processos de design e acelerar o desenvolvimento de produtos.',
+                              en: 'Hi! I\'m a <strong>Product Designer</strong> with over 10 years of experience designing and evolving user-centered digital products. I work across the entire product lifecycle, and I\'m currently focused on leveraging AI to optimize design processes and accelerate product development.' },
         'hero-find-me':    { pt: 'Onde você pode me encontrar', en: 'Where you can find me' },
         'footer-copyright': { pt: 'Copyright - 2026 Todos os direitos reservados', en: 'Copyright - 2026 All rights reserved' },
         'about-title':     { pt: 'Sobre mim', en: 'About me' },
-        'about-p1':        { pt: 'Nos últimos 10 anos, trabalhei de forma colaborativa em equipes multidisciplinares, contribuindo para a definição de estratégias e entregando produtos que equilibram excelência em experiência do usuário, geração de valor para o negócio e o alcance de métricas-chave de produto. Ao longo desse período, também apoiei e conduzi pesquisas qualitativas e quantitativas com usuários, traduzindo insights em melhorias de design acionáveis.',
-                              en: 'Over the past 10 years, I have worked collaboratively within multidisciplinary teams, contributing to strategy definition and delivering products that balance user experience excellence, business value generation, and the achievement of key product metrics. Throughout this period, I have also supported and conducted qualitative and quantitative user research, translating insights into actionable design improvements.' },
+        'about-p1':        { pt: 'Trabalhei de forma colaborativa em equipes multidisciplinares, contribuindo para a definição de estratégias e entregando produtos que equilibram excelência em experiência do usuário, geração de valor para o negócio e o alcance de métricas-chave de produto. Ao longo desse período, também apoiei e conduzi pesquisas qualitativas e quantitativas com usuários, traduzindo insights em melhorias de design acionáveis.',
+                              en: 'I worked collaboratively within multidisciplinary teams, contributing to strategy definition and delivering products that balance user experience excellence, business value generation, and the achievement of key product metrics. Throughout this period, I also supported and conducted qualitative and quantitative user research, translating insights into actionable design improvements.' },
         'about-p2':        { pt: 'Minha abordagem é orientada por dados, focada em criar experiências escaláveis e centradas no usuário que impulsionam a performance do produto e se alinham aos objetivos estratégicos da organização.',
                               en: 'My approach is data-informed, focused on creating scalable, user-centered experiences that drive product performance and align with the organization\'s strategic goals.' },
         'cases-featured':  { pt: 'Trabalhos em destaque', en: 'Featured work' },
@@ -1097,6 +1221,30 @@
       }, { threshold: 0.2 });
 
       document.querySelectorAll('.case-card').forEach(card => caseCardObserver.observe(card));
+
+      // ── Carrossel de especialidades: rolagem contínua, desacelera no hover ──
+      const skillsCarousel = document.querySelector('.skills-carousel');
+      const skillsTrack = document.querySelector('.skills-track');
+      if (skillsCarousel && skillsTrack) {
+        const NORMAL_SPEED = 0.6;
+        const SLOW_SPEED = 0.08;
+        let speed = NORMAL_SPEED;
+        let targetSpeed = NORMAL_SPEED;
+        let x = 0;
+        let halfWidth = skillsTrack.scrollWidth / 2;
+
+        window.addEventListener('resize', () => { halfWidth = skillsTrack.scrollWidth / 2; });
+        skillsCarousel.addEventListener('mouseenter', () => { targetSpeed = SLOW_SPEED; });
+        skillsCarousel.addEventListener('mouseleave', () => { targetSpeed = NORMAL_SPEED; });
+
+        (function tick() {
+          speed += (targetSpeed - speed) * 0.05;
+          x -= speed;
+          if (x <= -halfWidth) x += halfWidth;
+          skillsTrack.style.transform = `translateX(${x}px)`;
+          requestAnimationFrame(tick);
+        })();
+      }
     });
   </script>
 </body>
