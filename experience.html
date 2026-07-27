@@ -7,20 +7,21 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg:         #FBFAF5;
+      --bg:         #FFFFFF;
       --text:       #2C2C2A;
       --accent:     #DD4975;
       --nav-bg:     #E8E8E3;
       --card-bg:    #2C2C2A;
-      --border:     #E3E0D8;
+      --border:     #F0F0F4;
       --white:      #FFFFFF;
       --muted:      #928888;
       --max:        1128px;
-      --font:       'Inter', sans-serif;
+      --gutter:     72px;
+      --font:       'Work Sans', sans-serif;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -60,80 +61,80 @@
     img { display: block; }
     a   { color: inherit; text-decoration: none; }
 
-    /* ── NAV (idêntico às demais páginas) ────────────────────── */
+    /* ── NAV (header V2: barra escura full-width, fixa) ───────── */
     .nav-wrapper {
-      display: flex;
-      justify-content: center;
-      padding-top: 64px;
-      position: relative;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 80px;
+      background: #0E0F12;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.16);
       z-index: 100;
     }
 
-    nav {
-      background: none;
-      border-radius: 80px;
-      height: 72px;
-      width: var(--max);
-      max-width: calc(100% - 48px);
+    .nav-logo {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--white);
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 0 72px;
-      position: relative;
-      z-index: 1;
+      justify-self: start;
+    }
+
+    nav {
+      max-width: 1440px;
+      margin: 0 auto;
+      height: 100%;
+      padding: 0 var(--gutter);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: stretch;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
       gap: 80px;
+      position: relative;
+      justify-self: center;
+      height: 100%;
     }
 
     .nav-links a {
       font-size: 16px;
       font-weight: 400;
-      color: var(--text);
-      position: relative;
-      padding-bottom: 4px;
+      color: var(--white);
       text-transform: uppercase;
     }
 
-    .nav-links a.active { font-weight: 900; }
+    .nav-links a.active { font-weight: 700; }
 
     .nav-indicator {
       position: absolute;
-      top: 100%;
+      bottom: 0;
       left: 0;
-      height: 6px;
-      background: var(--accent);
-      border-radius: 0 0 6px 6px;
+      height: 2px;
+      background: #C63662;
       transition: left 0.3s, width 0.3s;
       pointer-events: none;
     }
 
-    .nav-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: var(--nav-bg);
-      border-radius: 80px;
-      transition: left 0.3s, width 0.3s;
-      pointer-events: none;
-      z-index: -1;
+    .nav-right {
+      grid-column: 3;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      justify-self: end;
     }
 
     /* ── SWITCH DE IDIOMA ───────────────────────────────────── */
     .lang-switch {
-      position: absolute;
-      right: 72px;
-      top: 50%;
-      transform: translateY(-50%);
+      position: relative;
       display: flex;
       align-items: center;
       gap: 6px;
-      background: rgba(44, 44, 42, 0.08);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 999px;
       padding: 4px;
       z-index: 2;
@@ -179,13 +180,13 @@
       z-index: 10;
     }
 
-    .hamburger:hover { background: rgba(44,44,42,0.08); }
+    .hamburger:hover { background: rgba(255,255,255,0.1); }
 
     .hamburger span {
       display: block;
       width: 100%;
       height: 2px;
-      background: var(--text);
+      background: var(--white);
       border-radius: 2px;
       transition: transform 0.3s, opacity 0.3s;
       transform-origin: center;
@@ -214,7 +215,7 @@
 
     .mobile-menu a {
       font-size: 32px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--text);
       text-transform: uppercase;
       letter-spacing: 0.04em;
@@ -247,7 +248,7 @@
     .main-content {
       display: flex;
       flex-direction: column;
-      padding-top: 144px;
+      padding-top: 176px;
       padding-bottom: 160px;
     }
 
@@ -270,11 +271,12 @@
     }
 
     .exp-title {
-      font-size: 48px;
-      font-weight: 900;
-      line-height: 56px;
+      font-size: 80px;
+      font-weight: 700;
+      font-style: italic;
+      line-height: 80px;
+      letter-spacing: -0.04em;
       color: var(--text);
-      text-transform: uppercase;
       animation: expFadeUp 0.6s ease-out both;
     }
 
@@ -317,7 +319,7 @@
     }
 
     .exp-bio strong {
-      font-weight: 800;
+      font-weight: 700;
       color: var(--accent);
     }
 
@@ -345,7 +347,7 @@
 
     .exp-entry-header h3 {
       font-size: 24px;
-      font-weight: 800;
+      font-weight: 700;
       color: var(--text);
     }
 
@@ -406,39 +408,47 @@
 
     /* ── RESPONSIVO ─────────────────────────────────────────── */
     @media (max-width: 1024px) {
-      .main-content { padding-top: 96px; padding-bottom: 96px; }
+      :root { --gutter: 40px; }
+      .main-content { padding-top: 140px; padding-bottom: 96px; }
       .exp { gap: 56px; }
-      .exp-title { font-size: 40px; line-height: 48px; }
+      .exp-title { font-size: 56px; line-height: 60px; }
       .exp-intro { flex-direction: column; gap: 40px; }
       .exp-photo { width: 420px; height: 540px; }
       .exp-bio { font-size: 18px; line-height: 24px; }
     }
 
     @media (max-width: 768px) {
-      .nav-wrapper { padding-top: 24px; }
+      :root { --gutter: 24px; }
+      .nav-wrapper { height: 64px; }
 
       nav {
-        padding: 0 16px;
-        height: 64px;
+        position: relative;
+        display: flex;
+        align-items: center;
         justify-content: space-between;
-        max-width: calc(100% - 32px);
+        padding: 0 var(--gutter);
       }
-
-      .lang-switch { right: 16px; }
 
       .nav-links { display: none; }
 
       .hamburger { display: flex; }
 
+      .lang-switch {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+
       .mobile-menu { display: flex; gap: 40px; }
 
       .mobile-menu a { font-size: 24px; }
 
-      .main-content { padding-top: 64px; padding-bottom: 80px; }
+      .main-content { padding-top: 104px; padding-bottom: 80px; }
 
       .exp { gap: 48px; padding: 0 24px; }
 
-      .exp-title { font-size: 30px; line-height: 38px; }
+      .exp-title { font-size: 36px; line-height: 40px; }
 
       .exp-photo {
         width: 100%;
@@ -460,25 +470,27 @@
   <!-- NAV -->
   <div class="nav-wrapper">
     <nav>
+      <span class="nav-logo">Murilo Simão</span>
       <div class="nav-links">
         <a href="index.html" data-i18n="nav-home">Início</a>
         <a href="case-1.html" data-i18n="nav-work">Trabalhos</a>
         <a href="experience.html" class="active" data-i18n="nav-experience">Experiência</a>
+        <div class="nav-indicator"></div>
       </div>
-      <button class="hamburger" aria-label="Abrir menu" data-i18n-aria="nav-open-menu" aria-expanded="false">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-      <div class="nav-bg"></div>
-      <div class="nav-indicator"></div>
-      <div class="lang-switch" role="group" aria-label="Idioma do site / Site language">
-        <button type="button" class="lang-btn" data-lang="pt" aria-label="Português">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#009C3B"/><polygon points="12,3 21,12 12,21 3,12" fill="#FFDF00"/><circle cx="12" cy="12" r="4.5" fill="#002776"/></svg>
+      <div class="nav-right">
+        <button class="hamburger" aria-label="Abrir menu" data-i18n-aria="nav-open-menu" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-        <button type="button" class="lang-btn" data-lang="en" aria-label="English">
-          <svg viewBox="0 0 24 24"><defs><clipPath id="usaClip"><circle cx="12" cy="12" r="12"/></clipPath></defs><g clip-path="url(#usaClip)"><rect width="24" height="24" fill="#B22234"/><rect y="1.85" width="24" height="1.85" fill="#fff"/><rect y="5.54" width="24" height="1.85" fill="#fff"/><rect y="9.23" width="24" height="1.85" fill="#fff"/><rect y="12.92" width="24" height="1.85" fill="#fff"/><rect y="16.62" width="24" height="1.85" fill="#fff"/><rect y="20.31" width="24" height="1.85" fill="#fff"/><rect width="10.5" height="12.92" fill="#3C3B6E"/></g></svg>
-        </button>
+        <div class="lang-switch" role="group" aria-label="Idioma do site / Site language">
+          <button type="button" class="lang-btn" data-lang="pt" aria-label="Português">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#009C3B"/><polygon points="12,3 21,12 12,21 3,12" fill="#FFDF00"/><circle cx="12" cy="12" r="4.5" fill="#002776"/></svg>
+          </button>
+          <button type="button" class="lang-btn" data-lang="en" aria-label="English">
+            <svg viewBox="0 0 24 24"><defs><clipPath id="usaClip"><circle cx="12" cy="12" r="12"/></clipPath></defs><g clip-path="url(#usaClip)"><rect width="24" height="24" fill="#B22234"/><rect y="1.85" width="24" height="1.85" fill="#fff"/><rect y="5.54" width="24" height="1.85" fill="#fff"/><rect y="9.23" width="24" height="1.85" fill="#fff"/><rect y="12.92" width="24" height="1.85" fill="#fff"/><rect y="16.62" width="24" height="1.85" fill="#fff"/><rect y="20.31" width="24" height="1.85" fill="#fff"/><rect width="10.5" height="12.92" fill="#3C3B6E"/></g></svg>
+          </button>
+        </div>
       </div>
     </nav>
   </div>
@@ -589,14 +601,11 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const nav          = document.querySelector('nav');
-      const navBg        = document.querySelector('.nav-bg');
+      const navLinksWrap = document.querySelector('.nav-links');
       const navIndicator = document.querySelector('.nav-indicator');
       const hamburger    = document.querySelector('.hamburger');
       const mobileMenu   = document.querySelector('.mobile-menu');
       const mobileLinks  = document.querySelectorAll('.mobile-menu a');
-      const navLinks     = document.querySelectorAll('.nav-links a');
-      const NAV_LINKS_GAP = 80; // deve bater com o `gap` de .nav-links no CSS
 
       // ── Idioma (PT/EN) ────────────────────────────────────────
       const translations = {
@@ -675,10 +684,10 @@
         const activeLink = document.querySelector('.nav-links a.active');
         if (!activeLink) return;
         const rect    = activeLink.getBoundingClientRect();
-        const navRect = nav.getBoundingClientRect();
+        const wrapRect = navLinksWrap.getBoundingClientRect();
         if (instant) navIndicator.style.transition = 'none';
         navIndicator.style.width = rect.width + 'px';
-        navIndicator.style.left  = (rect.left - navRect.left) + 'px';
+        navIndicator.style.left  = (rect.left - wrapRect.left) + 'px';
         if (instant) {
           navIndicator.offsetHeight; // força reflow antes de reativar a transição
           navIndicator.style.transition = '';
@@ -709,21 +718,6 @@
 
       mobileLinks.forEach(link => {
         link.addEventListener('click', () => closeMenu());
-      });
-
-      navLinks.forEach(link => {
-        link.addEventListener('mouseenter', () => {
-          const rect    = link.getBoundingClientRect();
-          const navRect = nav.getBoundingClientRect();
-          const pad     = NAV_LINKS_GAP / 2;
-          navBg.style.left  = (rect.left - navRect.left - pad) + 'px';
-          navBg.style.width = (rect.width + NAV_LINKS_GAP) + 'px';
-        });
-
-        link.addEventListener('mouseleave', () => {
-          navBg.style.left  = '0px';
-          navBg.style.width = '100%';
-        });
       });
     });
   </script>
