@@ -574,9 +574,8 @@
     }
 
     .checklist-card {
-      background: #F0F0F4;
-      border-bottom: 6px solid #CACACD;
-      border-radius: 24px;
+      background: #F7F7F8;
+      border-radius: 16px;
       padding: 24px;
       display: flex;
       align-items: center;
@@ -801,49 +800,38 @@
     .stacked-seg.tiny { font-size: 0; }
 
     /* ── STAT CARDS ─────────────────────────────────────────── */
-    .stats-grid {
+    .stat-flat-grid {
       display: flex;
+      gap: 16px;
       flex-wrap: wrap;
-      gap: 24px;
     }
 
-    .stat-card {
-      background: #F0F0F4;
-      border-bottom: 6px solid #CACACD;
-      border-radius: 24px;
-      padding: 24px;
-      width: 264px;
-      flex: 0 0 264px;
+    .stat-flat {
+      background: #F7F7F8;
+      box-shadow: 0 0 0 1px #F7F7F8;
+      border-radius: 16px;
+      padding: 24px 32px;
+      flex: 1;
+      min-width: 240px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-    }
-
-    .stat-badge {
-      background: var(--stat-bg);
-      border-radius: 8px;
-      height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       gap: 8px;
-      padding: 0 16px;
     }
 
-    .stat-badge .num {
+    .stat-flat .num {
       font-size: 36px;
       font-weight: 700;
-      color: var(--stat-green);
-      white-space: nowrap;
+      color: #C63662;
+      line-height: 1;
     }
 
-    .stat-badge .label {
-      font-size: 14px;
-      font-weight: 600;
-      text-transform: uppercase;
+    .stat-flat p {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--text);
     }
 
-    .stat-card p { font-size: 18px; line-height: 28px; }
+    .stat-flat p strong { font-weight: 700; }
 
     /* ── SWOT ───────────────────────────────────────────────── */
     .swot-grid {
@@ -965,8 +953,8 @@
       .case-title-block h1 { font-size: 36px; line-height: 40px; }
       .hero-video-frame, .ph, .design-image-frame { border-radius: 24px; }
       .subsection-title { font-size: 20px; }
-      .bullet-list li, .stat-card p, .checklist-card p, .risk-field p, .callout p { font-size: 16px; }
-      .stat-card { width: 100%; flex-basis: 100%; }
+      .bullet-list li, .checklist-card p, .risk-field p, .callout p { font-size: 16px; }
+      .stat-flat { min-width: 100%; padding: 20px 24px; }
       .chart-card { padding: 20px; border-radius: 16px; }
       .stacked-track { height: 32px; }
       .stacked-seg { font-size: 10px; }
@@ -992,19 +980,6 @@
       /* Imagens lado a lado empilhadas no mobile, largura toda */
       .design-image-row { flex-direction: column; }
 
-      /* Cards de resultado bem menores e alinhados à esquerda */
-      .stats-grid { justify-content: flex-start; }
-      .stat-card {
-        width: auto;
-        flex: 0 0 auto;
-        padding: 10px;
-        border-radius: 12px;
-        gap: 6px;
-      }
-      .stat-badge { height: 32px; padding: 0 8px; gap: 4px; border-radius: 6px; }
-      .stat-badge .num { font-size: 16px; }
-      .stat-badge .label { font-size: 8px; }
-      .stat-card p { font-size: 11px; line-height: 15px; max-width: 160px; }
     }
   </style>
 </head>
@@ -1440,9 +1415,9 @@
       <section class="section">
         <h2 class="section-title" data-i18n="result-title">Resultado</h2>
         <p class="body-text" data-i18n="result-body">A modalidade foi lançada no final de 2024 e vem mantendo a adoção dentro da expectativa definida durante o planejamento do projeto. A hipótese inicial estabelecia que a funcionalidade seria considerada saudável caso representasse 3% das transações de envio, meta que vem sendo sustentada desde o lançamento.</p>
-        <div class="stats-grid" style="margin-top:16px;">
-          <div class="stat-card">
-            <div class="stat-badge"><span class="num">3%</span><span class="label" data-i18n="result-stat-label">das transações</span></div>
+        <div class="stat-flat-grid" style="margin-top:16px;">
+          <div class="stat-flat">
+            <span class="num">3%</span>
             <p data-i18n="result-stat-p">Meta de adoção definida no planejamento, sustentada desde o lançamento.</p>
           </div>
         </div>
@@ -1573,7 +1548,6 @@
         "swot-t2": { pt: "Horário de funcionamento e prazo", en: "Operating hours and deadline" },
         "result-title": { pt: "Resultado", en: "Result" },
         "result-body": { pt: "A modalidade foi lançada no final de 2024 e vem mantendo a adoção dentro da expectativa definida durante o planejamento do projeto. A hipótese inicial estabelecia que a funcionalidade seria considerada saudável caso representasse 3% das transações de envio, meta que vem sendo sustentada desde o lançamento.", en: "The feature launched in late 2024 and has maintained adoption within the expectation set during project planning. The initial hypothesis was that the feature would be considered healthy if it represented 3% of sending transactions — a target that has held since launch." },
-        "result-stat-label": { pt: "das transações", en: "of transactions" },
         "result-stat-p": { pt: "Meta de adoção definida no planejamento, sustentada desde o lançamento.", en: "Adoption target set during planning, sustained since launch." },
         "final-learning-title": { pt: "Principal aprendizado", en: "Key takeaway" },
         "final-learning-body": { pt: "Este projeto reforçou que a proposta de valor não era oferecer simplesmente uma cotação mais baixa, mas reduzir a ansiedade da decisão de enviar dinheiro ao exterior. Também evidenciou a importância de validar separadamente riscos de valor, usabilidade, negócio e execução antes de investir em uma implementação completa, permitindo evoluir a solução com mais confiança e menor custo.", en: "This project reinforced that the value proposition wasn't simply offering a lower rate, but reducing the anxiety of the decision to send money abroad. It also highlighted the importance of separately validating value, usability, business, and execution risks before investing in a full implementation, allowing the solution to evolve with more confidence and lower cost." },

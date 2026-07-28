@@ -712,31 +712,44 @@
       background: var(--accent);
     }
 
-    /* ── PRINCÍPIOS (cards sem ícone, 3 por linha) ────────────── */
-    .principles-grid {
+    /* ── PRINCÍPIOS (tabela numerada, 2 colunas) ──────────────── */
+    .principles-table {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      grid-template-columns: 1fr 1fr;
+      background: #F7F7F8;
     }
 
-    .principle-card {
-      background: var(--principle-bg);
-      border-bottom: 6px solid var(--principle-border);
-      border-radius: 24px;
-      padding: 32px 24px;
+    .principle-cell {
       display: flex;
-      flex-direction: column;
       gap: 12px;
+      padding: 24px 32px;
+      border-bottom: 1px solid #E5E5E8;
     }
 
-    .principle-card h4 {
-      font-size: 20px;
-      font-weight: 500;
-    }
+    .principle-cell:nth-child(odd) { border-right: 1px solid #E5E5E8; }
 
-    .principle-card p {
+    .principle-cell.full { grid-column: 1 / -1; border-right: none; }
+
+    .principles-table .principle-cell:last-child { border-bottom: none; }
+
+    .principle-num {
       font-size: 16px;
-      line-height: 24px;
+      font-weight: 700;
+      color: #C63662;
+      flex-shrink: 0;
+      width: 16px;
+    }
+
+    .principle-cell h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .principle-cell p {
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--text);
     }
 
     /* ── LISTAS COM MARCADOR ──────────────────────────────────── */
@@ -944,7 +957,6 @@
       .case-title-block h1 { font-size: 40px; line-height: 52px; }
       .case-title-block p { font-size: 18px; line-height: 28px; }
       .problems-grid { grid-template-columns: 1fr; gap: 32px; }
-      .principles-grid { grid-template-columns: repeat(2, 1fr); }
       .risk-block { flex-direction: column; gap: 16px; }
       .feature-row { flex-direction: column; }
       .evolution-image-frame { width: 100%; }
@@ -1024,7 +1036,8 @@
       .case-title-block h1 { font-size: 36px; line-height: 40px; }
       .subsection-title { font-size: 20px; }
       .problem-card li, .bullet-list li { font-size: 16px; }
-      .principles-grid { grid-template-columns: 1fr; }
+      .principles-table { grid-template-columns: 1fr; }
+      .principle-cell:nth-child(odd) { border-right: none; }
 
       /* Ícones em círculo no máximo 40px no mobile */
       .risk-number { width: 40px; height: 40px; flex-basis: 40px; font-size: 15px; }
@@ -1244,26 +1257,26 @@
       <!-- IDEAÇÃO -->
       <section class="section">
         <h2 class="section-title" data-i18n="principles3-title">Princípios que guiaram o projeto</h2>
-        <div class="principles-grid" style="margin-top:16px;">
-          <div class="principle-card">
-            <h4 data-i18n="princ3-1-title">Entregar valor desde a primeira versão</h4>
-            <p data-i18n="princ3-1-body">Priorizar funcionalidades que resolvessem as principais necessidades dos clientes PJ, garantindo um MVP útil e relevante.</p>
+        <div class="principles-table" style="margin-top:16px;">
+          <div class="principle-cell">
+            <span class="principle-num">1</span>
+            <div><h4 data-i18n="princ3-1-title">Entregar valor desde a primeira versão</h4><p data-i18n="princ3-1-body">Priorizar funcionalidades que resolvessem as principais necessidades dos clientes PJ, garantindo um MVP útil e relevante.</p></div>
           </div>
-          <div class="principle-card">
-            <h4 data-i18n="princ3-2-title">Alinhar expectativas desde o primeiro contato</h4>
-            <p data-i18n="princ3-2-body">Comunicar de forma clara quem pode utilizar o aplicativo e o que estava disponível, reduzindo frustrações durante a jornada.</p>
+          <div class="principle-cell">
+            <span class="principle-num">2</span>
+            <div><h4 data-i18n="princ3-2-title">Alinhar expectativas desde o primeiro contato</h4><p data-i18n="princ3-2-body">Comunicar de forma clara quem pode utilizar o aplicativo e o que estava disponível, reduzindo frustrações durante a jornada.</p></div>
           </div>
-          <div class="principle-card">
-            <h4 data-i18n="princ3-3-title">Priorizar o contexto mobile</h4>
-            <p data-i18n="princ3-3-body">Focar nas tarefas que exigem agilidade e mobilidade, permitindo que clientes acompanhassem operações e realizassem ações importantes de qualquer lugar.</p>
+          <div class="principle-cell">
+            <span class="principle-num">3</span>
+            <div><h4 data-i18n="princ3-3-title">Priorizar o contexto mobile</h4><p data-i18n="princ3-3-body">Focar nas tarefas que exigem agilidade e mobilidade, permitindo que clientes acompanhassem operações e realizassem ações importantes de qualquer lugar.</p></div>
           </div>
-          <div class="principle-card">
-            <h4 data-i18n="princ3-4-title">Destacar o que exige atenção imediata</h4>
-            <p data-i18n="princ3-4-body">Tornar informações críticas, como novas ordens de pagamento e status das operações, facilmente acessíveis e visíveis.</p>
+          <div class="principle-cell">
+            <span class="principle-num">4</span>
+            <div><h4 data-i18n="princ3-4-title">Destacar o que exige atenção imediata</h4><p data-i18n="princ3-4-body">Tornar informações críticas, como novas ordens de pagamento e status das operações, facilmente acessíveis e visíveis.</p></div>
           </div>
-          <div class="principle-card">
-            <h4 data-i18n="princ3-5-title">Projetar para evoluir</h4>
-            <p data-i18n="princ3-5-body">Criar uma experiência simples para o lançamento inicial, mas preparada para incorporar novas funcionalidades sem perder consistência.</p>
+          <div class="principle-cell full">
+            <span class="principle-num">5</span>
+            <div><h4 data-i18n="princ3-5-title">Projetar para evoluir</h4><p data-i18n="princ3-5-body">Criar uma experiência simples para o lançamento inicial, mas preparada para incorporar novas funcionalidades sem perder consistência.</p></div>
           </div>
         </div>
         <hr class="section-divider">
