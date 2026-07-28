@@ -791,7 +791,9 @@
 
     /* ── DESAFIOS (selo + cards numerados com ícone) ──────────── */
     .challenge-group {
+      position: relative;
       margin-top: 24px;
+      margin-bottom: 80px;
     }
 
     .challenge-group + .challenge-group { margin-top: 40px; }
@@ -799,21 +801,22 @@
     .challenge-tag {
       display: inline-flex;
       align-items: center;
+      height: 36px;
+      box-sizing: border-box;
       background: var(--white);
       border: 1px solid #E5E5E8;
       border-radius: 999px;
-      padding: 8px 16px;
+      padding: 0 16px;
       font-size: 14px;
       font-weight: 600;
       color: var(--text);
-      position: relative;
     }
 
-    .challenge-tag::after {
+    .challenge-group::before {
       content: '';
       position: absolute;
-      top: 100%;
-      left: 50%;
+      top: 36px;
+      left: 110px;
       width: 1px;
       height: 24px;
       background: #E5E5E8;
