@@ -442,7 +442,7 @@
     .v2-skill-label {
       font-size: 14px;
       font-weight: 400;
-      line-height: 20px;
+      line-height: 1;
       color: var(--white);
       white-space: nowrap;
     }
@@ -1153,8 +1153,8 @@
       const skillsCarousel = document.querySelector('.v2-skills-carousel');
       const skillsTrack = document.querySelector('.v2-skills-track');
       if (skillsCarousel && skillsTrack) {
-        const NORMAL_SPEED = 0.5;
-        const SLOW_SPEED = 0.08;
+        const NORMAL_SPEED = 0.25;
+        const SLOW_SPEED = 0.04;
         let speed = NORMAL_SPEED;
         let targetSpeed = NORMAL_SPEED;
         let x = 0;
