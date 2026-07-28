@@ -789,6 +789,51 @@
       background: var(--accent);
     }
 
+    /* ── DESAFIOS (cards numerados com ícone) ─────────────────── */
+    .challenge-cards {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+      padding-top: 24px;
+      border-top: 1px solid #E5E5E8;
+    }
+
+    .challenge-card {
+      flex: 1;
+      min-width: 0;
+      background: #F7F7F8;
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .challenge-num {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+
+    .challenge-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .challenge-icon img { width: 100%; height: 100%; display: block; }
+
+    .challenge-card h4 {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .challenge-card p {
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--text);
+    }
+
     /* ── DESAFIOS NUMERADOS ───────────────────────────────────── */
     .risk-block {
       display: flex;
@@ -961,6 +1006,7 @@
       .case-title-block p { font-size: 18px; line-height: 28px; }
       .problems-grid { grid-template-columns: 1fr; gap: 32px; }
       .risk-block { flex-direction: column; gap: 16px; }
+      .challenge-cards { flex-direction: column; }
       .feature-row { flex-direction: column; }
       .evolution-image-frame { width: 100%; }
       .feature-text { width: 100%; flex: none; }
@@ -1216,11 +1262,26 @@
             <div class="risk-content">
               <h3 class="subsection-title" data-i18n="def1-title">Área não logada</h3>
               <p class="body-text" data-i18n="def1-intro">O produto PJ passaria a dividir o mesmo aplicativo e arquitetura do PF.</p>
-              <ul class="bullet-list">
-                <li data-i18n="def1-li1">Revisão da comunicação e experiência do carrossel de destaques</li>
-                <li data-i18n="def1-li2">Revisão da comunicação nas lojas de aplicativos e dos previews de tela</li>
-                <li data-i18n="def1-li3">Redesign do login e onboarding para contemplar entrada de clientes PF e PJ</li>
-              </ul>
+              <div class="challenge-cards">
+                <div class="challenge-card">
+                  <span class="challenge-num">01</span>
+                  <span class="challenge-icon"><img src="images/SVGs/mobile.svg" alt=""></span>
+                  <h4 data-i18n="def1-card1-title">Comunicação geral</h4>
+                  <p data-i18n="def1-card1-body">Revisão da comunicação e experiência do carrossel de destaques.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">02</span>
+                  <span class="challenge-icon"><img src="images/SVGs/laptop-mobile.svg" alt=""></span>
+                  <h4 data-i18n="def1-card2-title">Comunicação lojas</h4>
+                  <p data-i18n="def1-card2-body">Revisão da comunicação nas lojas de aplicativos e dos previews de tela.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">03</span>
+                  <span class="challenge-icon"><img src="images/SVGs/user-check.svg" alt=""></span>
+                  <h4 data-i18n="def1-card3-title">Experiência onboarding</h4>
+                  <p data-i18n="def1-card3-body">Redesign do login e onboarding contemplando os produtos PF e PJ.</p>
+                </div>
+              </div>
               <div class="design-image-row">
                 <div class="design-image-frame"><div class="ph"><img src="images/Case%203.01.png" alt="Área não logada 1"></div></div>
                 <div class="design-image-frame"><div class="ph"><img src="images/Case%203.02.png" alt="Área não logada 2"></div></div>
@@ -1234,17 +1295,32 @@
             <div class="risk-content">
               <h3 class="subsection-title" data-i18n="def2-title">Área logada</h3>
               <p class="body-text" data-i18n="def2-intro">Definição do escopo da V1:</p>
-              <ul class="bullet-list">
-                <li data-i18n="def2-li1">Pesquisa mostrou que clientes querem acompanhar operações, chegada de dinheiro e resgate de qualquer lugar</li>
-                <li>
-                  <span data-i18n="def2-li2-lead">Avaliação do uso da plataforma web indicou:</span>
-                  <ul class="bullet-list" style="margin-top:8px;">
-                    <li data-i18n="def2-li2-sub1">Maioria recebe do exterior — notificações de novas ordens de pagamento seriam úteis</li>
-                    <li data-i18n="def2-li2-sub2">Necessidade frequente de resgatar o dinheiro com urgência após a chegada da ordem</li>
-                    <li data-i18n="def2-li2-sub3">Extrato é essencial para contabilidade e controle financeiro das empresas</li>
-                  </ul>
-                </li>
-              </ul>
+              <div class="challenge-cards">
+                <div class="challenge-card">
+                  <span class="challenge-num">01</span>
+                  <span class="challenge-icon"><img src="images/SVGs/mobile-1.svg" alt=""></span>
+                  <h4 data-i18n="def2-card1-title">Escopo V1 do app</h4>
+                  <p data-i18n="def2-card1-body">Pesquisa: clientes querem extrato e acompanhar status das transações.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">02</span>
+                  <span class="challenge-icon"><img src="images/SVGs/bell.svg" alt=""></span>
+                  <h4 data-i18n="def2-card2-title">Notificação</h4>
+                  <p data-i18n="def2-card2-body">Maioria recebe do exterior — notificações de novas ordens de pagamento.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">03</span>
+                  <span class="challenge-icon"><img src="images/SVGs/arrow-down-left.svg" alt=""></span>
+                  <h4 data-i18n="def2-card3-title">Recebimentos</h4>
+                  <p data-i18n="def2-card3-body">Necessidade de resgatar o dinheiro com urgência após a chegada da ordem.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">04</span>
+                  <span class="challenge-icon"><img src="images/SVGs/ballot-check.svg" alt=""></span>
+                  <h4 data-i18n="def2-card4-title">Dados financeiros</h4>
+                  <p data-i18n="def2-card4-body">Histórico de transações e detalhes para contabilidade e controle financeiro.</p>
+                </div>
+              </div>
               <div class="design-image-row">
                 <div class="design-image-frame"><div class="ph"><img src="images/Case%203.1.png" alt="Área logada 1"></div></div>
                 <div class="design-image-frame"><div class="ph"><img src="images/Case%203.2.png" alt="Área logada 2"></div></div>
@@ -1458,16 +1534,22 @@
         "challenges-title": { pt: "Desafios", en: "Challenges" },
         "def1-title": { pt: "Área não logada", en: "Logged-out area" },
         "def1-intro": { pt: "O produto PJ passaria a dividir o mesmo aplicativo e arquitetura do PF.", en: "The business product would now share the same app and architecture as the individual product." },
-        "def1-li1": { pt: "Revisão da comunicação e experiência do carrossel de destaques", en: "Review of the highlights carousel's communication and experience" },
-        "def1-li2": { pt: "Revisão da comunicação nas lojas de aplicativos e dos previews de tela", en: "Review of app store communication and screen previews" },
-        "def1-li3": { pt: "Redesign do login e onboarding para contemplar entrada de clientes PF e PJ", en: "Redesign of login and onboarding to accommodate both individual and business customers" },
+        "def1-card1-title": { pt: "Comunicação geral", en: "General communication" },
+        "def1-card1-body": { pt: "Revisão da comunicação e experiência do carrossel de destaques.", en: "Review of the highlights carousel's communication and experience." },
+        "def1-card2-title": { pt: "Comunicação lojas", en: "App store communication" },
+        "def1-card2-body": { pt: "Revisão da comunicação nas lojas de aplicativos e dos previews de tela.", en: "Review of app store communication and screen previews." },
+        "def1-card3-title": { pt: "Experiência onboarding", en: "Onboarding experience" },
+        "def1-card3-body": { pt: "Redesign do login e onboarding contemplando os produtos PF e PJ.", en: "Redesign of login and onboarding covering both individual and business products." },
         "def2-title": { pt: "Área logada", en: "Logged-in area" },
         "def2-intro": { pt: "Definição do escopo da V1:", en: "Defining the V1 scope:" },
-        "def2-li1": { pt: "Pesquisa mostrou que clientes querem acompanhar operações, chegada de dinheiro e resgate de qualquer lugar", en: "Research showed customers want to track operations, incoming funds, and withdrawals from anywhere" },
-        "def2-li2-lead": { pt: "Avaliação do uso da plataforma web indicou:", en: "Evaluating web platform usage showed:" },
-        "def2-li2-sub1": { pt: "Maioria recebe do exterior — notificações de novas ordens de pagamento seriam úteis", en: "Most receive funds from abroad — notifications for new payment orders would be useful" },
-        "def2-li2-sub2": { pt: "Necessidade frequente de resgatar o dinheiro com urgência após a chegada da ordem", en: "Frequent need to withdraw funds urgently after the order arrives" },
-        "def2-li2-sub3": { pt: "Extrato é essencial para contabilidade e controle financeiro das empresas", en: "Statement is essential for companies' accounting and financial control" },
+        "def2-card1-title": { pt: "Escopo V1 do app", en: "App V1 scope" },
+        "def2-card1-body": { pt: "Pesquisa: clientes querem extrato e acompanhar status das transações.", en: "Research: customers want statements and to track transaction status." },
+        "def2-card2-title": { pt: "Notificação", en: "Notification" },
+        "def2-card2-body": { pt: "Maioria recebe do exterior — notificações de novas ordens de pagamento.", en: "Most receive funds from abroad — notifications for new payment orders." },
+        "def2-card3-title": { pt: "Recebimentos", en: "Receiving funds" },
+        "def2-card3-body": { pt: "Necessidade de resgatar o dinheiro com urgência após a chegada da ordem.", en: "Need to withdraw funds urgently after the order arrives." },
+        "def2-card4-title": { pt: "Dados financeiros", en: "Financial data" },
+        "def2-card4-body": { pt: "Histórico de transações e detalhes para contabilidade e controle financeiro.", en: "Transaction history and details for accounting and financial control." },
 
         "principles3-title": { pt: "Princípios que guiaram o projeto", en: "Principles that guided the project" },
         "princ3-1-title": { pt: "Entregar valor desde a primeira versão", en: "Deliver value from the first version" },
