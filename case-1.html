@@ -585,95 +585,44 @@
 
     .lightbox-close:hover { background: rgba(255,255,255,0.24); }
 
-    /* ── PROBLEMAS E OPORTUNIDADES ──────────────────────────── */
-    .problems-grid {
+    /* ── PRINCÍPIOS (tabela numerada, 2 colunas) ──────────────── */
+    .principles-table {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 32px;
+      grid-template-columns: 1fr 1fr;
+      background: #F7F7F8;
     }
 
-    .problem-card {
+    .principle-cell {
       display: flex;
-      flex-direction: column;
+      gap: 12px;
+      padding: 24px 32px;
+      border-bottom: 1px solid #E5E5E8;
     }
 
-    .problem-card h4 {
+    .principle-cell:nth-child(odd) { border-right: 1px solid #E5E5E8; }
+
+    .principle-cell.full { grid-column: 1 / -1; border-right: none; }
+
+    .principles-table .principle-cell:last-child { border-bottom: none; }
+
+    .principle-num {
       font-size: 16px;
-      font-weight: 500;
-      line-height: 20px;
-      margin-bottom: 12px;
+      font-weight: 700;
+      color: #C63662;
+      flex-shrink: 0;
+      width: 16px;
     }
 
-    .problem-card ul {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
+    .principle-cell h4 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
-    .problem-card li {
+    .principle-cell p {
       font-size: 16px;
       line-height: 20px;
       color: var(--text);
-      padding-left: 16px;
-      position: relative;
-    }
-
-    .problem-card li::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 12px;
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    /* ── PRINCÍPIOS (cards com ícone) ────────────────────────── */
-    .principles-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 24px;
-    }
-
-    .principle-card {
-      background: var(--principle-bg);
-      border-bottom: 6px solid var(--principle-border);
-      border-radius: 24px;
-      padding: 32px 24px;
-      min-height: 248px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .principle-divider {
-      border: none;
-      border-top: 1px solid var(--principle-border);
-      margin: 0;
-    }
-
-    .principle-icon {
-      background: var(--accent);
-      width: 64px;
-      height: 56px;
-      flex-shrink: 0;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--white);
-    }
-
-    .principle-card h4 {
-      font-size: 20px;
-      font-weight: 500;
-    }
-
-    .principle-card p {
-      font-size: 16px;
-      line-height: 24px;
     }
 
     /* ── GALERIA DE IMAGENS (Área não logada / logada) ──────── */
@@ -719,9 +668,8 @@
     }
 
     .checklist-card {
-      background: #F0F0F4;
-      border-bottom: 6px solid #CACACD;
-      border-radius: 24px;
+      background: #F7F7F8;
+      border-radius: 16px;
       padding: 24px;
       display: flex;
       align-items: center;
@@ -729,18 +677,22 @@
     }
 
     .checklist-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 40px;
-      background: var(--stat-green);
-      color: var(--white);
+      width: 24px;
+      height: 24px;
+      color: #C63662;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
     }
 
-    .checklist-icon.accent { background: var(--accent); }
+    .checklist-icon.accent {
+      width: 40px;
+      height: 40px;
+      border-radius: 40px;
+      background: var(--accent);
+      color: var(--white);
+    }
 
     .checklist-card p {
       font-size: 16px;
@@ -794,6 +746,61 @@
       font-size: 18px;
       line-height: 28px;
     }
+
+    /* ── STAT FLAT (Resultados / Rollout — número grande sem badge) ── */
+    .stat-flat-grid {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .stat-flat {
+      background: #F7F7F8;
+      border-radius: 16px;
+      padding: 24px 32px;
+      flex: 1;
+      min-width: 240px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .stat-flat .num {
+      font-size: 36px;
+      font-weight: 700;
+      color: #C63662;
+      line-height: 1;
+    }
+
+    .stat-flat p {
+      font-size: 16px;
+      line-height: 24px;
+      color: var(--text);
+    }
+
+    .stat-flat p strong { font-weight: 700; }
+
+    /* ── ACHADOS (O que eu descobri — lista corrida) ──────────── */
+    .findings-list {
+      display: flex;
+      flex-direction: column;
+      background: #F7F7F8;
+    }
+
+    .findings-item {
+      padding: 24px 32px;
+      border-bottom: 1px solid #E5E5E8;
+    }
+
+    .findings-item:last-child { border-bottom: none; }
+
+    .findings-item p {
+      font-size: 16px;
+      line-height: 20px;
+      color: var(--text);
+    }
+
+    .findings-item p strong { font-weight: 700; }
 
     /* ── FEATURE ROWS ALTERNADAS (Área logada) ───────────────── */
     .feature-row {
@@ -973,8 +980,6 @@
       .page-flow { gap: 80px; }
       .case-title-block h1 { font-size: 56px; line-height: 60px; }
       .case-title-block p { font-size: 18px; line-height: 24px; }
-      .problems-grid { grid-template-columns: 1fr; gap: 32px; }
-      .principles-grid { grid-template-columns: repeat(2, 1fr); }
       .feature-row { flex-direction: column !important; }
       .al-image-frame { width: 100%; height: auto; }
       .feature-text { width: 100%; flex: none; }
@@ -1050,12 +1055,15 @@
       .case-title-block h1 { font-size: 36px; line-height: 40px; }
       .hero-video-frame, .ph, .gallery-image-frame, .al-image-frame { border-radius: 24px; }
       .subsection-title { font-size: 20px; }
-      .stat-card p, .feature-text p, .principle-card p, .survey-card p { font-size: 17px; }
+      .stat-card p, .feature-text p, .survey-card p { font-size: 17px; }
       .bordered-images { flex-direction: column; }
       .img-trigger { width: 100%; height: auto; aspect-ratio: 264 / 134; flex: none; }
-      .principles-grid { grid-template-columns: 1fr; }
+      .principles-table { grid-template-columns: 1fr; }
+      .principle-cell:nth-child(odd) { border-right: none; }
       .checklist-grid { grid-template-columns: 1fr; }
       .stat-card { width: 100%; flex-basis: 100%; }
+      .stat-flat { min-width: 100%; padding: 20px 24px; }
+      .findings-item { padding: 20px 24px; }
       .chart-card { padding: 20px; border-radius: 16px; }
       .hbar-name { font-size: 15px; }
       .hbar-pct { font-size: 18px; }
@@ -1065,7 +1073,6 @@
       .survey-connector { display: none; }
 
       /* Ícones em círculo/retângulo no máximo 40px no mobile */
-      .principle-icon { width: 40px; height: 40px; }
       .survey-badge { width: 40px; height: 40px; top: -20px; }
 
       /* Imagens da área logada sem crop: altura acompanha a imagem */
@@ -1199,44 +1206,11 @@
       <section class="section">
         <h2 class="section-title" data-i18n="discover-title">O que eu descobri</h2>
         <p class="body-text" data-i18n="discover-body">Durante o Discovery, consolidei pesquisas, feedbacks de clientes e análises da experiência existente para identificar os principais fatores que comprometiam a evolução do produto.</p>
-        <div style="margin-top:16px;">
-          <h3 class="subsection-title" style="margin-bottom:24px;" data-i18n="problems-title">Problemas e oportunidades</h3>
-          <div class="problems-grid">
-            <div class="problem-card">
-              <h4 data-i18n="prob1-h4">Onboarding com alta fricção</h4>
-              <ul>
-                <li data-i18n="prob1-li1">Cadastro longo e pouco orientado.</li>
-                <li data-i18n="prob1-li2">Sem visibilidade de progresso.</li>
-                <li data-i18n="prob1-li3">Envio de documentos com restrições técnicas.</li>
-                <li data-i18n="prob1-li4">Baixa percepção de segurança.</li>
-              </ul>
-            </div>
-            <div class="problem-card">
-              <h4 data-i18n="prob3-h4">Experiência pouco personalizada</h4>
-              <ul>
-                <li data-i18n="prob3-li1">Home genérica para diferentes perfis.</li>
-                <li data-i18n="prob3-li2">Pouco suporte durante a jornada.</li>
-                <li data-i18n="prob3-li3">Acompanhamento de transações dependente de e-mails.</li>
-                <li data-i18n="prob3-li4">Feedbacks pouco claros.</li>
-              </ul>
-            </div>
-            <div class="problem-card">
-              <h4 data-i18n="prob2-h4">Arquitetura confusa</h4>
-              <ul>
-                <li data-i18n="prob2-li1">Navegação pouco escalável.</li>
-                <li data-i18n="prob2-li2">Terminologias distantes do modelo mental dos clientes.</li>
-                <li data-i18n="prob2-li3">Organização inconsistente entre funcionalidades.</li>
-              </ul>
-            </div>
-            <div class="problem-card">
-              <h4 data-i18n="prob4-h4">Baixa consistência</h4>
-              <ul>
-                <li data-i18n="prob4-li1">Ausência de Design System.</li>
-                <li data-i18n="prob4-li2">Componentes e padrões visuais inconsistentes.</li>
-                <li data-i18n="prob4-li3">Alto custo para evoluir o produto.</li>
-              </ul>
-            </div>
-          </div>
+        <div class="findings-list" style="margin-top:16px;">
+          <div class="findings-item"><p data-i18n="find1">O <strong>onboarding</strong> era longo, pouco orientado e com limitações técnicas gerava alta fricção e menor percepção de segurança.</p></div>
+          <div class="findings-item"><p data-i18n="find2">A <strong>experiência</strong> oferecia pouca personalização, baixo suporte ao longo da jornada e feedbacks insuficientes.</p></div>
+          <div class="findings-item"><p data-i18n="find3">A <strong>arquitetura</strong> da informação apresentava navegação pouco escalável, terminologia inconsistente e organização confusa das funcionalidades.</p></div>
+          <div class="findings-item"><p data-i18n="find4">A ausência de um <strong>Design System</strong> resultava em inconsistências visuais e maior custo para evolução do produto.</p></div>
         </div>
         <hr class="section-divider">
       </section>
@@ -1250,62 +1224,34 @@
       <!-- PRINCÍPIOS -->
       <section class="section">
         <h2 class="section-title" data-i18n="principles-title">Princípios que guiaram o redesign</h2>
-        <div class="principles-grid" style="margin-top:16px;">
-          <div class="principle-card">
-            <div class="principle-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20"/></svg>
-            </div>
-            <h4 data-i18n="princ1-h4">Escalabilidade</h4>
-            <hr class="principle-divider">
-            <p data-i18n="princ1-p">Construir uma plataforma preparada para crescer.</p>
+        <div class="principles-table" style="margin-top:16px;">
+          <div class="principle-cell">
+            <span class="principle-num">1</span>
+            <div><h4 data-i18n="princ1-h4">Escalabilidade:</h4><p data-i18n="princ1-p">Construir uma plataforma preparada para crescer.</p></div>
           </div>
-          <div class="principle-card">
-            <div class="principle-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg>
-            </div>
-            <h4 data-i18n="princ2-h4">Encontrabilidade</h4>
-            <hr class="principle-divider">
-            <p data-i18n="princ2-p">Facilitar a descoberta das funcionalidades.</p>
+          <div class="principle-cell">
+            <span class="principle-num">2</span>
+            <div><h4 data-i18n="princ2-h4">Encontrabilidade:</h4><p data-i18n="princ2-p">Facilitar a descoberta das funcionalidades.</p></div>
           </div>
-          <div class="principle-card">
-            <div class="principle-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
-            </div>
-            <h4 data-i18n="princ3-h4">Personalização</h4>
-            <hr class="principle-divider">
-            <p data-i18n="princ3-p">Mostrar o que é mais relevante para o caso de uso do cliente.</p>
+          <div class="principle-cell">
+            <span class="principle-num">3</span>
+            <div><h4 data-i18n="princ3-h4">Personalização:</h4><p data-i18n="princ3-p">Mostrar o que é mais relevante para o caso de uso do cliente.</p></div>
           </div>
-          <div class="principle-card">
-            <div class="principle-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 5l6 7-6 7M13 5l6 7-6 7"/></svg>
-            </div>
-            <h4 data-i18n="princ4-h4">Orientação</h4>
-            <hr class="principle-divider">
-            <p data-i18n="princ4-p">Reduzir dúvidas em jornadas financeiras complexas.</p>
+          <div class="principle-cell">
+            <span class="principle-num">4</span>
+            <div><h4 data-i18n="princ4-h4">Orientação:</h4><p data-i18n="princ4-p">Reduzir dúvidas em jornadas financeiras complexas.</p></div>
           </div>
-          <div class="principle-card">
-            <div class="principle-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-            </div>
-            <h4 data-i18n="princ5-h4">Visibilidade</h4>
-            <hr class="principle-divider">
-            <p data-i18n="princ5-p">Diminuir ansiedade durante as operações.</p>
+          <div class="principle-cell">
+            <span class="principle-num">5</span>
+            <div><h4 data-i18n="princ5-h4">Visibilidade:</h4><p data-i18n="princ5-p">Diminuir ansiedade durante as operações.</p></div>
           </div>
-          <div class="principle-card">
-            <div class="principle-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            </div>
-            <h4 data-i18n="princ6-h4">Consistência e clareza</h4>
-            <hr class="principle-divider">
-            <p data-i18n="princ6-p">Padrão consistente nos componentes, diminuindo o esforço cognitivo.</p>
+          <div class="principle-cell">
+            <span class="principle-num">6</span>
+            <div><h4 data-i18n="princ6-h4">Consistência e clareza:</h4><p data-i18n="princ6-p">Padrão consistente nos componentes, diminuindo o esforço cognitivo.</p></div>
           </div>
-          <div class="principle-card">
-            <div class="principle-icon">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 9.5V4a2 2 0 0 1 4 0v5"/><path d="M14 9.5V5a2 2 0 0 1 4 0v6"/><path d="M18 10.5a2 2 0 0 1 4 0v3.5a8 8 0 0 1-8 8h-1.5c-2.8 0-4.5-.9-6-2.3l-3.4-3.4a1.9 1.9 0 0 1 2.7-2.7L8 15"/><path d="M10 9.5a2 2 0 0 0-4 0v6"/></svg>
-            </div>
-            <h4 data-i18n="princ7-h4">Controle e Liberdade</h4>
-            <hr class="principle-divider">
-            <p data-i18n="princ7-p">Caminhos claros para desfazer ações, cancelar processos ou voltar no fluxo.</p>
+          <div class="principle-cell full">
+            <span class="principle-num">7</span>
+            <div><h4 data-i18n="princ7-h4">Controle e Liberdade:</h4><p data-i18n="princ7-p">Caminhos claros para desfazer ações, cancelar processos ou voltar no fluxo.</p></div>
           </div>
         </div>
       </section>
@@ -1355,14 +1301,14 @@
 
         <div style="margin-top:56px;">
           <h3 class="subsection-title" style="margin-bottom:32px;" data-i18n="results-title-1">Resultados</h3>
-          <div class="stats-grid">
-            <div class="stat-card">
-              <div class="stat-badge"><span class="num">23%</span><span class="label" data-i18n="stat1-label">menos abandono</span></div>
-              <p data-i18n="stat1-p">Menos abandono do fluxo de cadastro.</p>
+          <div class="stat-flat-grid">
+            <div class="stat-flat">
+              <span class="num">23%</span>
+              <p data-i18n="stat1-full"><strong>Menos abandono</strong> do fluxo de cadastro.</p>
             </div>
-            <div class="stat-card">
-              <div class="stat-badge"><span class="num">&gt; 90%</span><span class="label" data-i18n="stat2-label">Aprovação</span></div>
-              <p data-i18n="stat2-p">Aprovação automática dos documentos de identificação.</p>
+            <div class="stat-flat">
+              <span class="num">&gt; 90%</span>
+              <p data-i18n="stat2-full"><strong>Aprovação automática</strong> dos documentos de identificação.</p>
             </div>
           </div>
         </div>
@@ -1451,13 +1397,13 @@
       <section class="section">
         <h2 class="section-title" data-i18n="rollout-title">Rollout do site</h2>
         <p class="body-text" data-i18n="rollout-body">Para minimizar riscos durante uma mudança estrutural da plataforma, optamos por um rollout gradual, disponibilizando inicialmente a nova experiência para apenas 5% da base de clientes e ampliando esse percentual de forma progressiva à medida que acompanhávamos métricas de estabilidade, comportamento e adoção. Como mudanças significativas de interface e arquitetura da informação podem gerar resistência mesmo quando representam uma melhoria, mantivemos, durante os primeiros meses, a opção de alternar entre a nova e a antiga experiência. Essa estratégia reduziu o impacto da transição, preservou a sensação de controle do usuário e mitigou o risco de abandono.</p>
-        <div class="stats-grid" style="margin-top:16px;">
-          <div class="stat-card">
-            <div class="stat-badge"><span class="num">5%</span><span class="label" data-i18n="stat3-label">Base de clientes</span></div>
+        <div class="stat-flat-grid" style="margin-top:16px;">
+          <div class="stat-flat">
+            <span class="num">5%</span>
             <p data-i18n="stat3-p">Tamanho da base no lançamento do site novo.</p>
           </div>
-          <div class="stat-card">
-            <div class="stat-badge"><span class="num">&lt; 10%</span><span class="label" data-i18n="stat4-label">não aceitação</span></div>
+          <div class="stat-flat">
+            <span class="num">&lt; 10%</span>
             <p data-i18n="stat4-p">Taxa de retorno à versão antiga do site.</p>
           </div>
         </div>
@@ -1703,39 +1649,24 @@
         "ro-alt-3": { pt: "Plataforma antiga - Remessa Online 3", en: "Old platform - Remessa Online 3" },
         "discover-title": { pt: "O que eu descobri", en: "What I discovered" },
         "discover-body": { pt: "Durante o Discovery, consolidei pesquisas, feedbacks de clientes e análises da experiência existente para identificar os principais fatores que comprometiam a evolução do produto.", en: "During Discovery, I consolidated research, customer feedback, and analyses of the existing experience to identify the key factors holding back the product's evolution." },
-        "problems-title": { pt: "Problemas e oportunidades", en: "Problems and opportunities" },
-        "prob1-h4": { pt: "Onboarding com alta fricção", en: "High-friction onboarding" },
-        "prob1-li1": { pt: "Cadastro longo e pouco orientado.", en: "Long, poorly guided sign-up." },
-        "prob1-li2": { pt: "Sem visibilidade de progresso.", en: "No progress visibility." },
-        "prob1-li3": { pt: "Envio de documentos com restrições técnicas.", en: "Document upload with technical restrictions." },
-        "prob1-li4": { pt: "Baixa percepção de segurança.", en: "Low perceived security." },
-        "prob2-h4": { pt: "Arquitetura confusa", en: "Confusing architecture" },
-        "prob2-li1": { pt: "Navegação pouco escalável.", en: "Poorly scalable navigation." },
-        "prob2-li2": { pt: "Terminologias distantes do modelo mental dos clientes.", en: "Terminology far from customers' mental model." },
-        "prob2-li3": { pt: "Organização inconsistente entre funcionalidades.", en: "Inconsistent organization across features." },
-        "prob3-h4": { pt: "Experiência pouco personalizada", en: "Poorly personalized experience" },
-        "prob3-li1": { pt: "Home genérica para diferentes perfis.", en: "Generic home for different profiles." },
-        "prob3-li2": { pt: "Pouco suporte durante a jornada.", en: "Little support throughout the journey." },
-        "prob3-li3": { pt: "Acompanhamento de transações dependente de e-mails.", en: "Transaction tracking dependent on emails." },
-        "prob3-li4": { pt: "Feedbacks pouco claros.", en: "Unclear feedback." },
-        "prob4-h4": { pt: "Baixa consistência", en: "Low consistency" },
-        "prob4-li1": { pt: "Ausência de Design System.", en: "No Design System." },
-        "prob4-li2": { pt: "Componentes e padrões visuais inconsistentes.", en: "Inconsistent components and visual patterns." },
-        "prob4-li3": { pt: "Alto custo para evoluir o produto.", en: "High cost to evolve the product." },
+        "find1": { pt: "O <strong>onboarding</strong> era longo, pouco orientado e com limitações técnicas gerava alta fricção e menor percepção de segurança.", en: "<strong>Onboarding</strong> was long, poorly guided, and technical limitations created high friction and lower perceived security." },
+        "find2": { pt: "A <strong>experiência</strong> oferecia pouca personalização, baixo suporte ao longo da jornada e feedbacks insuficientes.", en: "The <strong>experience</strong> offered little personalization, low support throughout the journey, and insufficient feedback." },
+        "find3": { pt: "A <strong>arquitetura</strong> da informação apresentava navegação pouco escalável, terminologia inconsistente e organização confusa das funcionalidades.", en: "The information <strong>architecture</strong> had poorly scalable navigation, inconsistent terminology, and confusing organization of features." },
+        "find4": { pt: "A ausência de um <strong>Design System</strong> resultava em inconsistências visuais e maior custo para evolução do produto.", en: "The lack of a <strong>Design System</strong> resulted in visual inconsistencies and a higher cost to evolve the product." },
         "principles-title": { pt: "Princípios que guiaram o redesign", en: "Principles that guided the redesign" },
-        "princ1-h4": { pt: "Escalabilidade", en: "Scalability" },
+        "princ1-h4": { pt: "Escalabilidade:", en: "Scalability:" },
         "princ1-p": { pt: "Construir uma plataforma preparada para crescer.", en: "Build a platform ready to grow." },
-        "princ2-h4": { pt: "Encontrabilidade", en: "Findability" },
+        "princ2-h4": { pt: "Encontrabilidade:", en: "Findability:" },
         "princ2-p": { pt: "Facilitar a descoberta das funcionalidades.", en: "Make it easier to discover features." },
-        "princ3-h4": { pt: "Personalização", en: "Personalization" },
+        "princ3-h4": { pt: "Personalização:", en: "Personalization:" },
         "princ3-p": { pt: "Mostrar o que é mais relevante para o caso de uso do cliente.", en: "Show what's most relevant to the customer's use case." },
-        "princ4-h4": { pt: "Orientação", en: "Guidance" },
+        "princ4-h4": { pt: "Orientação:", en: "Guidance:" },
         "princ4-p": { pt: "Reduzir dúvidas em jornadas financeiras complexas.", en: "Reduce doubts in complex financial journeys." },
-        "princ5-h4": { pt: "Visibilidade", en: "Visibility" },
+        "princ5-h4": { pt: "Visibilidade:", en: "Visibility:" },
         "princ5-p": { pt: "Diminuir ansiedade durante as operações.", en: "Reduce anxiety during operations." },
-        "princ6-h4": { pt: "Consistência e clareza", en: "Consistency and clarity" },
+        "princ6-h4": { pt: "Consistência e clareza:", en: "Consistency and clarity:" },
         "princ6-p": { pt: "Padrão consistente nos componentes, diminuindo o esforço cognitivo.", en: "Consistent component patterns, reducing cognitive effort." },
-        "princ7-h4": { pt: "Controle e Liberdade", en: "Control and Freedom" },
+        "princ7-h4": { pt: "Controle e Liberdade:", en: "Control and Freedom:" },
         "princ7-p": { pt: "Caminhos claros para desfazer ações, cancelar processos ou voltar no fluxo.", en: "Clear paths to undo actions, cancel processes, or go back in the flow." },
         "build-title": { pt: "Construção da nova experiência", en: "Building the new experience" },
         "build-body": { pt: "Redesenhei toda a plataforma utilizando um Design System desenvolvido pelo time de design. A nova experiência foi concebida para resolver os problemas de inconsistência, arquitetura da informação e usabilidade identificados no diagnóstico, estabelecendo uma base escalável para a evolução do produto.<br><br>Realizei um benchmarking com concorrentes diretos e indiretos, analisando fluxos, arquitetura da informação e padrões de interação, além de mapear boas práticas de UX e UI adotadas por fintechs e bancos digitais. O objetivo foi identificar oportunidades para elevar a usabilidade, a confiança e a competitividade da plataforma.", en: "I redesigned the entire platform using a Design System developed by the design team. The new experience was built to solve the inconsistency, information architecture, and usability problems identified in the diagnosis, establishing a scalable foundation for the product's evolution.<br><br>I ran a benchmark against direct and indirect competitors, analyzing flows, information architecture, and interaction patterns, as well as mapping UX and UI best practices adopted by fintechs and digital banks. The goal was to identify opportunities to raise usability, trust, and the platform's competitiveness." },
@@ -1748,10 +1679,8 @@
         "chk1-4": { pt: "Máscara para captura no mobile, reduzindo erros durante a fotografia do documento.", en: "Capture mask on mobile, reducing errors while photographing the document." },
         "chk1-5": { pt: "Fluxo de qualificação, permitindo personalizar a experiência desde o primeiro acesso.", en: "Qualification flow, allowing the experience to be personalized from the first access." },
         "results-title-1": { pt: "Resultados", en: "Results" },
-        "stat1-label": { pt: "menos abandono", en: "less drop-off" },
-        "stat1-p": { pt: "Menos abandono do fluxo de cadastro.", en: "Less drop-off in the sign-up flow." },
-        "stat2-label": { pt: "Aprovação", en: "Approval" },
-        "stat2-p": { pt: "Aprovação automática dos documentos de identificação.", en: "Automatic approval of ID documents." },
+        "stat1-full": { pt: "<strong>Menos abandono</strong> do fluxo de cadastro.", en: "<strong>Less drop-off</strong> in the sign-up flow." },
+        "stat2-full": { pt: "<strong>Aprovação automática</strong> dos documentos de identificação.", en: "<strong>Automatic approval</strong> of ID documents." },
         "logged-in-title": { pt: "Área logada", en: "Logged-in area" },
         "fr1-h4": { pt: "Menu lateral e header simplificado", en: "Simplified sidebar and header" },
         "fr1-p": { pt: "A navegação foi reorganizada com a adoção de um menu lateral, posicionando a estrutura principal da plataforma como o primeiro elemento na leitura da interface.", en: "Navigation was reorganized with a sidebar menu, positioning the platform's main structure as the first element read in the interface." },
@@ -1779,9 +1708,7 @@
         "fr8-impact": { pt: "→ Consistência visual, menor carga cognitiva e maior escalabilidade.", en: "→ Visual consistency, less cognitive load, and greater scalability." },
         "rollout-title": { pt: "Rollout do site", en: "Site rollout" },
         "rollout-body": { pt: "Para minimizar riscos durante uma mudança estrutural da plataforma, optamos por um rollout gradual, disponibilizando inicialmente a nova experiência para apenas 5% da base de clientes e ampliando esse percentual de forma progressiva à medida que acompanhávamos métricas de estabilidade, comportamento e adoção. Como mudanças significativas de interface e arquitetura da informação podem gerar resistência mesmo quando representam uma melhoria, mantivemos, durante os primeiros meses, a opção de alternar entre a nova e a antiga experiência. Essa estratégia reduziu o impacto da transição, preservou a sensação de controle do usuário e mitigou o risco de abandono.", en: "To minimize risk during a structural platform change, we opted for a gradual rollout, initially making the new experience available to just 5% of the customer base and progressively expanding that share as we tracked stability, behavior, and adoption metrics. Since significant interface and information architecture changes can create resistance even when they represent an improvement, we kept the option to switch between the new and old experience during the first few months. This strategy reduced the impact of the transition, preserved users' sense of control, and mitigated the risk of drop-off." },
-        "stat3-label": { pt: "Base de clientes", en: "Customer base" },
         "stat3-p": { pt: "Tamanho da base no lançamento do site novo.", en: "Base size at the launch of the new site." },
-        "stat4-label": { pt: "não aceitação", en: "opt-out" },
         "stat4-p": { pt: "Taxa de retorno à versão antiga do site.", en: "Rate of return to the old version of the site." },
         "survey-title": { pt: "Pesquisa termômetro e acompanhamento", en: "Pulse survey and follow-up" },
         "survey-body": { pt: "Após a abertura da nova web para 30% dos clientes, devido ao volume de acessos à nova plataforma, foi disparada na dashboard (via Hotjar) uma pesquisa de termômetro, para acompanharmos as impressões dos clientes sobre a nova experiência da plataforma web.", en: "After the new web platform opened up to 30% of customers, due to the volume of traffic to the new platform, a pulse survey was triggered on the dashboard (via Hotjar) to track customer impressions of the new web platform experience." },
