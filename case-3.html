@@ -1032,8 +1032,12 @@
       .case-title-block h1 { font-size: 40px; line-height: 52px; }
       .case-title-block p { font-size: 18px; line-height: 28px; }
       .problems-grid { grid-template-columns: 1fr; gap: 32px; }
+      .challenge-group { text-align: center; }
+      .challenge-group::before,
+      .challenge-cards::before,
+      .challenge-card::before { display: none; }
       .challenge-cards { flex-direction: column; width: 100%; }
-      .challenge-card { width: 100%; }
+      .challenge-card { width: 100%; text-align: left; }
       .feature-row { flex-direction: column; }
       .evolution-image-frame { width: 100%; }
       .feature-text { width: 100%; flex: none; }
