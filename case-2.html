@@ -45,6 +45,11 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: var(--font);
       background-color: var(--bg);
@@ -277,7 +282,6 @@
     .main-content {
       display: flex;
       flex-direction: column;
-      padding-top: 176px;
       padding-bottom: 160px;
     }
 
@@ -287,9 +291,18 @@
       gap: 112px;
     }
 
+    /* Full-bleed: sai da largura de 1128px do .wrap e cobre a
+       viewport inteira, do fim do header até 72px abaixo do vídeo
+       principal (último filho). O .wrap interno realinha o conteúdo
+       com o restante da página. */
     .intro-block {
-      display: flex;
-      flex-direction: column;
+      background: #F7F7F8;
+      padding-top: 176px;
+      padding-bottom: 72px;
+      border-bottom: 1px solid #E8E8ED;
+      width: 100vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
     }
 
     /* ── CASE SWITCHER ──────────────────────────────────────── */
@@ -448,6 +461,9 @@
     .hero-video-frame {
       border-radius: 40px;
       box-shadow: 0 10px 20px rgba(44, 42, 42, 0.10);
+      height: 687px;
+      aspect-ratio: 1838 / 1184;
+      overflow: hidden;
     }
 
     /* ── REVELAÇÃO AO ROLAR (imagens e vídeos) ────────────────── */
@@ -470,12 +486,13 @@
 
     .hero-image {
       width: 100%;
-      height: auto;
+      height: 100%;
     }
 
     .hero-image video {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
       display: block;
       transition: transform 0.35s ease;
     }
@@ -882,10 +899,12 @@
     /* ── RESPONSIVO ─────────────────────────────────────────── */
     @media (max-width: 1024px) {
       :root { --gutter: 40px; }
-      .main-content { padding-top: 140px; padding-bottom: 96px; }
+      .main-content { padding-bottom: 96px; }
+      .intro-block { padding-top: 140px; }
       .page-flow { gap: 80px; }
       .case-title-block h1 { font-size: 56px; line-height: 60px; }
       .case-title-block p { font-size: 18px; line-height: 24px; }
+      .hero-video-frame { width: 100%; height: auto; }
       .checklist-grid { grid-template-columns: 1fr; }
       .risk-block { flex-direction: column; gap: 16px; }
       .swot-grid { grid-template-columns: 1fr; }
@@ -950,7 +969,8 @@
       }
 
       .wrap { max-width: calc(100% - 48px); }
-      .main-content { padding-top: 104px; padding-bottom: 64px; }
+      .main-content { padding-bottom: 64px; }
+      .intro-block { padding-top: 104px; }
       .page-flow { gap: 64px; }
       .case-title-block h1 { font-size: 36px; line-height: 40px; }
       .hero-video-frame, .ph, .design-image-frame { border-radius: 24px; }
@@ -1027,6 +1047,7 @@
 
       <!-- INTRO: seletor de case + título + imagem hero -->
       <div class="intro-block">
+       <div class="wrap">
 
         <!-- CASE SWITCHER -->
         <div class="case-switch-header">
@@ -1054,6 +1075,7 @@
           </div>
         </div>
 
+       </div>
       </div>
 
       <!-- CONTEXTO E OBJETIVOS -->

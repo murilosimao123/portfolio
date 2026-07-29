@@ -38,6 +38,11 @@
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
     body {
       font-family: var(--font);
       background-color: var(--bg);
@@ -259,7 +264,6 @@
     .main-content {
       display: flex;
       flex-direction: column;
-      padding-top: 176px;
       padding-bottom: 160px;
     }
 
@@ -269,9 +273,20 @@
       gap: 112px;
     }
 
+    /* Full-bleed: sai da largura de 1128px do .wrap e cobre a
+       viewport inteira, do fim do header até 72px abaixo do vídeo
+       principal (último filho). O .wrap interno realinha o conteúdo
+       com o restante da página. */
     .intro-block {
-      display: flex;
-      flex-direction: column;
+      background: #F7F7F8;
+      padding-top: 176px;
+      /* 144px = 72px desejados + 72px que o vídeo (mais alto que o
+         hero-gradient-block) já estoura visualmente por baixo dele. */
+      padding-bottom: 144px;
+      border-bottom: 1px solid #E8E8ED;
+      width: 100vw;
+      margin-left: 50%;
+      transform: translateX(-50%);
     }
 
     /* ── CASE SWITCHER ──────────────────────────────────────── */
@@ -379,7 +394,6 @@
       background: linear-gradient(180deg, #081457 0%, #001899 100%);
       overflow: visible;
       margin-top: 120px;
-      margin-bottom: 24px;
     }
 
     .hero-video-frame {
@@ -1033,7 +1047,8 @@
     /* ── RESPONSIVO ─────────────────────────────────────────── */
     @media (max-width: 1024px) {
       :root { --gutter: 40px; }
-      .main-content { padding-top: 140px; padding-bottom: 96px; }
+      .main-content { padding-bottom: 96px; }
+      .intro-block { padding-top: 140px; padding-bottom: 72px; }
       .page-flow { gap: 80px; }
       .case-title-block h1 { font-size: 40px; line-height: 52px; }
       .case-title-block p { font-size: 18px; line-height: 28px; }
@@ -1054,7 +1069,6 @@
         gap: 32px;
         height: auto;
         margin-top: 144px;
-        margin-bottom: 24px;
       }
       .hero-video-frame { width: 220px; height: auto; aspect-ratio: 359 / 772; }
       .hero-side-text { align-items: center; text-align: center; }
@@ -1117,7 +1131,8 @@
       }
 
       .wrap { max-width: calc(100% - 48px); }
-      .main-content { padding-top: 104px; padding-bottom: 64px; }
+      .main-content { padding-bottom: 64px; }
+      .intro-block { padding-top: 104px; }
       .page-flow { gap: 64px; }
       .case-title-block h1 { font-size: 36px; line-height: 40px; }
       .subsection-title { font-size: 20px; }
@@ -1198,6 +1213,7 @@
 
       <!-- INTRO: seletor de case + título -->
       <div class="intro-block">
+       <div class="wrap">
 
         <!-- CASE SWITCHER -->
         <div class="case-switch-header">
@@ -1236,6 +1252,7 @@
           </div>
         </div>
 
+       </div>
       </div>
 
       <!-- CONTEXTO -->
