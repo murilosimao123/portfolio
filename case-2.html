@@ -1062,8 +1062,14 @@
       padding: 40px;
       margin-top: 24px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       gap: 40px;
+    }
+
+    .donut-text-col h3 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
     }
 
     .donut-col { flex: 1 1 50%; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 24px; }
@@ -1072,18 +1078,45 @@
     .donut-figure { width: 100%; max-width: 340px; }
     .donut-svg { width: 100%; height: auto; display: block; overflow: visible; }
 
-    .donut-slice { transition: transform 0.2s ease, filter 0.2s ease; transform-origin: 220px 220px; }
-    .donut-slice:hover { filter: brightness(1.08); transform: scale(1.02); }
+    .donut-slice {
+      transform-origin: 220px 220px;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: transform 0.5s cubic-bezier(.34,1.56,.64,1), opacity 0.35s ease, filter 0.2s ease;
+    }
+    .donut-card.in-view .donut-slice { opacity: 1; transform: scale(1); }
+    .donut-card.in-view .donut-slice:hover { filter: brightness(1.08); transform: scale(1.03); }
+
+    .donut-slice:nth-child(1) { transition-delay: 0.05s; }
+    .donut-slice:nth-child(2) { transition-delay: 0.12s; }
+    .donut-slice:nth-child(3) { transition-delay: 0.19s; }
+    .donut-slice:nth-child(4) { transition-delay: 0.26s; }
+    .donut-slice:nth-child(5) { transition-delay: 0.33s; }
+    .donut-slice:nth-child(6) { transition-delay: 0.40s; }
+    .donut-slice:nth-child(7) { transition-delay: 0.47s; }
+
+    .donut-legend li {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .donut-card.in-view .donut-legend li { opacity: 1; transform: translateY(0); }
+    .donut-legend li:nth-child(1) { transition-delay: 0.55s; }
+    .donut-legend li:nth-child(2) { transition-delay: 0.60s; }
+    .donut-legend li:nth-child(3) { transition-delay: 0.65s; }
+    .donut-legend li:nth-child(4) { transition-delay: 0.70s; }
+    .donut-legend li:nth-child(5) { transition-delay: 0.75s; }
+    .donut-legend li:nth-child(6) { transition-delay: 0.80s; }
+    .donut-legend li:nth-child(7) { transition-delay: 0.85s; }
 
     .donut-legend {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
       list-style: none;
       padding: 0;
       margin: 0;
       width: 100%;
-      max-width: 340px;
     }
 
     .donut-legend li {
@@ -1228,6 +1261,7 @@
       /* Rosca: empilha gráfico+legenda e texto em coluna única no mobile */
       .donut-card { flex-direction: column; padding: 24px; gap: 24px; }
       .donut-figure { max-width: 220px; }
+      .donut-legend { grid-template-columns: 1fr; }
 
       /* Hero com fundo gradiente: raio menor e vídeo mais compacto */
       .hero-gradient-block {
@@ -1628,6 +1662,7 @@
             </ul>
           </div>
           <div class="donut-text-col">
+            <h3 data-i18n="value-title">Impacto em retenção e engajamento</h3>
             <p class="body-text" data-i18n="value-closing">Mesmo com funcionalidades limitadas em sua primeira versão, o aplicativo entregou valor suficiente para promover adoção e retenção entre a maior parte dos clientes que passaram a utilizá-lo.</p>
           </div>
         </div>
@@ -1749,6 +1784,7 @@
         "impact-li1": { pt: "<strong>Alta demanda reprimida:</strong> 71% dos clientes não sabiam que o app existia, mas a maioria demonstrou alto interesse em utilizá-lo.", en: "<strong>High pent-up demand:</strong> 71% of customers didn't know the app existed, but most showed strong interest in using it." },
         "impact-li2": { pt: "<strong>Percepção de valor para os clientes já usuários:</strong> o app foi associado à praticidade, mobilidade e agilidade na gestão das operações.", en: "<strong>Perceived value among existing users:</strong> the app was associated with convenience, mobility, and speed in managing operations." },
         "impact-closing": { pt: "A adoção do aplicativo seguiu com um crescimento orgânico e constante, ganhando em participação no volume de clientes da base ativa e número de operações.", en: "App adoption continued to grow organically and steadily, gaining share in both active customer base volume and number of operations." },
+        "value-title": { pt: "Impacto em retenção e engajamento", en: "Impact on retention and engagement" },
         "value-closing": { pt: "Mesmo com funcionalidades limitadas em sua primeira versão, o aplicativo entregou valor suficiente para promover adoção e retenção entre a maior parte dos clientes que passaram a utilizá-lo.", en: "Even with limited functionality in its first version, the app delivered enough value to drive adoption and retention among most of the customers who started using it." },
         "chart-sim-atende": { pt: "Sim, atende", en: "Yes, it meets my need" },
         "chart-nao-sei-dizer": { pt: "Não sei dizer", en: "Can't say" },
@@ -1873,6 +1909,17 @@
       }, { threshold: 0.2 });
 
       document.querySelectorAll('.hbar-card').forEach(card => hbarObserver.observe(card));
+
+      // ── Gráfico de rosca: fatias "preenchem" ao entrar na tela ──
+      const donutObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('in-view');
+          donutObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.3 });
+
+      document.querySelectorAll('.donut-card').forEach(card => donutObserver.observe(card));
 
       function positionIndicator(instant) {
         const activeLink = document.querySelector('.nav-links a.active');
