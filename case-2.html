@@ -954,12 +954,11 @@
     .section > .challenge-cards::before,
     .section > .challenge-cards { margin-top: 0; padding-top: 0; }
     .section > .challenge-cards::before { display: none; }
-    .section > .challenge-cards { width: 75%; }
-    .section > .challenge-cards .challenge-card { flex: 1 1 0; width: auto; }
 
-    /* 4 cards de 3 colunas (264px) somam a largura total do container */
-    .section > .challenge-cards.wide { width: 100%; gap: 24px; }
-    .section > .challenge-cards.wide .challenge-card { flex: 0 0 264px; width: 264px; }
+    /* Cards de 3 colunas (264px) e 24px de gap — mesmo tamanho em
+       qualquer quantidade de cards (3 ou 4 somam a largura total). */
+    .section > .challenge-cards { width: 100%; gap: 24px; }
+    .section > .challenge-cards .challenge-card { flex: 0 0 264px; width: 264px; }
 
     .challenge-card {
       position: relative;
@@ -1532,7 +1531,7 @@
       <!-- PRINCIPAL DESAFIO -->
       <section class="section">
         <h2 class="section-title" data-i18n="challenge3-title">Principal desafio</h2>
-        <p class="body-text" data-i18n="challenge3-p1">A decisão central do projeto não foi sobre quais funcionalidades construir, foi sobre disciplina de escopo. Não era viável replicar toda a plataforma web PJ dentro do app numa V1. Em vez de tentar entregar tudo, priorizamos as duas coisas que a pesquisa mostrava que os clientes mais precisavam: acompanhar o extrato, o status das transações e ser notificado de ordens de pagamentos recebidas do exterior. O resto ficou para depois.</p>
+        <p class="body-text" data-i18n="challenge3-p1">A decisão central do projeto não foi sobre quais funcionalidades construir, foi sobre disciplina de escopo. Não era viável replicar toda a plataforma web PJ dentro do app numa V1. Em vez de tentar entregar tudo, priorizamos as duas coisas que a pesquisa mostrava que os clientes mais precisavam: acompanhar o extrato, o status das transações, receber notificação de ordens de pagamentos recebidas do exterior e poder solicitar o resgate para a conta no Brasil. O resto ficou para depois.</p>
         <p class="body-text" data-i18n="challenge3-p2">Comunicar essa limitação com clareza, antes mesmo do download, foi o que evitou que o escopo reduzido virasse frustração. Foi essa combinação — escopo certo, comunicação honesta — que começou a reverter a percepção negativa do app, não uma lista maior de funcionalidades.</p>
         <img src="images/Case%202%20ideacao.png" alt="Cliente acessando o app pelo celular" data-i18n-alt="ideacao3-alt" style="width:100%; border-radius:40px; box-shadow:0 10px 20px rgba(44,42,42,0.10); margin-top:8px;">
       </section>
@@ -1582,7 +1581,7 @@
           </div>
           <div class="principle-cell full">
             <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><h4 data-i18n="dd3-5-title">Guia passo a passo para a primeira operação</h4><p data-i18n="dd3-5-body">Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT.</p></div>
+            <div><h4 data-i18n="dd3-5-title">Guia passo a passo para a primeira operação</h4><p data-i18n="dd3-5-body">Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT. Também orientou sobre as etapas necessárias até o resgate de uma ordem de pagamento.</p></div>
           </div>
         </div>
       </section>
@@ -1975,7 +1974,7 @@
         "problem3-4": { pt: "Como o app era um canal importante de aquisição, cada avaliação ruim comprometia o crescimento do produto PJ como um todo.", en: "Since the app was an important acquisition channel, every bad review hurt the growth of the business product as a whole." },
 
         "challenge3-title": { pt: "Principal desafio", en: "Main challenge" },
-        "challenge3-p1": { pt: "A decisão central do projeto não foi sobre quais funcionalidades construir, foi sobre disciplina de escopo. Não era viável replicar toda a plataforma web PJ dentro do app numa V1. Em vez de tentar entregar tudo, priorizamos as duas coisas que a pesquisa mostrava que os clientes mais precisavam: acompanhar o extrato, o status das transações e ser notificado de ordens de pagamentos recebidas do exterior. O resto ficou para depois.", en: "The project's central decision wasn't about which features to build, it was about scope discipline. It wasn't feasible to replicate the entire business web platform inside the app in a V1. Instead of trying to deliver everything, we prioritized what research showed customers needed most: tracking statements, transaction status, and being notified of payment orders received from abroad. Everything else was left for later." },
+        "challenge3-p1": { pt: "A decisão central do projeto não foi sobre quais funcionalidades construir, foi sobre disciplina de escopo. Não era viável replicar toda a plataforma web PJ dentro do app numa V1. Em vez de tentar entregar tudo, priorizamos as duas coisas que a pesquisa mostrava que os clientes mais precisavam: acompanhar o extrato, o status das transações, receber notificação de ordens de pagamentos recebidas do exterior e poder solicitar o resgate para a conta no Brasil. O resto ficou para depois.", en: "The project's central decision wasn't about which features to build, it was about scope discipline. It wasn't feasible to replicate the entire business web platform inside the app in a V1. Instead of trying to deliver everything, we prioritized what research showed customers needed most: tracking statements, transaction status, receiving notifications for payment orders from abroad, and being able to request a withdrawal to their account in Brazil. Everything else was left for later." },
         "challenge3-p2": { pt: "Comunicar essa limitação com clareza, antes mesmo do download, foi o que evitou que o escopo reduzido virasse frustração. Foi essa combinação — escopo certo, comunicação honesta — que começou a reverter a percepção negativa do app, não uma lista maior de funcionalidades.", en: "Communicating that limitation clearly, even before download, is what kept the reduced scope from turning into frustration. It was this combination — the right scope, honest communication — that started reversing the app's negative perception, not a longer feature list." },
         "ideacao3-alt": { pt: "Cliente acessando o app pelo celular", en: "Customer accessing the app on their phone" },
 
@@ -1999,7 +1998,7 @@
         "dd3-4-title": { pt: "Notificações de novas ordens de pagamento", en: "Notifications for new payment orders" },
         "dd3-4-body": { pt: "Porque a maioria dos clientes recebe do exterior e precisa agir rápido quando o dinheiro chega.", en: "Because most customers receive funds from abroad and need to act quickly when the money arrives." },
         "dd3-5-title": { pt: "Guia passo a passo para a primeira operação", en: "Step-by-step guide for the first operation" },
-        "dd3-5-body": { pt: "Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT.", en: "Simplified after tests showed the original feature was useful but confusing, especially around technical terms like IBAN and SWIFT." },
+        "dd3-5-body": { pt: "Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT. Também orientou sobre as etapas necessárias até o resgate de uma ordem de pagamento.", en: "Simplified after tests showed the original feature was useful but confusing, especially around technical terms like IBAN and SWIFT. It also guided customers through the steps needed to withdraw a payment order." },
 
         "sol3-1-intro": { pt: "Comunicação revisada no carrossel de destaques, nas lojas de aplicativo e no onboarding, deixando claro desde o início quem pode usar o app.", en: "Revised communication in the highlights carousel, app stores, and onboarding, making clear from the start who can use the app." },
         "sol3-2-intro": { pt: "MVP deliberadamente enxuto: extrato, status das transações, notificações de novas ordens, recebimentos e dados financeiros para controle contábil.", en: "Deliberately lean MVP: statement, transaction status, new order notifications, receiving funds, and financial data for accounting control." },
