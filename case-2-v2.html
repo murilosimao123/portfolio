@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="light">
-  <title>App PJ Remessa Online: MVP de alto impacto — Murilo Simão</title>
+  <title>App Pessoa Jurídica - Remessa Online — Murilo Simão</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -390,7 +390,7 @@
       gap: 64px;
       height: 532px;
       padding: 0 64px 0 120px;
-      border-radius: 72px;
+      border-radius: 96px;
       background: linear-gradient(180deg, #081457 0%, #001899 100%);
       overflow: visible;
       margin-top: 120px;
@@ -530,7 +530,7 @@
     }
 
     .evolution-image-frame {
-      width: 297.8px;
+      width: 334.4px;
       aspect-ratio: 528 / 1153;
       flex-shrink: 0;
       border-radius: 40px;
@@ -598,8 +598,7 @@
     .hero-video-frame,
     .evolution-image-frame,
     .feedback-frame,
-    .design-image-frame,
-    .img-placeholder {
+    .design-image-frame {
       opacity: 0;
       transform: translateY(40px);
       animation: scrollReveal 0.6s ease-out forwards;
@@ -609,84 +608,8 @@
     .hero-video-frame.in-view,
     .evolution-image-frame.in-view,
     .feedback-frame.in-view,
-    .design-image-frame.in-view,
-    .img-placeholder.in-view {
+    .design-image-frame.in-view {
       animation-play-state: running;
-    }
-
-    /* ── IMAGEM PLACEHOLDER GENÉRICA (rascunho) ───────────────── */
-    .img-placeholder {
-      background: repeating-linear-gradient(135deg, #F0F0F4, #F0F0F4 10px, #E8E8ED 10px, #E8E8ED 20px);
-      border: 1px dashed #CACACD;
-      border-radius: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #9B9D9A;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      text-align: center;
-      padding: 16px;
-      min-height: 96px;
-      transition: box-shadow 0.25s ease, translate 0.25s ease;
-    }
-
-    .img-placeholder:hover {
-      box-shadow: 0 20px 40px rgba(44, 44, 42, 0.2);
-      translate: 0 -4px;
-    }
-
-    /* ── DESTAQUES EM COLUNAS (hero stats / resultados) ───────── */
-    .highlight-stats {
-      display: grid;
-      background: #F7F7F8;
-      border-radius: 16px;
-    }
-
-    .highlight-stats.cols-4 { grid-template-columns: repeat(4, 1fr); }
-    .highlight-stats.cols-3 { grid-template-columns: repeat(3, 1fr); }
-
-    .highlight-cell {
-      padding: 24px 32px;
-      border-left: 1px solid #E5E5E8;
-      border-top: 1px solid transparent;
-    }
-
-    .highlight-stats.cols-4 .highlight-cell:nth-child(4n+1) { border-left: none; }
-    .highlight-stats.cols-3 .highlight-cell:nth-child(3n+1) { border-left: none; }
-    .highlight-stats.cols-3 .highlight-cell:nth-child(n+4) { border-top-color: #E5E5E8; }
-
-    .highlight-cell .num {
-      font-size: 32px;
-      font-weight: 700;
-      color: #C63662;
-      line-height: 1.15;
-      margin-bottom: 8px;
-    }
-
-    .highlight-cell p {
-      font-size: 14px;
-      line-height: 18px;
-      color: var(--text);
-    }
-
-    /* ── GALERIA DE IMAGENS (Área não logada / logada) ────────── */
-    .gallery-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .gallery-row {
-      display: flex;
-      gap: 24px;
-    }
-
-    .gallery-row .img-placeholder {
-      flex: 1;
-      min-width: 0;
     }
 
     /* ── FEEDBACKS DA APP STORE ───────────────────────────────── */
@@ -947,19 +870,6 @@
       height: 1px;
       background: #E5E5E8;
     }
-
-    /* Sem o .challenge-tag acima (rascunho usa h3 no lugar), a linha
-       conectora fica órfã — desativada quando os cards não estão
-       dentro de um .challenge-group. */
-    .section > .challenge-cards::before,
-    .section > .challenge-cards { margin-top: 0; padding-top: 0; }
-    .section > .challenge-cards::before { display: none; }
-    .section > .challenge-cards { width: 75%; }
-    .section > .challenge-cards .challenge-card { flex: 1 1 0; width: auto; }
-
-    /* 4 cards de 3 colunas (264px) somam a largura total do container */
-    .section > .challenge-cards.wide { width: 100%; gap: 24px; }
-    .section > .challenge-cards.wide .challenge-card { flex: 0 0 264px; width: 264px; }
 
     .challenge-card {
       position: relative;
@@ -1260,14 +1170,6 @@
       }
       .hero-video-frame { width: 220px; height: auto; aspect-ratio: 359 / 772; }
       .hero-side-text { align-items: center; text-align: center; }
-
-      .gallery-row { flex-direction: column; }
-      .highlight-stats.cols-4,
-      .highlight-stats.cols-3 { grid-template-columns: repeat(2, 1fr); }
-      .highlight-stats .highlight-cell { border-left: 1px solid #E5E5E8; border-top-color: transparent; }
-      .highlight-stats .highlight-cell:nth-child(2n+1) { border-left: none; }
-      .highlight-stats.cols-4 .highlight-cell:nth-child(n+3),
-      .highlight-stats.cols-3 .highlight-cell:nth-child(n+3) { border-top-color: #E5E5E8; }
     }
 
     @media (max-width: 768px) {
@@ -1335,11 +1237,6 @@
       .principles-table { grid-template-columns: 1fr; }
       .principle-cell:nth-child(odd) { border-right: none; }
       .principles-table .principle-cell:nth-last-child(2) { border-bottom: 1px solid #E5E5E8; }
-
-      .highlight-stats.cols-4,
-      .highlight-stats.cols-3 { grid-template-columns: 1fr; }
-      .highlight-cell { border-left: none !important; border-top-color: #E5E5E8 !important; }
-      .highlight-cell:first-child { border-top-color: transparent !important; }
 
       /* Menos padding lateral nos cards de fundo branco */
       .problems-box { padding: 20px; }
@@ -1427,7 +1324,7 @@
           <span class="case-switch-title" data-i18n="my-work">Meus trabalhos</span>
           <div class="case-switch-list">
             <a href="case-1.html" style="view-transition-name: case-tab-1;">1</a>
-            <a href="case-2.html" class="active" style="view-transition-name: case-tab-2;" data-i18n="tab2-label">2 - MVP de alto impacto</a>
+            <a href="case-2.html" class="active" style="view-transition-name: case-tab-2;" data-i18n="tab2-label">2 - App Pessoa Jurídica</a>
             <a href="case-3.html" style="view-transition-name: case-tab-3;">3</a>
           </div>
         </div>
@@ -1438,16 +1335,7 @@
 
         <!-- TÍTULO -->
         <div class="case-title-block">
-          <h1 data-i18n="c3b-title">App PJ Remessa Online: da necessidade do mercado a um MVP de alto impacto</h1>
-          <p data-i18n="c3b-intro">Como defini um escopo mínimo para o app de clientes Pessoa Jurídica da Remessa Online, priorizando o que os clientes mais precisavam em vez de tentar replicar toda a plataforma web de uma vez. 77,4% dos clientes dizem que esse MVP atende ao que precisam. A recuperação da nota do app nas lojas, para acima de 4,5, veio como consequência, não como objetivo do projeto.</p>
-          <div class="tag-row">
-            <span class="tag-pill">App</span>
-            <span class="tag-pill">Mobile</span>
-            <span class="tag-pill" data-i18n="tag-pj">Pessoa Jurídica</span>
-            <span class="tag-pill">Discovery</span>
-            <span class="tag-pill">UX Research</span>
-            <span class="tag-pill">MVP</span>
-          </div>
+          <h1 data-i18n="c3-title">App Pessoa Jurídica - Remessa Online</h1>
         </div>
 
         <div class="hero-gradient-block">
@@ -1455,9 +1343,10 @@
             <video src="images/N%C3%A3o%20logado.mp4" autoplay muted playsinline></video>
           </div>
           <div class="hero-side-text">
+            <p data-i18n="c3-intro">Criação do aplicativo para clientes Pessoa Jurídica da Remessa Online.</p>
             <div class="store-buttons">
-              <a href="https://apps.apple.com/br/app/remessa-online-c%C3%A2mbio-pj-e-pf/id1491830364" target="_blank" rel="noopener" aria-label="Baixar na App Store" data-i18n-aria="store-apple-aria"><img src="images/appstore.svg" alt="Baixar na App Store" data-i18n-alt="store-apple-aria"></a>
-              <a href="https://play.google.com/store/apps/details?id=br.com.remessaonline&pcampaignid=web_share" target="_blank" rel="noopener" aria-label="Baixar no Google Play" data-i18n-aria="store-google-aria"><img src="images/googleplay.svg" alt="Baixar no Google Play" data-i18n-alt="store-google-aria"></a>
+              <a href="https://apps.apple.com/br/app/remessa-online-c%C3%A2mbio-pj-e-pf/id1491830364" target="_blank" rel="noopener" aria-label="Download on the App Store"><img src="images/Apple.svg" alt="Download on the App Store"></a>
+              <a href="https://play.google.com/store/apps/details?id=br.com.remessaonline&pcampaignid=web_share" target="_blank" rel="noopener" aria-label="Get it on Google Play"><img src="images/Play%20store.svg" alt="Get it on Google Play"></a>
             </div>
             <hr class="hero-role-divider">
             <div class="hero-role">
@@ -1470,216 +1359,214 @@
        </div>
       </div>
 
-      <!-- DESTAQUES (hero) -->
-      <div class="wrap">
-        <div class="highlight-stats cols-4">
-          <div class="highlight-cell"><div class="num">77,4%</div><p data-i18n="hero3-stat1">dos clientes dizem que o MVP atende ao que precisam</p></div>
-          <div class="highlight-cell"><div class="num">71%</div><p data-i18n="hero3-stat2">de demanda reprimida validada, mesmo com escopo reduzido</p></div>
-          <div class="highlight-cell"><div class="num" data-i18n="stat-organic">Orgânico</div><p data-i18n="hero3-stat3">crescimento constante da base ativa no app, mês a mês</p></div>
-          <div class="highlight-cell"><div class="num">&gt;4,5</div><p data-i18n="hero3-stat4">nota nas lojas desde 2024 — consequência, não objetivo</p></div>
-        </div>
-      </div>
-
-      <!-- RESUMO RÁPIDO -->
+      <!-- CONTEXTO -->
       <section class="section">
-        <h2 class="section-title" data-i18n="summary3-title">Resumo rápido</h2>
-        <p class="body-text" data-i18n="summary3-p1">Em um primeiro momento, o maior desafio deste projeto era de escopo. O app da Remessa Online não tinha como replicar, numa V1, tudo o que a plataforma web já oferecia para clientes Pessoa Jurídica. A pergunta central era outra: o que entregar primeiro para que o app já fizesse sentido, mesmo com funcionalidades limitadas?</p>
-        <p class="body-text" data-i18n="summary3-p2">Defini o MVP a partir do que a pesquisa mostrava que os clientes mais precisavam — extrato, status das transações e receber notificações, e priorizei comunicar essa limitação com clareza, em vez de escondê-la. O resultado foi um app que entregava valor real desde o primeiro dia, mesmo limitado em funcionalidades: adoção orgânica constante, validação de uma demanda reprimida de 71% e, como consequência de tudo isso, a recuperação da nota nas lojas para acima de 4,5.</p>
+        <h2 class="section-title" data-i18n="context3-title">Contexto</h2>
+        <p class="body-text" data-i18n="context3-body">Pesquisas com clientes e análises de feedbacks em canais de atendimento e nas app stores evidenciaram a necessidade de um aplicativo para clientes Pessoa Jurídica, disponível até então apenas na plataforma web.<br><br>O maior desafio do projeto foi definir um MVP que entregasse valor desde o primeiro lançamento, equilibrando limitações de escopo com uma experiência capaz de atender às principais necessidades dos clientes.</p>
+        <hr class="section-divider">
       </section>
 
-      <!-- O CONTEXTO -->
+      <!-- DISCOVERY -->
       <section class="section">
-        <h2 class="section-title" data-i18n="context3b-title">O contexto</h2>
-        <p class="body-text" data-i18n="context3b-p1">Pesquisas com clientes e análises de feedback em canais de atendimento e nas app stores evidenciaram a necessidade de um aplicativo para clientes Pessoa Jurídica, até então disponível apenas na plataforma web.</p>
-        <p class="body-text" data-i18n="context3b-p2"><strong>Objetivo:</strong> definir um MVP que entregasse valor desde o primeiro lançamento, equilibrando as limitações reais de escopo com uma experiência capaz de atender às principais necessidades dos clientes PJ — sem tentar fazer tudo de uma vez.</p>
-        <div class="feedback-row" style="margin-top:16px;">
-          <button type="button" class="feedback-frame" data-full="images/Feedback%20playstore%202%201.png" aria-label="Ampliar feedback de cliente na Play Store 1" data-i18n-aria="feedback3-aria-1"><img src="images/Feedback%20playstore%202%201.png" alt="Feedback de cliente na Play Store 1" data-i18n-alt="feedback3-alt-1"></button>
-          <button type="button" class="feedback-frame" data-full="images/Feedback%20playstore%203.png" aria-label="Ampliar feedback de cliente na Play Store 2" data-i18n-aria="feedback3-aria-2"><img src="images/Feedback%20playstore%203.png" alt="Feedback de cliente na Play Store 2" data-i18n-alt="feedback3-alt-2"></button>
+        <h2 class="section-title" data-i18n="discovery3-title">Discovery</h2>
+        <h3 class="subsection-title" data-i18n="analysis3-title">Análise do problema</h3>
+        <p class="body-text" data-i18n="discover3-body">A nota do aplicativo vinha sendo impactada por avaliações negativas de clientes PJ, que só descobriam após o cadastro que o app atendia exclusivamente pessoas físicas. Essa limitação comprometia o app como canal de aquisição do produto PJ.</p>
+        <div class="feedback-row">
+          <button type="button" class="feedback-frame" data-full="images/Feedback%20playstore%202%201.png" aria-label="Ampliar feedback de cliente na Play Store 1"><img src="images/Feedback%20playstore%202%201.png" alt="Feedback de cliente na Play Store 1"></button>
+          <button type="button" class="feedback-frame" data-full="images/Feedback%20playstore%203.png" aria-label="Ampliar feedback de cliente na Play Store 2"><img src="images/Feedback%20playstore%203.png" alt="Feedback de cliente na Play Store 2"></button>
         </div>
+
+        <div style="margin-top:56px;">
+          <h3 class="subsection-title" style="margin-bottom:24px;" data-i18n="opportunities3-title">Principais oportunidades</h3>
+          <div class="problems-grid">
+            <div class="problem-card">
+              <h4 data-i18n="opp1-h4">Limitação para clientes PJ</h4>
+              <ul>
+                <li data-i18n="opp1-li1">Aplicativo restrito a transferências como pessoa física.</li>
+                <li data-i18n="opp1-li2">Clientes PJ descobriam a limitação apenas após o cadastro.</li>
+                <li data-i18n="opp1-li3">Frustração refletida em avaliações negativas na App Store.</li>
+              </ul>
+            </div>
+            <div class="problem-card">
+              <h4 data-i18n="opp2-h4">Comunicação pouco clara</h4>
+              <ul>
+                <li data-i18n="opp2-li1">A descrição da App Store não informava claramente a restrição para PJ.</li>
+                <li data-i18n="opp2-li2">A área não logada do aplicativo também não comunicava a limitação.</li>
+                <li data-i18n="opp2-li3">Expectativa do cliente desalinhada com a experiência oferecida.</li>
+              </ul>
+            </div>
+            <div class="problem-card">
+              <h4 data-i18n="opp3-h4">Impacto na aquisição e crescimento</h4>
+              <ul>
+                <li data-i18n="opp3-li1">Aplicativo era um importante canal de aquisição para a Remessa Online.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <hr class="section-divider">
       </section>
 
-      <!-- MEU PAPEL -->
+      <!-- IDEAÇÃO -->
       <section class="section">
-        <h2 class="section-title" data-i18n="role3b-title">Meu papel</h2>
-        <p class="body-text" data-i18n="role3b-body">Liderei o desenho da solução de ponta a ponta, do Discovery ao rollout. Nos meses seguintes ao lançamento, acompanhei o produto e conduzi pesquisas para medir o impacto e orientar a evolução da V2.</p>
-        <div class="tag-row">
-          <span class="tag-pill">Discovery</span>
-          <span class="tag-pill">UX Research</span>
-          <span class="tag-pill">UI Design</span>
-          <span class="tag-pill" data-i18n="tag-prototyping">Prototipação</span>
-          <span class="tag-pill" data-i18n="tag-tests">Testes</span>
-          <span class="tag-pill">Rollout</span>
-        </div>
-      </section>
-
-      <!-- O PROBLEMA REAL -->
-      <section class="section">
-        <h2 class="section-title" data-i18n="problem3-title">O problema real</h2>
-        <p class="body-text" data-i18n="problem3-intro">O sintoma era uma nota em queda nas lojas de aplicativo. Mas o problema de fundo era um descompasso entre o que o app entregava e o que o cliente esperava dele.</p>
+        <h2 class="section-title" data-i18n="principles3-title">Princípios que guiaram o projeto</h2>
         <div class="principles-table" style="margin-top:16px;">
           <div class="principle-cell">
             <span class="principle-num">1</span>
-            <div><p data-i18n="problem3-1">O aplicativo era restrito a transferências como pessoa física, mas isso não era comunicado com clareza.</p></div>
+            <div><h4 data-i18n="princ3-1-title">Entregar valor desde a primeira versão</h4><p data-i18n="princ3-1-body">Priorizar funcionalidades que resolvessem as principais necessidades dos clientes PJ, garantindo um MVP útil e relevante.</p></div>
           </div>
           <div class="principle-cell">
             <span class="principle-num">2</span>
-            <div><p data-i18n="problem3-2">Clientes PJ só descobriam a limitação depois de já terem se cadastrado.</p></div>
+            <div><h4 data-i18n="princ3-2-title">Alinhar expectativas desde o primeiro contato</h4><p data-i18n="princ3-2-body">Comunicar de forma clara quem pode utilizar o aplicativo e o que estava disponível, reduzindo frustrações durante a jornada.</p></div>
           </div>
           <div class="principle-cell">
             <span class="principle-num">3</span>
-            <div><p data-i18n="problem3-3">A frustração virava avaliação negativa na App Store e na Google Play.</p></div>
+            <div><h4 data-i18n="princ3-3-title">Priorizar o contexto mobile</h4><p data-i18n="princ3-3-body">Focar nas tarefas que exigem agilidade e mobilidade, permitindo que clientes acompanhassem operações e realizassem ações importantes de qualquer lugar.</p></div>
           </div>
           <div class="principle-cell">
             <span class="principle-num">4</span>
-            <div><p data-i18n="problem3-4">Como o app era um canal importante de aquisição, cada avaliação ruim comprometia o crescimento do produto PJ como um todo.</p></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PRINCIPAL DESAFIO -->
-      <section class="section">
-        <h2 class="section-title" data-i18n="challenge3-title">Principal desafio</h2>
-        <p class="body-text" data-i18n="challenge3-p1">A decisão central do projeto não foi sobre quais funcionalidades construir, foi sobre disciplina de escopo. Não era viável replicar toda a plataforma web PJ dentro do app numa V1. Em vez de tentar entregar tudo, priorizamos as duas coisas que a pesquisa mostrava que os clientes mais precisavam: acompanhar o extrato, o status das transações e ser notificado de ordens de pagamentos recebidas do exterior. O resto ficou para depois.</p>
-        <p class="body-text" data-i18n="challenge3-p2">Comunicar essa limitação com clareza, antes mesmo do download, foi o que evitou que o escopo reduzido virasse frustração. Foi essa combinação — escopo certo, comunicação honesta — que começou a reverter a percepção negativa do app, não uma lista maior de funcionalidades.</p>
-        <img src="images/Case%202%20ideacao.png" alt="Cliente acessando o app pelo celular" data-i18n-alt="ideacao3-alt" style="width:100%; border-radius:40px; box-shadow:0 10px 20px rgba(44,42,42,0.10); margin-top:8px;">
-      </section>
-
-      <!-- COMO ATRAVESSEI O PROBLEMA -->
-      <section class="section">
-        <h2 class="section-title" data-i18n="approach3-title">Como atravessei o problema</h2>
-        <div class="principles-table" style="margin-top:16px;">
-          <div class="principle-cell">
-            <span class="principle-num">1</span>
-            <div><h4 data-i18n="approach3-1-title">Diagnóstico com dados reais</h4><p data-i18n="approach3-1-body">Analisei avaliações, atendimentos e pesquisas para identificar os principais pontos de frustração dos clientes.</p></div>
-          </div>
-          <div class="principle-cell">
-            <span class="principle-num">2</span>
-            <div><h4 data-i18n="approach3-2-title">Princípios antes de telas</h4><p data-i18n="approach3-2-body">Defini cinco princípios para orientar a V1: gerar valor rapidamente, alinhar expectativas, priorizar o mobile e garantir evolução do produto.</p></div>
-          </div>
-          <div class="principle-cell">
-            <span class="principle-num">3</span>
-            <div><h4 data-i18n="approach3-3-title">Escopo de MVP orientado por pesquisa</h4><p data-i18n="approach3-3-body">Priorizei as funcionalidades mais demandadas e deixei recursos não essenciais para versões futuras.</p></div>
-          </div>
-          <div class="principle-cell">
-            <span class="principle-num">4</span>
-            <div><h4 data-i18n="approach3-4-title">Validação pós-rollout</h4><p data-i18n="approach3-4-body">Conduzi pesquisa com clientes PJ para validar a entrega de valor e orientar a priorização da V2.</p></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- DECISÕES DE DESIGN -->
-      <section class="section">
-        <h2 class="section-title" data-i18n="decisions3-title">Ideação e decisões de design</h2>
-        <div class="principles-table" style="margin-top:16px;">
-          <div class="principle-cell">
-            <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><h4 data-i18n="dd3-1-title">Escopo V1 focado em extrato e status</h4><p data-i18n="dd3-1-body">Porque era exatamente o que a pesquisa mostrava que os clientes mais precisavam, mesmo abrindo mão de outras funcionalidades da plataforma web.</p></div>
-          </div>
-          <div class="principle-cell">
-            <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><h4 data-i18n="dd3-2-title">Comunicação clara na loja de aplicativos</h4><p data-i18n="dd3-2-body">Para alinhar a expectativa do cliente PJ antes mesmo do download, evitando que o escopo reduzido virasse frustração.</p></div>
-          </div>
-          <div class="principle-cell">
-            <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><h4 data-i18n="dd3-3-title">Onboarding único para PF e PJ</h4><p data-i18n="dd3-3-body">Para manter consistência sem duplicar a experiência dentro do mesmo app.</p></div>
-          </div>
-          <div class="principle-cell">
-            <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><h4 data-i18n="dd3-4-title">Notificações de novas ordens de pagamento</h4><p data-i18n="dd3-4-body">Porque a maioria dos clientes recebe do exterior e precisa agir rápido quando o dinheiro chega.</p></div>
+            <div><h4 data-i18n="princ3-4-title">Destacar o que exige atenção imediata</h4><p data-i18n="princ3-4-body">Tornar informações críticas, como novas ordens de pagamento e status das operações, facilmente acessíveis e visíveis.</p></div>
           </div>
           <div class="principle-cell full">
-            <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><h4 data-i18n="dd3-5-title">Guia passo a passo para a primeira operação</h4><p data-i18n="dd3-5-body">Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT.</p></div>
+            <span class="principle-num">5</span>
+            <div><h4 data-i18n="princ3-5-title">Projetar para evoluir</h4><p data-i18n="princ3-5-body">Criar uma experiência simples para o lançamento inicial, mas preparada para incorporar novas funcionalidades sem perder consistência.</p></div>
           </div>
         </div>
+        <hr class="section-divider">
       </section>
 
-      <!-- A SOLUÇÃO -->
+      <!-- DEFINIÇÕES -->
       <section class="section">
-        <h3 class="subsection-title" style="font-size:20px;" data-i18n="def1-title">Área não logada</h3>
-        <p class="body-text" data-i18n="sol3-1-intro">Comunicação revisada no carrossel de destaques, nas lojas de aplicativo e no onboarding, deixando claro desde o início quem pode usar o app.</p>
-        <div class="challenge-cards" style="margin-top:16px;">
-          <div class="challenge-card">
-            <span class="challenge-num">01</span>
-            <span class="challenge-icon"><img src="images/SVGs/mobile.svg" alt=""></span>
-            <h4 data-i18n="def1-card1-title">Comunicação geral</h4>
-            <p data-i18n="def1-card1-body">Revisão da comunicação e experiência do carrossel de destaques.</p>
-          </div>
-          <div class="challenge-card">
-            <span class="challenge-num">02</span>
-            <span class="challenge-icon"><img src="images/SVGs/laptop-mobile.svg" alt=""></span>
-            <h4 data-i18n="def1-card2-title">Comunicação lojas</h4>
-            <p data-i18n="def1-card2-body">Revisão da comunicação nas lojas de aplicativos e dos previews de tela.</p>
-          </div>
-          <div class="challenge-card">
-            <span class="challenge-num">03</span>
-            <span class="challenge-icon"><img src="images/SVGs/user-check.svg" alt=""></span>
-            <h4 data-i18n="def1-card3-title">Experiência onboarding</h4>
-            <p data-i18n="def1-card3-body">Redesign do login e onboarding contemplando os produtos PF e PJ.</p>
-          </div>
-        </div>
-        <div class="design-image-row">
-          <div class="design-image-frame"><div class="ph"><img src="images/Case%203.01.png" alt="Área não logada 1" data-i18n-alt="anl3-alt-1"></div></div>
-          <div class="design-image-frame"><div class="ph"><img src="images/Case%203.02.png" alt="Área não logada 2" data-i18n-alt="anl3-alt-2"></div></div>
-          <div class="design-image-frame"><div class="ph"><img src="images/Case%203.03.png" alt="Área não logada 3" data-i18n-alt="anl3-alt-3"></div></div>
-        </div>
+        <h2 class="section-title" data-i18n="definitions-title">Definições e ideação</h2>
+        <h3 class="subsection-title" data-i18n="challenges-title">Desafios</h3>
 
-        <h3 class="subsection-title" style="margin-top:40px;font-size:20px;" data-i18n="def2-title">Área logada</h3>
-        <p class="body-text" data-i18n="sol3-2-intro">MVP deliberadamente enxuto: extrato, status das transações, notificações de novas ordens, recebimentos e dados financeiros para controle contábil.</p>
-        <div class="challenge-cards wide" style="margin-top:16px;">
-          <div class="challenge-card">
-            <span class="challenge-num">01</span>
-            <span class="challenge-icon"><img src="images/SVGs/mobile-1.svg" alt=""></span>
-            <h4 data-i18n="def2-card1-title">Escopo V1 do app</h4>
-            <p data-i18n="def2-card1-body">Pesquisa: clientes querem extrato e acompanhar status das transações.</p>
+        <div style="display:flex; flex-direction:column; gap:40px; margin-top:8px;">
+          <div>
+            <p class="body-text" data-i18n="def1-intro">O produto PJ passaria a dividir o mesmo aplicativo e arquitetura do PF.</p>
+            <div class="challenge-group">
+              <span class="challenge-tag" data-i18n="def1-title">Área não logada</span>
+              <div class="challenge-cards">
+                <div class="challenge-card">
+                  <span class="challenge-num">01</span>
+                  <span class="challenge-icon"><img src="images/SVGs/mobile.svg" alt=""></span>
+                  <h4 data-i18n="def1-card1-title">Comunicação geral</h4>
+                  <p data-i18n="def1-card1-body">Revisão da comunicação e experiência do carrossel de destaques.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">02</span>
+                  <span class="challenge-icon"><img src="images/SVGs/laptop-mobile.svg" alt=""></span>
+                  <h4 data-i18n="def1-card2-title">Comunicação lojas</h4>
+                  <p data-i18n="def1-card2-body">Revisão da comunicação nas lojas de aplicativos e dos previews de tela.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">03</span>
+                  <span class="challenge-icon"><img src="images/SVGs/user-check.svg" alt=""></span>
+                  <h4 data-i18n="def1-card3-title">Experiência onboarding</h4>
+                  <p data-i18n="def1-card3-body">Redesign do login e onboarding contemplando os produtos PF e PJ.</p>
+                </div>
+              </div>
+            </div>
+            <div class="design-image-row">
+              <div class="design-image-frame"><div class="ph"><img src="images/Case%203.01.png" alt="Área não logada 1"></div></div>
+              <div class="design-image-frame"><div class="ph"><img src="images/Case%203.02.png" alt="Área não logada 2"></div></div>
+              <div class="design-image-frame"><div class="ph"><img src="images/Case%203.03.png" alt="Área não logada 3"></div></div>
+            </div>
           </div>
-          <div class="challenge-card">
-            <span class="challenge-num">02</span>
-            <span class="challenge-icon"><img src="images/SVGs/bell.svg" alt=""></span>
-            <h4 data-i18n="def2-card2-title">Notificação</h4>
-            <p data-i18n="def2-card2-body">Maioria recebe do exterior — notificações de novas ordens de pagamento.</p>
-          </div>
-          <div class="challenge-card">
-            <span class="challenge-num">03</span>
-            <span class="challenge-icon"><img src="images/SVGs/arrow-down-left.svg" alt=""></span>
-            <h4 data-i18n="def2-card3-title">Recebimentos</h4>
-            <p data-i18n="def2-card3-body">Necessidade de resgatar o dinheiro com urgência após a chegada da ordem.</p>
-          </div>
-          <div class="challenge-card">
-            <span class="challenge-num">04</span>
-            <span class="challenge-icon"><img src="images/SVGs/ballot-check.svg" alt=""></span>
-            <h4 data-i18n="def2-card4-title">Dados financeiros</h4>
-            <p data-i18n="def2-card4-body">Histórico de transações e detalhes para contabilidade e controle financeiro.</p>
+
+          <div style="margin-top:40px;">
+            <p class="body-text" data-i18n="def2-intro">Definição do escopo da V1:</p>
+            <div class="challenge-group">
+              <span class="challenge-tag" data-i18n="def2-title">Área logada</span>
+              <div class="challenge-cards">
+                <div class="challenge-card">
+                  <span class="challenge-num">01</span>
+                  <span class="challenge-icon"><img src="images/SVGs/mobile-1.svg" alt=""></span>
+                  <h4 data-i18n="def2-card1-title">Escopo V1 do app</h4>
+                  <p data-i18n="def2-card1-body">Pesquisa: clientes querem extrato e acompanhar status das transações.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">02</span>
+                  <span class="challenge-icon"><img src="images/SVGs/bell.svg" alt=""></span>
+                  <h4 data-i18n="def2-card2-title">Notificação</h4>
+                  <p data-i18n="def2-card2-body">Maioria recebe do exterior — notificações de novas ordens de pagamento.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">03</span>
+                  <span class="challenge-icon"><img src="images/SVGs/arrow-down-left.svg" alt=""></span>
+                  <h4 data-i18n="def2-card3-title">Recebimentos</h4>
+                  <p data-i18n="def2-card3-body">Necessidade de resgatar o dinheiro com urgência após a chegada da ordem.</p>
+                </div>
+                <div class="challenge-card">
+                  <span class="challenge-num">04</span>
+                  <span class="challenge-icon"><img src="images/SVGs/ballot-check.svg" alt=""></span>
+                  <h4 data-i18n="def2-card4-title">Dados financeiros</h4>
+                  <p data-i18n="def2-card4-body">Histórico de transações e detalhes para contabilidade e controle financeiro.</p>
+                </div>
+              </div>
+            </div>
+            <div class="design-image-row">
+              <div class="design-image-frame"><div class="ph"><img src="images/Case%203.1.png" alt="Área logada 1"></div></div>
+              <div class="design-image-frame"><div class="ph"><img src="images/Case%203.2.png" alt="Área logada 2"></div></div>
+              <div class="design-image-frame"><div class="ph"><img src="images/Case%203.3.png" alt="Área logada 3"></div></div>
+            </div>
           </div>
         </div>
-        <div class="design-image-row">
-          <div class="design-image-frame"><div class="ph"><img src="images/Case%203.1.png" alt="Área logada 1" data-i18n-alt="al3-alt-1"></div></div>
-          <div class="design-image-frame"><div class="ph"><img src="images/Case%203.2.png" alt="Área logada 2" data-i18n-alt="al3-alt-2"></div></div>
-          <div class="design-image-frame"><div class="ph"><img src="images/Case%203.3.png" alt="Área logada 3" data-i18n-alt="al3-alt-3"></div></div>
-        </div>
+        <hr class="section-divider">
       </section>
 
-      <!-- GUIA PASSO A PASSO: PRIMEIRA EVOLUÇÃO DO PRODUTO -->
+      <!-- ROLLOUT V1 E ACOMPANHAMENTO -->
+      <section class="section">
+        <h2 class="section-title" data-i18n="rollout3-title">Rollout V1 e acompanhamento</h2>
+        <h3 class="subsection-title" data-i18n="postlaunch3-title">Pesquisa pós-rollout</h3>
+        <p class="body-text" data-i18n="postlaunch3-body">Entender a percepção dos primeiros usuários da V1 do aplicativo PJ, validar hipóteses, identificar oportunidades de melhoria e apoiar a priorização da V2.</p>
+
+        <div style="margin-top:8px; display:flex; flex-direction:column; gap:16px;">
+          <p class="body-text" style="font-weight:700;" data-i18n="what-was-done-title">O que foi feito</p>
+          <p class="body-text" style="margin-top:-16px;" data-i18n="what-was-done-body">Pesquisa qualitativa com 6 clientes PJ para avaliar a experiência com a V1, expectativas e principais necessidades.</p>
+
+          <p class="body-text" style="font-weight:700;" data-i18n="insights3-title">Principais insights</p>
+          <div class="principles-table">
+            <div class="principle-cell">
+              <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <div><p data-i18n="insight3-1">A V1 foi bem recebida e já entregava valor, mesmo com escopo reduzido.</p></div>
+            </div>
+            <div class="principle-cell">
+              <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <div><p data-i18n="insight3-2">Usuários iniciantes precisavam de mais orientação e transparência durante a jornada.</p></div>
+            </div>
+            <div class="principle-cell">
+              <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <div><p data-i18n="insight3-3">A principal dor era a ansiedade com os prazos de recebimento, mais do que com a cotação.</p></div>
+            </div>
+            <div class="principle-cell">
+              <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <div><p data-i18n="insight3-4">Os achados direcionaram a evolução da V2, com foco em mais informações sobre as operações e novas funcionalidades financeiras.</p></div>
+            </div>
+          </div>
+        </div>
+        <hr class="section-divider">
+      </section>
+
+      <!-- EVOLUÇÃO DO PRODUTO -->
       <section class="section">
         <div class="feature-row">
-          <div class="evolution-image-frame"><div class="ph"><img src="images/Passo%20a%20passo.png" alt="Guia passo a passo" data-i18n-alt="guide3-alt"></div></div>
+          <div class="evolution-image-frame"><div class="ph"><img src="images/Passo%20a%20passo.png" alt="Guia passo a passo"></div></div>
           <div class="feature-text">
-            <h2 class="section-title" data-i18n="guide3-title">Guia passo a passo: primeira evolução do produto</h2>
+            <h2 class="section-title" data-i18n="evolution-title">Evolução do produto</h2>
             <p class="body-text" data-i18n="evolution-body">Após o lançamento do MVP, identificamos uma oportunidade de apoiar clientes PJ durante a primeira operação. Para validar essa hipótese, prototipamos um guia passo a passo e conduzimos testes de usabilidade com clientes que ainda não haviam recebido recursos pelo aplicativo.<br><br>Os testes mostraram que a funcionalidade era percebida como útil, mas seu propósito não estava claro. A partir dos aprendizados, simplificamos o conteúdo, reduzimos a quantidade de informações por etapa e refinamos a comunicação para tornar a jornada mais intuitiva, especialmente em conceitos técnicos como IBAN, SWIFT e banco intermediário.</p>
           </div>
         </div>
+        <hr class="section-divider">
       </section>
 
-      <!-- RESULTADOS -->
+      <!-- IMPACTO PARA O NEGÓCIO -->
       <section class="section">
-        <h2 class="section-title" data-i18n="results3-title">Resultados</h2>
-        <div class="highlight-stats cols-3" style="margin-top:16px;">
-          <div class="highlight-cell"><div class="num">77,4%</div><p data-i18n="results3-stat1">dos clientes responderam que o MVP atende às suas necessidades, mesmo com escopo reduzido</p></div>
-          <div class="highlight-cell"><div class="num">71%</div><p data-i18n="results3-stat2">dos clientes PJ não sabiam que o app existia, mas demonstraram alto interesse em usá-lo</p></div>
-          <div class="highlight-cell"><div class="num" data-i18n="stat-organic">Orgânico</div><p data-i18n="results3-stat3">participação da base app cresceu mês a mês desde o lançamento, sem campanhas pagas de aquisição</p></div>
-        </div>
-
-        <p class="body-text" style="margin-top:8px;" data-i18n="impact-closing">A adoção do aplicativo seguiu com um crescimento orgânico e constante, ganhando em participação no volume de clientes da base ativa e número de operações.</p>
+        <h2 class="section-title" data-i18n="impact-title">Impacto para o negócio e o valor percebido</h2>
+        <p class="body-text" data-i18n="impact-intro">Em pesquisa quantitativa para toda a base de clientes PJ, vimos que o aplicativo já era percebido como uma solução de alto valor, mesmo entre aqueles que ainda não o utilizavam:</p>
+        <ul class="bullet-list">
+          <li data-i18n="impact-li1">Alta demanda reprimida: 71% dos clientes não sabiam que o app existia, mas a maioria demonstrou alto interesse em utilizá-lo.</li>
+          <li data-i18n="impact-li2">Percepção de valor para os clientes já usuários: o app foi associado à praticidade, mobilidade e agilidade na gestão das operações.</li>
+        </ul>
+        <p class="body-text" style="margin-top:16px;" data-i18n="impact-closing">A adoção do aplicativo seguiu com um crescimento orgânico e constante, ganhando em participação no volume de clientes da base ativa e número de operações.</p>
 
         <div class="hbar-card">
           <div class="hbar-legend">
@@ -1780,32 +1667,12 @@
           </div>
         </div>
 
-        <p class="body-text" style="margin-top:16px;" data-i18n="results3-rating"><strong>&gt;4,5</strong> — nota do app nas lojas, mantida desde 2024. Uma consequência do valor entregue com o escopo certo — não o objetivo que guiou as decisões de design.</p>
-        <p class="body-text" data-i18n="results3-qual"><strong>Percepção qualitativa:</strong> o app foi associado pelos clientes já usuários à praticidade, mobilidade e agilidade na gestão das operações — mesmo com um escopo inicial reduzido.</p>
-
         <h3 class="subsection-title" style="margin-top:40px;font-size:20px;" data-i18n="storerating-title">Recuperação da nota de avaliação em lojas</h3>
         <p class="body-text" data-i18n="storerating-body">O lançamento do aplicativo para clientes PJ atendeu a uma das principais demandas da base de usuários. Após o lançamento, observamos uma recuperação consistente da nota do aplicativo, que passou a se manter acima de 4,5 desde 2024, refletindo uma melhora significativa na satisfação dos usuários e fortalecendo a credibilidade da plataforma.</p>
         <div class="feedback-row" style="margin-top:16px;">
           <button type="button" class="feedback-frame" data-full="images/playstore.png" aria-label="Ampliar avaliação na Google Play" data-i18n-aria="playstore-aria"><img src="images/playstore.png" alt="Avaliação do app na Google Play" data-i18n-alt="playstore-alt" style="width:360px; max-width:100%; height:186px; object-fit:cover;"></button>
           <button type="button" class="feedback-frame" data-full="images/appstore.png" aria-label="Ampliar avaliação na App Store" data-i18n-aria="appstore-aria"><img src="images/appstore.png" alt="Avaliação do app na App Store" data-i18n-alt="appstore-alt" style="width:360px; max-width:100%; height:186px; object-fit:cover;"></button>
         </div>
-      </section>
-
-      <!-- PRÓXIMOS PASSOS -->
-      <section class="section">
-        <h2 class="section-title" data-i18n="next3-title">Próximos passos</h2>
-        <p class="body-text" data-i18n="next3-intro">A pesquisa pós-rollout também revelou um insight que redirecionou a V2: a maior dor dos clientes não era a cotação, mas a ansiedade com os prazos de recebimento. Isso guiou a evolução do produto para:</p>
-        <ul class="bullet-list">
-          <li data-i18n="next3-li1">Mais informações sobre o andamento das operações, reduzindo a ansiedade durante a espera.</li>
-          <li data-i18n="next3-li2">Novas funcionalidades financeiras, ampliando o valor do app além do acompanhamento básico.</li>
-          <li data-i18n="next3-li3">Mais orientação para usuários iniciantes, que ainda precisavam de apoio durante a jornada.</li>
-        </ul>
-      </section>
-
-      <!-- O QUE EU LEVEI DESSE PROJETO -->
-      <section class="section">
-        <h2 class="section-title" data-i18n="learnings3-title">O que eu levei desse projeto</h2>
-        <p class="body-text" data-i18n="learnings3-body">Esse projeto mostrou que um escopo bem definido pode entregar mais valor do que um escopo maior e mal priorizado. A nota do app nas lojas não subiu porque adicionamos recursos, subiu porque o pouco que entregamos resolvia o que de fato importava, e comunicamos isso com honestidade desde antes do download.</p>
       </section>
 
     </div>
@@ -1835,8 +1702,8 @@
         "nav-contact": { pt: "Contato", en: "Contact" },
         "nav-open-menu": { pt: "Abrir menu", en: "Open menu" },
         "my-work": { pt: "Meus trabalhos", en: "My work" },
-        "tab2-label": { pt: "2 - MVP de alto impacto", en: "2 - High-impact MVP" },
-        "c3-title": { pt: "Remessa Online: App Pessoa Jurídica", en: "Remessa Online: Business Account App" },
+        "tab2-label": { pt: "2 - App Pessoa Jurídica", en: "2 - Business Account App" },
+        "c3-title": { pt: "App Pessoa Jurídica - Remessa Online", en: "Business Account App - Remessa Online" },
         "c3-intro": { pt: "Criação do aplicativo para clientes Pessoa Jurídica da Remessa Online.", en: "Creating the app for Remessa Online's business (legal entity) customers." },
 
         "context3-title": { pt: "Contexto", en: "Context" },
@@ -1944,97 +1811,6 @@
         "month-set": { pt: "setembro", en: "September" },
         "lightbox-aria": { pt: "Imagem ampliada", en: "Enlarged image" },
         "lightbox-close": { pt: "Fechar", en: "Close" },
-
-        "c3b-title": { pt: "App PJ Remessa Online: da necessidade do mercado a um MVP de alto impacto", en: "Remessa Online Business App: from market need to a high-impact MVP" },
-        "c3b-intro": { pt: "Como defini um escopo mínimo para o app de clientes Pessoa Jurídica da Remessa Online, priorizando o que os clientes mais precisavam em vez de tentar replicar toda a plataforma web de uma vez. 77,4% dos clientes dizem que esse MVP atende ao que precisam. A recuperação da nota do app nas lojas, para acima de 4,5, veio como consequência, não como objetivo do projeto.", en: "How I defined a minimal scope for Remessa Online's business (legal entity) customer app, prioritizing what customers needed most instead of trying to replicate the entire web platform at once. 77.4% of customers say this MVP meets what they need. The app's store rating recovering to above 4.5 came as a consequence, not as the project's goal." },
-        "tag-pj": { pt: "Pessoa Jurídica", en: "Business" },
-        "store-apple-aria": { pt: "Baixar na App Store", en: "Download on the App Store" },
-        "store-google-aria": { pt: "Baixar no Google Play", en: "Get it on Google Play" },
-
-        "hero3-stat1": { pt: "dos clientes dizem que o MVP atende ao que precisam", en: "of customers say the MVP meets what they need" },
-        "hero3-stat2": { pt: "de demanda reprimida validada, mesmo com escopo reduzido", en: "of pent-up demand validated, even with a reduced scope" },
-        "hero3-stat3": { pt: "crescimento constante da base ativa no app, mês a mês", en: "steady growth of the active base in the app, month over month" },
-        "hero3-stat4": { pt: "nota nas lojas desde 2024 — consequência, não objetivo", en: "store rating since 2024 — a consequence, not a goal" },
-        "stat-organic": { pt: "Orgânico", en: "Organic" },
-
-        "summary3-title": { pt: "Resumo rápido", en: "Quick summary" },
-        "summary3-p1": { pt: "Em um primeiro momento, o maior desafio deste projeto era de escopo. O app da Remessa Online não tinha como replicar, numa V1, tudo o que a plataforma web já oferecia para clientes Pessoa Jurídica. A pergunta central era outra: o que entregar primeiro para que o app já fizesse sentido, mesmo com funcionalidades limitadas?", en: "At first, the biggest challenge of this project was scope. Remessa Online's app couldn't replicate, in a V1, everything the web platform already offered business customers. The central question was different: what to deliver first so the app would already make sense, even with limited features?" },
-        "summary3-p2": { pt: "Defini o MVP a partir do que a pesquisa mostrava que os clientes mais precisavam — extrato, status das transações e receber notificações, e priorizei comunicar essa limitação com clareza, em vez de escondê-la. O resultado foi um app que entregava valor real desde o primeiro dia, mesmo limitado em funcionalidades: adoção orgânica constante, validação de uma demanda reprimida de 71% e, como consequência de tudo isso, a recuperação da nota nas lojas para acima de 4,5.", en: "I defined the MVP based on what research showed customers needed most — statements, transaction status, and receiving notifications — and prioritized communicating that limitation clearly, instead of hiding it. The result was an app that delivered real value from day one, even with limited features: steady organic adoption, validation of 71% pent-up demand, and, as a consequence of all that, the store rating recovering to above 4.5." },
-
-        "context3b-title": { pt: "O contexto", en: "The context" },
-        "context3b-p1": { pt: "Pesquisas com clientes e análises de feedback em canais de atendimento e nas app stores evidenciaram a necessidade de um aplicativo para clientes Pessoa Jurídica, até então disponível apenas na plataforma web.", en: "Customer research and feedback analysis across service channels and app stores showed the need for an app for business customers, until then only available on the web platform." },
-        "context3b-p2": { pt: "<strong>Objetivo:</strong> definir um MVP que entregasse valor desde o primeiro lançamento, equilibrando as limitações reais de escopo com uma experiência capaz de atender às principais necessidades dos clientes PJ — sem tentar fazer tudo de uma vez.", en: "<strong>Goal:</strong> define an MVP that delivered value from the first release, balancing real scope limitations with an experience capable of meeting business customers' main needs — without trying to do everything at once." },
-        "feedback3-aria-1": { pt: "Ampliar feedback de cliente na Play Store 1", en: "Enlarge customer feedback on Play Store 1" },
-        "feedback3-alt-1": { pt: "Feedback de cliente na Play Store 1", en: "Customer feedback on Play Store 1" },
-        "feedback3-aria-2": { pt: "Ampliar feedback de cliente na Play Store 2", en: "Enlarge customer feedback on Play Store 2" },
-        "feedback3-alt-2": { pt: "Feedback de cliente na Play Store 2", en: "Customer feedback on Play Store 2" },
-
-        "role3b-title": { pt: "Meu papel", en: "My role" },
-        "role3b-body": { pt: "Liderei o desenho da solução de ponta a ponta, do Discovery ao rollout. Nos meses seguintes ao lançamento, acompanhei o produto e conduzi pesquisas para medir o impacto e orientar a evolução da V2.", en: "I led the design of the solution end to end, from Discovery to rollout. In the months following launch, I tracked the product and ran research to measure impact and guide V2's evolution." },
-        "tag-prototyping": { pt: "Prototipação", en: "Prototyping" },
-        "tag-tests": { pt: "Testes", en: "Testing" },
-
-        "problem3-title": { pt: "O problema real", en: "The real problem" },
-        "problem3-intro": { pt: "O sintoma era uma nota em queda nas lojas de aplicativo. Mas o problema de fundo era um descompasso entre o que o app entregava e o que o cliente esperava dele.", en: "The symptom was a falling store rating. But the underlying problem was a mismatch between what the app delivered and what customers expected from it." },
-        "problem3-1": { pt: "O aplicativo era restrito a transferências como pessoa física, mas isso não era comunicado com clareza.", en: "The app was restricted to individual-customer transfers, but this wasn't clearly communicated." },
-        "problem3-2": { pt: "Clientes PJ só descobriam a limitação depois de já terem se cadastrado.", en: "Business customers only discovered the limitation after already signing up." },
-        "problem3-3": { pt: "A frustração virava avaliação negativa na App Store e na Google Play.", en: "The frustration turned into negative reviews on the App Store and Google Play." },
-        "problem3-4": { pt: "Como o app era um canal importante de aquisição, cada avaliação ruim comprometia o crescimento do produto PJ como um todo.", en: "Since the app was an important acquisition channel, every bad review hurt the growth of the business product as a whole." },
-
-        "challenge3-title": { pt: "Principal desafio", en: "Main challenge" },
-        "challenge3-p1": { pt: "A decisão central do projeto não foi sobre quais funcionalidades construir, foi sobre disciplina de escopo. Não era viável replicar toda a plataforma web PJ dentro do app numa V1. Em vez de tentar entregar tudo, priorizamos as duas coisas que a pesquisa mostrava que os clientes mais precisavam: acompanhar o extrato, o status das transações e ser notificado de ordens de pagamentos recebidas do exterior. O resto ficou para depois.", en: "The project's central decision wasn't about which features to build, it was about scope discipline. It wasn't feasible to replicate the entire business web platform inside the app in a V1. Instead of trying to deliver everything, we prioritized what research showed customers needed most: tracking statements, transaction status, and being notified of payment orders received from abroad. Everything else was left for later." },
-        "challenge3-p2": { pt: "Comunicar essa limitação com clareza, antes mesmo do download, foi o que evitou que o escopo reduzido virasse frustração. Foi essa combinação — escopo certo, comunicação honesta — que começou a reverter a percepção negativa do app, não uma lista maior de funcionalidades.", en: "Communicating that limitation clearly, even before download, is what kept the reduced scope from turning into frustration. It was this combination — the right scope, honest communication — that started reversing the app's negative perception, not a longer feature list." },
-        "ideacao3-alt": { pt: "Cliente acessando o app pelo celular", en: "Customer accessing the app on their phone" },
-
-        "approach3-title": { pt: "Como atravessei o problema", en: "How I worked through the problem" },
-        "approach3-1-title": { pt: "Diagnóstico com dados reais", en: "Diagnosis with real data" },
-        "approach3-1-body": { pt: "Analisei avaliações, atendimentos e pesquisas para identificar os principais pontos de frustração dos clientes.", en: "I analyzed reviews, support interactions, and research to identify customers' main pain points." },
-        "approach3-2-title": { pt: "Princípios antes de telas", en: "Principles before screens" },
-        "approach3-2-body": { pt: "Defini cinco princípios para orientar a V1: gerar valor rapidamente, alinhar expectativas, priorizar o mobile e garantir evolução do produto.", en: "I defined five principles to guide V1: generate value quickly, align expectations, prioritize mobile, and ensure the product could evolve." },
-        "approach3-3-title": { pt: "Escopo de MVP orientado por pesquisa", en: "Research-driven MVP scope" },
-        "approach3-3-body": { pt: "Priorizei as funcionalidades mais demandadas e deixei recursos não essenciais para versões futuras.", en: "I prioritized the most requested features and left non-essential ones for future versions." },
-        "approach3-4-title": { pt: "Validação pós-rollout", en: "Post-rollout validation" },
-        "approach3-4-body": { pt: "Conduzi pesquisa com clientes PJ para validar a entrega de valor e orientar a priorização da V2.", en: "I conducted research with business customers to validate the value delivered and guide V2 prioritization." },
-
-        "decisions3-title": { pt: "Ideação e decisões de design", en: "Ideation and design decisions" },
-        "dd3-1-title": { pt: "Escopo V1 focado em extrato e status", en: "V1 scope focused on statement and status" },
-        "dd3-1-body": { pt: "Porque era exatamente o que a pesquisa mostrava que os clientes mais precisavam, mesmo abrindo mão de outras funcionalidades da plataforma web.", en: "Because it was exactly what research showed customers needed most, even giving up other web platform features." },
-        "dd3-2-title": { pt: "Comunicação clara na loja de aplicativos", en: "Clear communication in the app store" },
-        "dd3-2-body": { pt: "Para alinhar a expectativa do cliente PJ antes mesmo do download, evitando que o escopo reduzido virasse frustração.", en: "To align business customers' expectations even before download, avoiding the reduced scope turning into frustration." },
-        "dd3-3-title": { pt: "Onboarding único para PF e PJ", en: "Single onboarding for individual and business customers" },
-        "dd3-3-body": { pt: "Para manter consistência sem duplicar a experiência dentro do mesmo app.", en: "To maintain consistency without duplicating the experience within the same app." },
-        "dd3-4-title": { pt: "Notificações de novas ordens de pagamento", en: "Notifications for new payment orders" },
-        "dd3-4-body": { pt: "Porque a maioria dos clientes recebe do exterior e precisa agir rápido quando o dinheiro chega.", en: "Because most customers receive funds from abroad and need to act quickly when the money arrives." },
-        "dd3-5-title": { pt: "Guia passo a passo para a primeira operação", en: "Step-by-step guide for the first operation" },
-        "dd3-5-body": { pt: "Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT.", en: "Simplified after tests showed the original feature was useful but confusing, especially around technical terms like IBAN and SWIFT." },
-
-        "sol3-1-intro": { pt: "Comunicação revisada no carrossel de destaques, nas lojas de aplicativo e no onboarding, deixando claro desde o início quem pode usar o app.", en: "Revised communication in the highlights carousel, app stores, and onboarding, making clear from the start who can use the app." },
-        "sol3-2-intro": { pt: "MVP deliberadamente enxuto: extrato, status das transações, notificações de novas ordens, recebimentos e dados financeiros para controle contábil.", en: "Deliberately lean MVP: statement, transaction status, new order notifications, receiving funds, and financial data for accounting control." },
-        "anl3-alt-1": { pt: "Área não logada 1", en: "Logged-out area 1" },
-        "anl3-alt-2": { pt: "Área não logada 2", en: "Logged-out area 2" },
-        "anl3-alt-3": { pt: "Área não logada 3", en: "Logged-out area 3" },
-        "al3-alt-1": { pt: "Área logada 1", en: "Logged-in area 1" },
-        "al3-alt-2": { pt: "Área logada 2", en: "Logged-in area 2" },
-        "al3-alt-3": { pt: "Área logada 3", en: "Logged-in area 3" },
-
-        "guide3-title": { pt: "Guia passo a passo: primeira evolução do produto", en: "Step-by-step guide: the product's first evolution" },
-        "guide3-alt": { pt: "Guia passo a passo", en: "Step-by-step guide" },
-
-        "results3-title": { pt: "Resultados", en: "Results" },
-        "results3-stat1": { pt: "dos clientes responderam que o MVP atende às suas necessidades, mesmo com escopo reduzido", en: "of customers said the MVP meets their needs, even with a reduced scope" },
-        "results3-stat2": { pt: "dos clientes PJ não sabiam que o app existia, mas demonstraram alto interesse em usá-lo", en: "of business customers didn't know the app existed, but showed strong interest in using it" },
-        "results3-stat3": { pt: "participação da base app cresceu mês a mês desde o lançamento, sem campanhas pagas de aquisição", en: "the app base's share grew month over month since launch, with no paid acquisition campaigns" },
-        "results3-rating": { pt: "<strong>&gt;4,5</strong> — nota do app nas lojas, mantida desde 2024. Uma consequência do valor entregue com o escopo certo — não o objetivo que guiou as decisões de design.", en: "<strong>&gt;4.5</strong> — the app's store rating, held since 2024. A consequence of the value delivered with the right scope — not the goal that guided design decisions." },
-        "results3-qual": { pt: "<strong>Percepção qualitativa:</strong> o app foi associado pelos clientes já usuários à praticidade, mobilidade e agilidade na gestão das operações — mesmo com um escopo inicial reduzido.", en: "<strong>Qualitative perception:</strong> existing users associated the app with convenience, mobility, and speed in managing operations — even with a reduced initial scope." },
-
-        "next3-title": { pt: "Próximos passos", en: "Next steps" },
-        "next3-intro": { pt: "A pesquisa pós-rollout também revelou um insight que redirecionou a V2: a maior dor dos clientes não era a cotação, mas a ansiedade com os prazos de recebimento. Isso guiou a evolução do produto para:", en: "Post-rollout research also revealed an insight that redirected V2: customers' biggest pain point wasn't the exchange rate, but anxiety about receiving timelines. That guided the product's evolution toward:" },
-        "next3-li1": { pt: "Mais informações sobre o andamento das operações, reduzindo a ansiedade durante a espera.", en: "More information about how operations are progressing, reducing anxiety during the wait." },
-        "next3-li2": { pt: "Novas funcionalidades financeiras, ampliando o valor do app além do acompanhamento básico.", en: "New financial features, extending the app's value beyond basic tracking." },
-        "next3-li3": { pt: "Mais orientação para usuários iniciantes, que ainda precisavam de apoio durante a jornada.", en: "More guidance for first-time users, who still needed support throughout the journey." },
-
-        "learnings3-title": { pt: "O que eu levei desse projeto", en: "What I took from this project" },
-        "learnings3-body": { pt: "Esse projeto mostrou que um escopo bem definido pode entregar mais valor do que um escopo maior e mal priorizado. A nota do app nas lojas não subiu porque adicionamos recursos, subiu porque o pouco que entregamos resolvia o que de fato importava, e comunicamos isso com honestidade desde antes do download.", en: "This project showed that a well-defined scope can deliver more value than a larger, poorly prioritized one. The app's store rating didn't rise because we added features — it rose because the little we delivered solved what actually mattered, and we communicated that honestly even before download." },
       };
 
       function applyLanguage(lang) {
@@ -2043,10 +1819,6 @@
         document.querySelectorAll('[data-i18n]').forEach(el => {
           const t = translations[el.getAttribute('data-i18n')];
           if (t && t[lang] != null) el.innerHTML = t[lang];
-        });
-        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
-          const t = translations[el.getAttribute('data-i18n-alt')];
-          if (t && t[lang] != null) el.alt = t[lang];
         });
         document.querySelectorAll('[data-i18n-aria]').forEach(el => {
           const t = translations[el.getAttribute('data-i18n-aria')];
@@ -2122,7 +1894,7 @@
         });
       }, { threshold: 0.2 });
 
-      document.querySelectorAll('.hero-video-frame, .evolution-image-frame, .feedback-frame, .design-image-frame, .img-placeholder').forEach(el => mediaRevealObserver.observe(el));
+      document.querySelectorAll('.hero-video-frame, .evolution-image-frame, .feedback-frame, .design-image-frame').forEach(el => mediaRevealObserver.observe(el));
 
       // ── Gráfico de adoção: barras "carregam" ao entrar na tela ──
       const hbarObserver = new IntersectionObserver((entries) => {
