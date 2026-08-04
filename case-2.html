@@ -599,7 +599,8 @@
     .evolution-image-frame,
     .feedback-frame,
     .design-image-frame,
-    .img-placeholder {
+    .img-placeholder,
+    .ideation-image-frame {
       opacity: 0;
       transform: translateY(40px);
       animation: scrollReveal 0.6s ease-out forwards;
@@ -610,9 +611,19 @@
     .evolution-image-frame.in-view,
     .feedback-frame.in-view,
     .design-image-frame.in-view,
-    .img-placeholder.in-view {
+    .img-placeholder.in-view,
+    .ideation-image-frame.in-view {
       animation-play-state: running;
     }
+
+    /* ── IMAGEM DE IDEAÇÃO (ao lado da tabela de decisões) ────── */
+    .ideation-image-frame { width: 552px; flex-shrink: 0; }
+    .ideation-image-frame .ph { width: 100%; aspect-ratio: 1302 / 1574; }
+
+    /* Tabela ao lado da imagem: itens empilhados em coluna única */
+    .ideation-row .principles-table { grid-template-columns: 1fr; }
+    .ideation-row .principle-cell:nth-child(odd) { border-right: none; }
+    .ideation-row .principles-table .principle-cell:nth-last-child(2) { border-bottom: 1px solid #E5E5E8; }
 
     /* ── IMAGEM PLACEHOLDER GENÉRICA (rascunho) ───────────────── */
     .img-placeholder {
@@ -954,6 +965,7 @@
     .section > .challenge-cards::before,
     .section > .challenge-cards { margin-top: 0; padding-top: 0; }
     .section > .challenge-cards::before { display: none; }
+    .section > .challenge-cards .challenge-card::before { display: none; }
 
     /* Cards de 3 colunas (264px) e 24px de gap — mesmo tamanho em
        qualquer quantidade de cards (3 ou 4 somam a largura total). */
@@ -1246,9 +1258,12 @@
       .challenge-card::before { display: none; }
       .challenge-cards { flex-direction: column; width: 100%; }
       .challenge-card { flex: 0 0 auto; width: 100%; text-align: left; }
+      .section > .challenge-cards .challenge-card { flex: 0 0 auto; width: 100%; }
       .feature-row { flex-direction: column; }
       .evolution-image-frame { width: 100%; }
       .feature-text { width: 100%; flex: none; }
+      .ideation-row { flex-direction: column; }
+      .ideation-image-frame { width: 100%; }
 
       .hero-gradient-block {
         flex-direction: column;
@@ -1562,7 +1577,13 @@
       <!-- DECISÕES DE DESIGN -->
       <section class="section">
         <h2 class="section-title" data-i18n="decisions3-title">Ideação e decisões de design</h2>
-        <div class="principles-table" style="margin-top:16px;">
+        <div class="ideation-row" style="display:flex; gap:40px; align-items:flex-start; margin-top:16px;">
+        <div class="ideation-image-frame">
+          <div class="ph">
+            <img src="images/Ideacao%20case%202.png" alt="Ideação: telas de recebimento e passo a passo" data-i18n-alt="ideation3-alt">
+          </div>
+        </div>
+        <div class="principles-table" style="flex:1; min-width:0;">
           <div class="principle-cell">
             <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <div><h4 data-i18n="dd3-1-title">Escopo V1 focado em extrato e status</h4><p data-i18n="dd3-1-body">Porque era exatamente o que a pesquisa mostrava que os clientes mais precisavam, mesmo abrindo mão de outras funcionalidades da plataforma web.</p></div>
@@ -1578,10 +1599,6 @@
           <div class="principle-cell">
             <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
             <div><h4 data-i18n="dd3-4-title">Notificações de novas ordens de pagamento</h4><p data-i18n="dd3-4-body">Porque a maioria dos clientes recebe do exterior e precisa agir rápido quando o dinheiro chega.</p></div>
-          </div>
-          <div class="principle-cell full">
-            <span class="principle-arrow" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-            <div><h4 data-i18n="dd3-5-title">Guia passo a passo para a primeira operação</h4><p data-i18n="dd3-5-body">Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT. Também orientou sobre as etapas necessárias até o resgate de uma ordem de pagamento.</p></div>
           </div>
         </div>
       </section>
@@ -1969,6 +1986,7 @@
         "challenge3-p1": { pt: "A decisão central do projeto não foi sobre quais funcionalidades construir, foi sobre disciplina de escopo. Não era viável replicar toda a plataforma web PJ dentro do app numa V1. Em vez de tentar entregar tudo, priorizamos as duas coisas que a pesquisa mostrava que os clientes mais precisavam: acompanhar o extrato, o status das transações, receber notificação de ordens de pagamentos recebidas do exterior e poder solicitar o resgate para a conta no Brasil. O resto ficou para depois.", en: "The project's central decision wasn't about which features to build, it was about scope discipline. It wasn't feasible to replicate the entire business web platform inside the app in a V1. Instead of trying to deliver everything, we prioritized what research showed customers needed most: tracking statements, transaction status, receiving notifications for payment orders from abroad, and being able to request a withdrawal to their account in Brazil. Everything else was left for later." },
         "challenge3-p2": { pt: "Comunicar essa limitação com clareza, antes mesmo do download, foi o que evitou que o escopo reduzido virasse frustração. Foi essa combinação — escopo certo, comunicação honesta — que começou a reverter a percepção negativa do app, não uma lista maior de funcionalidades.", en: "Communicating that limitation clearly, even before download, is what kept the reduced scope from turning into frustration. It was this combination — the right scope, honest communication — that started reversing the app's negative perception, not a longer feature list." },
         "ideacao3-alt": { pt: "Cliente acessando o app pelo celular", en: "Customer accessing the app on their phone" },
+        "ideation3-alt": { pt: "Telas do app: notificação de recebimento e passo a passo do resgate", en: "App screens: receipt notification and step-by-step withdrawal guide" },
 
         "approach3-title": { pt: "Como atravessei o problema", en: "How I worked through the problem" },
         "approach3-1-title": { pt: "Diagnóstico com dados reais", en: "Diagnosis with real data" },
@@ -1989,8 +2007,6 @@
         "dd3-3-body": { pt: "Para manter consistência sem duplicar a experiência dentro do mesmo app.", en: "To maintain consistency without duplicating the experience within the same app." },
         "dd3-4-title": { pt: "Notificações de novas ordens de pagamento", en: "Notifications for new payment orders" },
         "dd3-4-body": { pt: "Porque a maioria dos clientes recebe do exterior e precisa agir rápido quando o dinheiro chega.", en: "Because most customers receive funds from abroad and need to act quickly when the money arrives." },
-        "dd3-5-title": { pt: "Guia passo a passo para a primeira operação", en: "Step-by-step guide for the first operation" },
-        "dd3-5-body": { pt: "Simplificado depois que testes mostraram que a funcionalidade original era útil, mas confusa, especialmente em termos técnicos como IBAN e SWIFT. Também orientou sobre as etapas necessárias até o resgate de uma ordem de pagamento.", en: "Simplified after tests showed the original feature was useful but confusing, especially around technical terms like IBAN and SWIFT. It also guided customers through the steps needed to withdraw a payment order." },
 
         "sol3-1-intro": { pt: "Comunicação revisada no carrossel de destaques, nas lojas de aplicativo e no onboarding, deixando claro desde o início quem pode usar o app.", en: "Revised communication in the highlights carousel, app stores, and onboarding, making clear from the start who can use the app." },
         "sol3-2-intro": { pt: "MVP deliberadamente enxuto: extrato, status das transações, notificações de novas ordens, recebimentos e dados financeiros para controle contábil.", en: "Deliberately lean MVP: statement, transaction status, new order notifications, receiving funds, and financial data for accounting control." },
@@ -2106,7 +2122,7 @@
         });
       }, { threshold: 0.2 });
 
-      document.querySelectorAll('.hero-video-frame, .evolution-image-frame, .feedback-frame, .design-image-frame, .img-placeholder').forEach(el => mediaRevealObserver.observe(el));
+      document.querySelectorAll('.hero-video-frame, .evolution-image-frame, .feedback-frame, .design-image-frame, .img-placeholder, .ideation-image-frame').forEach(el => mediaRevealObserver.observe(el));
 
       // ── Gráfico de adoção: barras "carregam" ao entrar na tela ──
       const hbarObserver = new IntersectionObserver((entries) => {
