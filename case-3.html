@@ -567,8 +567,8 @@
     }
 
     .bullet-list li {
-      font-size: 18px;
-      line-height: 28px;
+      font-size: 16px;
+      line-height: 20px;
       color: var(--text);
       padding-left: 20px;
       position: relative;
@@ -614,8 +614,8 @@
     }
 
     .checklist-card p {
-      font-size: 18px;
-      line-height: 27px;
+      font-size: 16px;
+      line-height: 20px;
     }
 
     /* ── CALLOUT ("Importante:") ──────────────────────────────── */
@@ -627,7 +627,7 @@
       margin: 32px 0;
     }
 
-    .callout p { font-size: 18px; line-height: 28px; }
+    .callout p { font-size: 16px; line-height: 20px; }
 
     /* ── JORNADA (fluxo de etapas em estilo infográfico) ─────── */
     .journey-row {
@@ -741,7 +741,7 @@
       color: var(--muted);
     }
 
-    .risk-field p { font-size: 18px; line-height: 28px; }
+    .risk-field p { font-size: 16px; line-height: 20px; }
 
     /* ── GRÁFICO DE BARRAS EMPILHADAS ─────────────────────────── */
     .chart-block { display: flex; flex-direction: column; gap: 24px; }
@@ -830,8 +830,8 @@
       box-shadow: 0 0 0 1px #F7F7F8;
       border-radius: 16px;
       padding: 24px 32px;
-      flex: 0 0 264px;
-      width: 264px;
+      flex: 0 0 552px;
+      width: 552px;
       display: flex;
       flex-direction: column;
       gap: 8px;
@@ -1101,11 +1101,11 @@
       <!-- DISCOVERY -->
       <section class="section">
         <h2 class="section-title">Discovery</h2>
-        <h3 class="subsection-title" data-i18n="discover2-subtitle">O que eu descobri</h3>
+        <h3 class="subsection-title" style="font-size:20px;" data-i18n="discover2-subtitle">O problema</h3>
         <p class="body-text" data-i18n="discover2-body">Minha investigação mostrou que o problema não era a experiência de envio, mas a decisão que acontecia antes dela. A volatilidade do câmbio fazia com que muitos clientes acompanhassem a cotação durante dias, postergassem suas transferências e permanecessem inseguros mesmo após concluir a operação. O desafio, portanto, deixou de ser oferecer uma cotação mais competitiva e passou a ser reduzir a ansiedade associada à decisão de enviar dinheiro ao exterior.</p>
 
         <div style="margin-top:16px;">
-          <h3 class="subsection-title" style="margin-bottom:24px;" data-i18n="insights2-title">Principais insights</h3>
+          <h3 class="subsection-title" style="margin-bottom:24px;font-size:20px;" data-i18n="insights2-title">Oportunidades</h3>
           <div class="checklist-grid">
             <div class="checklist-card">
               <div class="checklist-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M10 8l4 4-4 4"/></svg></div>
@@ -1126,8 +1126,9 @@
 
       <!-- IDEAÇÃO -->
       <section class="section">
-        <h2 class="section-title" data-i18n="ideation-title">Ideação</h2>
-        <p class="body-text" data-i18n="ideation-body">A partir do desejo dos clientes de garantirem a melhor cotação em um período de tempo, ideei em cima de algumas possibilidades, e a experiência que melhor atende às necessidades dos clientes é a garantia da melhor cotação do dia.</p>
+        <h2 class="section-title" data-i18n="ideation-title">Definições</h2>
+        <p class="body-text" data-i18n="ideation-body">A partir da necessidade dos clientes de obter uma boa cotação sem acompanhar constantemente o câmbio, decidimos seguir com a garantia da melhor cotação do dia. Esta opção foi a que melhor equilibrou valor para o cliente e diferenciação de mercado.</p>
+        <p class="body-text" data-i18n="ideation-body2">Enquanto alertas e travas de câmbio já eram funcionalidades comuns na concorrência, garantir automaticamente a melhor cotação do dia criava uma proposta inovadora e com forte potencial de gerar percepção de valor.</p>
 
         <div style="margin-top:16px; display:flex; flex-direction:column; gap:32px;">
           <h3 class="subsection-title" data-i18n="journey-title">O que altera na jornada atual?</h3>
@@ -1216,7 +1217,7 @@
 
       <!-- TESTES E VALIDAÇÃO -->
       <section class="section">
-        <h2 class="section-title" data-i18n="testing-title">Testes e validação</h2>
+        <h2 class="section-title" data-i18n="testing-title">Estratégia para diminuir riscos</h2>
         <p class="body-text" data-i18n="testing-body">Antes de iniciar o desenvolvimento completo da funcionalidade, busquei reduzir os principais riscos do projeto por meio de experimentos rápidos e de baixo custo. Cada experimento foi desenhado para responder uma hipótese específica, permitindo validar valor, usabilidade, viabilidade de negócio e execução antes de um investimento maior.</p>
 
         <div style="margin-top:32px; display:flex; flex-direction:column; gap:56px;">
@@ -1441,7 +1442,7 @@
         <p class="body-text" data-i18n="result-body">A modalidade foi lançada no final de 2024 e vem mantendo a adoção dentro da expectativa definida durante o planejamento do projeto. A hipótese inicial estabelecia que a funcionalidade seria considerada saudável caso representasse 3% das transações de envio, meta que vem sendo sustentada desde o lançamento.</p>
         <div class="stat-flat-grid" style="margin-top:16px;">
           <div class="stat-flat">
-            <span class="num">3%</span>
+            <span class="num" data-i18n="result-stat-num">&gt; 3% de adoção</span>
             <p data-i18n="result-stat-p">Meta de adoção definida no planejamento, sustentada desde o lançamento.</p>
           </div>
         </div>
@@ -1483,14 +1484,15 @@
         "tag-architecture": { pt: "Arquitetura", en: "Architecture" },
         "tag-prototyping": { pt: "Prototipação", en: "Prototyping" },
         "tag-research-validation": { pt: "Pesquisa e validação", en: "Research and validation" },
-        "discover2-subtitle": { pt: "O que eu descobri", en: "What I discovered" },
+        "discover2-subtitle": { pt: "O problema", en: "The problem" },
         "discover2-body": { pt: "Minha investigação mostrou que o problema não era a experiência de envio, mas a decisão que acontecia antes dela. A volatilidade do câmbio fazia com que muitos clientes acompanhassem a cotação durante dias, postergassem suas transferências e permanecessem inseguros mesmo após concluir a operação. O desafio, portanto, deixou de ser oferecer uma cotação mais competitiva e passou a ser reduzir a ansiedade associada à decisão de enviar dinheiro ao exterior.", en: "My investigation showed that the problem wasn't the sending experience, but the decision that happened before it. Exchange rate volatility led many customers to track the rate for days, postpone their transfers, and remain uneasy even after completing the transaction. The challenge, therefore, shifted from offering a more competitive rate to reducing the anxiety tied to the decision to send money abroad." },
-        "insights2-title": { pt: "Principais insights", en: "Key insights" },
+        "insights2-title": { pt: "Oportunidades", en: "Opportunities" },
         "d2-insight1": { pt: "A volatilidade do câmbio gerava ansiedade e dificultava a tomada de decisão.", en: "Exchange rate volatility created anxiety and made decision-making harder." },
         "d2-insight2": { pt: "Muitos clientes adiavam suas transferências esperando uma cotação melhor.", en: "Many customers postponed their transfers waiting for a better rate." },
         "d2-insight3": { pt: "O receio de \"perder dinheiro\" após uma oscilação do câmbio era uma dor mais relevante do que a busca pelo menor preço em si.", en: "The fear of \"losing money\" after a rate swing was a more relevant pain point than the search for the lowest price itself." },
-        "ideation-title": { pt: "Ideação", en: "Ideation" },
-        "ideation-body": { pt: "A partir do desejo dos clientes de garantirem a melhor cotação em um período de tempo, ideei em cima de algumas possibilidades, e a experiência que melhor atende às necessidades dos clientes é a garantia da melhor cotação do dia.", en: "Based on customers' desire to lock in the best rate over a period of time, I ideated around a few possibilities, and the experience that best meets customer needs is guaranteeing the best rate of the day." },
+        "ideation-title": { pt: "Definições", en: "Definitions" },
+        "ideation-body": { pt: "A partir da necessidade dos clientes de obter uma boa cotação sem acompanhar constantemente o câmbio, decidimos seguir com a garantia da melhor cotação do dia. Esta opção foi a que melhor equilibrou valor para o cliente e diferenciação de mercado.", en: "Based on customers' need to get a good rate without constantly tracking exchange rate fluctuations, we decided to move forward with guaranteeing the best rate of the day. This option best balanced customer value and market differentiation." },
+        "ideation-body2": { pt: "Enquanto alertas e travas de câmbio já eram funcionalidades comuns na concorrência, garantir automaticamente a melhor cotação do dia criava uma proposta inovadora e com forte potencial de gerar percepção de valor.", en: "While exchange rate alerts and locks were already common features among competitors, automatically guaranteeing the best rate of the day created an innovative proposal with strong potential to generate perceived value." },
         "journey-title": { pt: "O que altera na jornada atual?", en: "What changes in the current journey?" },
         "journey-intro": { pt: "Hoje, o cliente que envia ao exterior, fecha uma transação com a cotação do momento e paga em reais via Pix ou Ted à Remessa Online, que converte e envia ao beneficiário no exterior o valor equivalente na moeda estrangeira.", en: "Today, a customer sending money abroad closes a transaction at the current rate and pays in reais via Pix or bank transfer to Remessa Online, which converts and sends the equivalent amount in foreign currency to the beneficiary abroad." },
         "journey-today": { pt: "Hoje", en: "Today" },
@@ -1504,7 +1506,7 @@
         "design-title": { pt: "Desenho da experiência", en: "Experience design" },
         "design-body": { pt: "Nesta etapa, desenhei a jornada com base nas regras de negócio que foram definidas em conjunto com outras áreas e toda a nova experiência que acrescenta o agendamento da transação à transação de envio.", en: "At this stage, I designed the journey based on the business rules defined together with other teams, and the entire new experience that adds the transaction scheduling step to the sending transaction." },
         "callout-important": { pt: "<strong>Importante:</strong> a funcionalidade da melhor cotação teria um spread ligeiramente maior, porém esta alteração deveria ser apresentada de forma transparente aos clientes.", en: "<strong>Important:</strong> the best-rate feature would carry a slightly higher spread, but this change had to be presented transparently to customers." },
-        "testing-title": { pt: "Testes e validação", en: "Testing and validation" },
+        "testing-title": { pt: "Estratégia para diminuir riscos", en: "Strategy to reduce risk" },
         "testing-body": { pt: "Antes de iniciar o desenvolvimento completo da funcionalidade, busquei reduzir os principais riscos do projeto por meio de experimentos rápidos e de baixo custo. Cada experimento foi desenhado para responder uma hipótese específica, permitindo validar valor, usabilidade, viabilidade de negócio e execução antes de um investimento maior.", en: "Before starting full development of the feature, I sought to reduce the project's main risks through quick, low-cost experiments. Each experiment was designed to answer a specific hypothesis, allowing us to validate value, usability, business viability, and execution before a larger investment." },
         "field-hypothesis": { pt: "Hipótese", en: "Hypothesis" },
         "field-validation": { pt: "Como validei", en: "How I validated it" },
@@ -1572,6 +1574,7 @@
         "swot-t2": { pt: "Horário de funcionamento e prazo", en: "Operating hours and deadline" },
         "result-title": { pt: "Resultado", en: "Result" },
         "result-body": { pt: "A modalidade foi lançada no final de 2024 e vem mantendo a adoção dentro da expectativa definida durante o planejamento do projeto. A hipótese inicial estabelecia que a funcionalidade seria considerada saudável caso representasse 3% das transações de envio, meta que vem sendo sustentada desde o lançamento.", en: "The feature launched in late 2024 and has maintained adoption within the expectation set during project planning. The initial hypothesis was that the feature would be considered healthy if it represented 3% of sending transactions — a target that has held since launch." },
+        "result-stat-num": { pt: "&gt; 3% de adoção", en: "&gt; 3% adoption" },
         "result-stat-p": { pt: "Meta de adoção definida no planejamento, sustentada desde o lançamento.", en: "Adoption target set during planning, sustained since launch." },
         "final-learning-title": { pt: "Principal aprendizado", en: "Key takeaway" },
         "final-learning-body": { pt: "Este projeto reforçou que a proposta de valor não era oferecer simplesmente uma cotação mais baixa, mas reduzir a ansiedade da decisão de enviar dinheiro ao exterior. Também evidenciou a importância de validar separadamente riscos de valor, usabilidade, negócio e execução antes de investir em uma implementação completa, permitindo evoluir a solução com mais confiança e menor custo.", en: "This project reinforced that the value proposition wasn't simply offering a lower rate, but reducing the anxiety of the decision to send money abroad. It also highlighted the importance of separately validating value, usability, business, and execution risks before investing in a full implementation, allowing the solution to evolve with more confidence and lower cost." },
